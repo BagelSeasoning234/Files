@@ -1,0 +1,49 @@
+@startuml
+
+class StartFilesApp
+{
+main()
+}
+class FilesApp
+{
+start()
+}
+
+StartFilesApp -> FilesApp
+
+class JavaFX::Application
+
+FilesApp -> JavaFX::Application
+
+class ViewHandler
+class ViewModelFactory
+class ModelFactory
+
+FilesApp --> ViewHandler : creates
+FilesApp --> ViewModelFactory : creates
+FilesApp --> ModelFactory : creates
+
+class MainView
+class MainController
+{
+init(MainViewModel)
+}
+class MainViewModel
+interface FilesModel
+class FilesModelManager
+
+ViewHandler --> MainController
+MainController <-> MainView
+
+ViewModelFactory --> MainViewModel
+
+ModelFactory --> FilesModel
+FilesModelManager .> FilesModel
+
+MainController -> MainViewModel
+MainViewModel <..> MainController
+
+ViewHandler -> ViewModelFactory
+ViewModelFactory -> ModelFactory
+
+@enduml
