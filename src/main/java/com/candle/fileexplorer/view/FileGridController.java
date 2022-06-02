@@ -3,8 +3,7 @@ package com.candle.fileexplorer.view;
 import com.candle.fileexplorer.view.enums.GridSortOrder;
 import com.candle.fileexplorer.viewmodel.FileItemViewModel;
 import com.candle.fileexplorer.viewmodel.FileGridViewModel;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
 import java.io.IOException;
 import java.util.Comparator;
 
@@ -46,7 +44,7 @@ public class FileGridController extends GridPane
     /**
      * The order used to sort grid items.
      */
-    private GridSortOrder sortOrder = GridSortOrder.Modified;
+    private GridSortOrder sortOrder = GridSortOrder.Name;
 
     /**
      * A reference to the view model responsible for getting the file items.
@@ -74,26 +72,11 @@ public class FileGridController extends GridPane
         this.viewModel = viewModel;
 
         // Bind and setup contents
-        viewModel.getItems().addListener(new ListChangeListener<FileItemViewModel>()
-        {
-            @Override
-            public void onChanged(Change<? extends FileItemViewModel> change)
-            {
-                System.out.println("Once this function actually works, update the grid contents here.");
-            }
-        });
-        updateFiles();
+        viewModel.getItems().addListener(this::listListener);
+        updateGridContents();
+
         setVisualAppearance();
         setEvents();
-    }
-
-    /**
-     * Refreshes the grid view of items.
-     */
-    public void updateFiles()
-    {
-        viewModel.updateContents();
-        updateGridContents();
     }
 
     /**
@@ -115,7 +98,7 @@ public class FileGridController extends GridPane
         {
             String newCurrentDirectory = ((FileItemController)clickedNode).getItemDirectory();
             viewModel.setCurrentDirectory(newCurrentDirectory);
-            updateFiles();
+            //updateGridContents();
         }
     }
 
@@ -134,8 +117,18 @@ public class FileGridController extends GridPane
     //region Private Methods
 
     /**
+     * The function that runs whenever items in the view model get updated.
+     * @param c The list change
+     */
+    private void listListener(ListChangeListener.Change<? extends FileItemViewModel> c)
+    {
+        updateGridContents();
+    }
+
+    /**
      * Iterates through elements in the view model as it adds them to the grid view.
-     * Currently, the function re-adds everything when updated. I'll try to optimize this in the future.
+     * Currently, the function re-adds everything when updated.
+     * TODO: Optimize the grid construction in the future.
      */
     private void updateGridContents()
     {
@@ -163,21 +156,26 @@ public class FileGridController extends GridPane
 
     /**
      * Using the defined sort order, this function reorganizes a list of FileItemViewModels.
+     *
      */
     private ObservableList<FileItemViewModel> sortItems(ObservableList<FileItemViewModel> items)
     {
         // TODO: Make the Size sort algorithm account for folder sizes.
         //  This approach might work: https://stackoverflow.com/questions/2149785/get-size-of-folder-or-file/19877372#19877372
+
+        // I duplicate the array to prevent the function from making changes to the underlying view model's data. (Otherwise, this causes a stack overflow error).
+        ObservableList<FileItemViewModel> newItemList = FXCollections.observableArrayList(items);
+
         switch (sortOrder)
         {
             // Sorts based on the alphabetical name of each item.
-            case Name -> items.sort((o1, o2) -> o1.getFileName().compareToIgnoreCase(o2.getFileName()));
+            case Name -> newItemList.sort((o1, o2) -> o1.getFileName().compareToIgnoreCase(o2.getFileName()));
             // Sorts based on the size of each item.
-            case Size -> items.sort(Comparator.comparingLong(FileItemViewModel::getFileSize));
+            case Size -> newItemList.sort(Comparator.comparingLong(FileItemViewModel::getFileSize));
             // Sorts based on the last modified date of each item.
-            case Modified -> items.sort(Comparator.comparing(FileItemViewModel::getLastModifiedTime));
+            case Modified -> newItemList.sort(Comparator.comparing(FileItemViewModel::getLastModifiedTime));
         }
-        return items;
+        return newItemList;
     }
 
     /**

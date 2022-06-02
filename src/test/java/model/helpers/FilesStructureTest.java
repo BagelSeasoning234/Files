@@ -25,7 +25,7 @@ public class FilesStructureTest
     }
 
     @Test
-    public void testGetCurrentFilesAndFolders() throws IOException
+    public void testGetCurrentFilesAndFolders()
     {
         String path = "~/Productivity/Development/Java/FileExplorer/src/test";
         ArrayList<FileItem> expectedResult = new ArrayList<>();
@@ -33,4 +33,14 @@ public class FilesStructureTest
 
         Assertions.assertArrayEquals(expectedResult.toArray(), DirectoryStructure.getDirectoryContents(path, false).toArray());
     }
+
+    @Test
+    public void testSanitizePath()
+    {
+        String dirtyPath = "~/Files/User\\040File.png";
+        String expectedResult = "/home/cachandler/Files/User File.png";
+
+        Assertions.assertEquals(expectedResult, DirectoryStructure.sanitizePath(dirtyPath));
+    }
+
 }

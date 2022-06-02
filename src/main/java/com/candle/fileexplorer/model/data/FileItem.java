@@ -32,5 +32,5 @@ public interface FileItem
     /**
      * Gets the time at which this item was last modified.
      */
-    FileTime getLastModifiedTime();
+    long getLastModifiedTime();
 }

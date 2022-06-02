@@ -42,7 +42,7 @@ public class DirectoryStructure
 
         ArrayList<FileItem> result = new ArrayList<>();
         File[] contents = currentDirectory.listFiles();
-        if (contents.length > 0)
+        if (contents != null && contents.length > 0)
         {
             FileType type;
             for (File subFile : contents)
@@ -136,7 +136,6 @@ public class DirectoryStructure
      */
     private static String validateDrive(String drive)
     {
-        // The helper is set up like this so that it'll be easy to add more elements if necessary.
         String[] badDriveNames = { "boot", "timeshift" };
         for (String badName : badDriveNames)
             if (drive.contains(badName))

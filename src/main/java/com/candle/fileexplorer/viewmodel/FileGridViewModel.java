@@ -4,11 +4,9 @@ import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
 import com.candle.fileexplorer.model.observer.DataListener;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -43,8 +41,6 @@ public class FileGridViewModel implements DataListener
         this.dataModel = dataModel;
         dataModel.addListener(this);
         currentDirectoryChanged();
-
-        updateContents();
     }
 
     //endregion
@@ -58,22 +54,16 @@ public class FileGridViewModel implements DataListener
     {
         // Lazy instantiation
         if (items == null)
-            items = new SimpleListProperty<>();
+            items = FXCollections.observableArrayList();
         else
-            items.removeAll();
+            items.clear();
 
         // Get the files/folders.
         ArrayList<FileItem> children = DirectoryStructure.getDirectoryContents(dataModel.getCurrentDirectory(), showHiddenItems);
 
-        // Create the view models from the data.
-        ArrayList<FileItemViewModel> models = new ArrayList<>();
+        // Create the view models from the data and add them to an observable list.
         if (children != null)
-            children.forEach((fileItem) -> models.add(new FileItemViewModel(fileItem)));
-
-        // Turn the data into an observable array list for the view to access.
-
-        items = FXCollections.observableArrayList(models);
-
+            children.forEach((fileItem) -> items.add(new FileItemViewModel(fileItem)));
     }
 
     public ObservableList<FileItemViewModel> getItems()

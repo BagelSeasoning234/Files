@@ -53,7 +53,8 @@ public class FilesModelManager implements FilesModel
         FileItem testItem = new FileItemManager(newDirectory);
         if (testItem.getFileType() != FileType.File)
         {
-            this.currentDirectory = newDirectory;
+            // We use the test item so that we'll get a clean user path back.
+            this.currentDirectory = testItem.getItemDirectory();
             notifyDirectoryChange();
         }
     }

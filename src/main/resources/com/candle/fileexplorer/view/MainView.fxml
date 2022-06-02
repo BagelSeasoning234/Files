@@ -10,7 +10,6 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.net.URL?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -25,7 +24,7 @@
 <?import com.candle.fileexplorer.view.FileGridController?>
 <?import javafx.scene.control.ScrollPane?>
 
-<BorderPane prefWidth="1045" prefHeight="700" xmlns:fx="http://javafx.com/fxml"
+<BorderPane prefWidth="1075" prefHeight="700" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.candle.fileexplorer.view.MainController">
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/Light.css"/>

@@ -3,10 +3,6 @@ package com.candle.fileexplorer.model.data;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 
 /**
  * Information about a directory item such as a drive, folder, or file.
@@ -85,22 +81,14 @@ public class FileItemManager implements FileItem
     @Override
     public long getFileSize()
     {
+        // TODO: Make this function work for folders too.
         return file.length();
     }
 
     @Override
-    public FileTime getLastModifiedTime()
+    public long getLastModifiedTime()
     {
-        try
-        {
-            BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-            return attributes.creationTime();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        return file.lastModified();
     }
 
     @Override

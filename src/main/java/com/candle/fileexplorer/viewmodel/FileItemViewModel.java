@@ -89,7 +89,7 @@ public class FileItemViewModel
         return fileItem.getFileSize();
     }
 
-    public FileTime getLastModifiedTime()
+    public long getLastModifiedTime()
     {
         return fileItem.getLastModifiedTime();
     }
