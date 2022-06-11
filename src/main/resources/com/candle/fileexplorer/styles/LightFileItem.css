@@ -1,28 +1,23 @@
-.vbox
-{
+.vbox {
     -fx-alignment: center;
     -fx-background-color: transparent;
     -fx-background-radius: 5;
     -fx-padding: 5;
 }
 
-.vbox:hover
-{
+.vbox:hover {
     -fx-background-color: #D9D9D9;
 }
 
-.vbox:focused
-{
+.vbox:focused {
     -fx-background-color: #CACACA;
 }
 
-.image
-{
+.image {
     -fx-alignment: center;
 }
 
-.label
-{
+.label {
     -fx-font-size: 15;
     -fx-text-alignment: center;
     -fx-text-fill: #000;

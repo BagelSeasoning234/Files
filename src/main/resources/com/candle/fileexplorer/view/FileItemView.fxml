@@ -16,8 +16,9 @@
     </stylesheets>
 
     <ImageView fx:id="filePreview" StackPane.alignment="CENTER" mouseTransparent="true">
-        <Image url="@/com/candle/fileexplorer/images/64/File.png" />
+        <Image url="@/com/candle/fileexplorer/images/64/File.png"/>
     </ImageView>
-    <Label fx:id="fileName" text="File.png" StackPane.alignment="BOTTOM_CENTER" mouseTransparent="true" wrapText="true"/>
+    <Label fx:id="fileName" text="File.png" StackPane.alignment="BOTTOM_CENTER" mouseTransparent="true"
+           wrapText="true"/>
 
 </fx:root>

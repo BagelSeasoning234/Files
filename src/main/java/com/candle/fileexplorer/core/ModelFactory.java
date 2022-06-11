@@ -1,13 +1,12 @@
 package com.candle.fileexplorer.core;
 
 import com.candle.fileexplorer.model.FilesModel;
-import com.candle.fileexplorer.model.FilesModelManager;
+import com.candle.fileexplorer.model.DefaultFilesModel;
 
 /**
  * The class that is responsible for creating the data models.
  */
-public class ModelFactory
-{
+public class ModelFactory {
     //region Private Members
 
     /**
@@ -20,10 +19,9 @@ public class ModelFactory
     /**
      * Gets a reference to the files' data model.
      */
-    public FilesModel getFilesModel()
-    {
+    public FilesModel getFilesModel() {
         if (filesModel == null)
-            filesModel = new FilesModelManager();
+            filesModel = new DefaultFilesModel();
         return filesModel;
     }
 }

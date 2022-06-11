@@ -1,0 +1,28 @@
+.root {
+    -very-light-gray: #f7f7f7;
+    -light-gray: #efefef;
+    -mid-gray: #c5c5c5;
+    -text-light-gray: #949494;
+    -text-dark-gray: #3f3f3f;
+}
+
+.scroll-pane {
+    -fx-padding: 10;
+    -fx-background-color: -light-gray;
+    -fx-background-radius: 5;
+    -fx-border-color: -mid-gray;
+    -fx-border-radius: 5;
+}
+
+.button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.button:hover {
+    -fx-background-color: -mid-gray;
+}
+
+.button:armed {
+    -fx-background-color: -text-light-gray;
+}

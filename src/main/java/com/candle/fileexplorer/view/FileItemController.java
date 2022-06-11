@@ -9,8 +9,7 @@ import javafx.scene.layout.VBox;
 /**
  * The view class for the custom File Item component.
  */
-public class FileItemController extends VBox
-{
+public class FileItemController extends VBox {
     //region Private Members
 
     /**
@@ -29,21 +28,12 @@ public class FileItemController extends VBox
 
     //endregion
 
-    //region Constructor
-
-    public FileItemController()
-    {
-    }
-
-    //endregion
-
     //region Public Methods
 
     /**
      * Initializes the view for this item by binding properties to information on the view model.
      */
-    public void init(FileItemViewModel viewModel)
-    {
+    public void init(FileItemViewModel viewModel) {
         this.viewModel = viewModel;
 
         // Bind data
@@ -53,8 +43,7 @@ public class FileItemController extends VBox
         this.getStyleClass().add("vbox");
     }
 
-    public String getItemDirectory()
-    {
+    public String getItemDirectory() {
         return viewModel.getItemDirectory();
     }
 

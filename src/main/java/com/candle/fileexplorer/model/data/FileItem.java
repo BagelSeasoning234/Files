@@ -1,9 +1,6 @@
 package com.candle.fileexplorer.model.data;
 
-import java.nio.file.attribute.FileTime;
-
-public interface FileItem
-{
+public interface FileItem {
     /**
      * Gets the name of the file item.
      */

@@ -8,8 +8,7 @@ import javafx.beans.property.StringProperty;
 /**
  * The view model used by the main view.
  */
-public class MainViewModel implements DataListener
-{
+public class MainViewModel implements DataListener {
     //region Private Members
 
     /**
@@ -27,18 +26,25 @@ public class MainViewModel implements DataListener
      */
     private FileGridViewModel fileGridViewModel;
 
+    /**
+     * The view model for the quick access items.
+     */
+    private QuickAccessViewModel quickAccessVM;
+
     //endregion
 
     //region Constructor
 
     /**
      * Instantiates the main view model using the File Structure view model.
-     * @param structureViewModel A reference to an existing file structure view model, which is created in the view model factory.
-     * @param dataModel A reference to an existing data model, which is created in the model factory.
+     *
+     * @param gridVM        A reference to an existing file grid view model, which is created in the view model factory.
+     * @param quickAccessVM A reference to an existing quick access view model, which is created in the view model factory.
+     * @param dataModel     A reference to an existing data model, which is created in the model factory.
      */
-    public MainViewModel(FileGridViewModel structureViewModel, FilesModel dataModel)
-    {
-        this.fileGridViewModel = structureViewModel;
+    public MainViewModel(FileGridViewModel gridVM, QuickAccessViewModel quickAccessVM, FilesModel dataModel) {
+        this.fileGridViewModel = gridVM;
+        this.quickAccessVM = quickAccessVM;
         this.dataModel = dataModel;
         currentDirectoryProperty = new SimpleStringProperty();
 
@@ -50,27 +56,27 @@ public class MainViewModel implements DataListener
 
     //region Public Methods
 
-    public FileGridViewModel getFileStructureViewModel()
-    {
+    public FileGridViewModel getFileStructureViewModel() {
         return fileGridViewModel;
     }
 
-    public StringProperty currentDirectoryProperty()
-    {
+    public QuickAccessViewModel getQuickAccessViewModel() {
+        return quickAccessVM;
+    }
+
+    public StringProperty currentDirectoryProperty() {
         return currentDirectoryProperty;
     }
 
     /**
      * The method used by the view to inform the view model that the user is ready to go to the new directory.
      */
-    public void userUpdatedDirectory()
-    {
+    public void userUpdatedDirectory() {
         dataModel.setCurrentDirectory(currentDirectoryProperty.getValue());
     }
 
     @Override
-    public void currentDirectoryChanged()
-    {
+    public void currentDirectoryChanged() {
         currentDirectoryProperty.setValue(dataModel.getCurrentDirectory());
     }
 

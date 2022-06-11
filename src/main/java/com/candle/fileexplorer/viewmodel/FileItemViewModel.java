@@ -7,10 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
-import java.nio.file.attribute.FileTime;
-
-public class FileItemViewModel
-{
+public class FileItemViewModel {
     //region Private Members
 
     /**
@@ -34,10 +31,10 @@ public class FileItemViewModel
 
     /**
      * Initializes the data property values by referring to the model.
+     *
      * @param item A reference to the data item
      */
-    public FileItemViewModel(FileItem item)
-    {
+    public FileItemViewModel(FileItem item) {
         this.fileItem = item;
         fileName = new SimpleStringProperty();
         imagePreview = new SimpleObjectProperty<>();
@@ -52,45 +49,41 @@ public class FileItemViewModel
     /**
      * Updates the data by referring to the model.
      */
-    public void updateFile()
-    {
+    public void updateFile() {
         fileName.setValue(fileItem.getFileName());
 
-        switch (fileItem.getFileType())
-        {
+        switch (fileItem.getFileType()) {
             case File -> imagePreview.setValue(new Image("/com/candle/fileexplorer/images/64/File.png"));
             case Folder -> imagePreview.setValue(new Image("/com/candle/fileexplorer/images/64/Folder.png"));
             case Drive -> imagePreview.setValue(new Image("/com/candle/fileexplorer/images/64/Drive.png"));
         }
     }
 
-    public String getItemDirectory()
-    {
+    public String getItemDirectory() {
         return fileItem.getItemDirectory();
     }
 
-    public String getFileName()
-    {
+    public String getFileName() {
         return fileName.getValue();
     }
 
-    public StringProperty fileNameProperty()
-    {
+    public Image getImagePreview() {
+        return imagePreview.getValue();
+    }
+
+    public StringProperty fileNameProperty() {
         return fileName;
     }
 
-    public ObjectProperty<Image> imagePreviewProperty()
-    {
+    public ObjectProperty<Image> imagePreviewProperty() {
         return imagePreview;
     }
 
-    public long getFileSize()
-    {
+    public long getFileSize() {
         return fileItem.getFileSize();
     }
 
-    public long getLastModifiedTime()
-    {
+    public long getLastModifiedTime() {
         return fileItem.getLastModifiedTime();
     }
 

@@ -9,11 +9,9 @@ import javafx.stage.Stage;
 /**
  * The 'main' class
  */
-public class FilesApp extends Application
-{
+public class FilesApp extends Application {
     @Override
-    public void start(Stage primaryStage) throws Exception
-    {
+    public void start(Stage primaryStage) throws Exception {
         // Create the management classes
         ModelFactory modelFactory = new ModelFactory();
         ViewModelFactory viewModelFactory = new ViewModelFactory(modelFactory);

@@ -10,8 +10,7 @@ import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 
-public class FileGridViewModel implements DataListener
-{
+public class FileGridViewModel implements DataListener {
     //region Private Members
 
     /**
@@ -36,8 +35,7 @@ public class FileGridViewModel implements DataListener
     /**
      * Initializes the view model and sets the current directory to the user's home folder.
      */
-    public FileGridViewModel(FilesModel dataModel)
-    {
+    public FileGridViewModel(FilesModel dataModel) {
         this.dataModel = dataModel;
         dataModel.addListener(this);
         currentDirectoryChanged();
@@ -50,8 +48,7 @@ public class FileGridViewModel implements DataListener
     /**
      * Updates the file items in the view model using the new current directory value.
      */
-    public void updateContents()
-    {
+    public void updateContents() {
         // Lazy instantiation
         if (items == null)
             items = FXCollections.observableArrayList();
@@ -66,32 +63,27 @@ public class FileGridViewModel implements DataListener
             children.forEach((fileItem) -> items.add(new FileItemViewModel(fileItem)));
     }
 
-    public ObservableList<FileItemViewModel> getItems()
-    {
+    public ObservableList<FileItemViewModel> getItems() {
         return items;
     }
 
     /**
      * Updates the data model's current directory with the new path.
      */
-    public void setCurrentDirectory(String newDirectory)
-    {
+    public void setCurrentDirectory(String newDirectory) {
         dataModel.setCurrentDirectory(newDirectory);
     }
 
-    public boolean getShowHiddenItems()
-    {
+    public boolean getShowHiddenItems() {
         return showHiddenItems;
     }
 
-    public void setShowHiddenItems(boolean value)
-    {
+    public void setShowHiddenItems(boolean value) {
         this.showHiddenItems = value;
     }
 
     @Override
-    public void currentDirectoryChanged()
-    {
+    public void currentDirectoryChanged() {
         updateContents();
     }
 

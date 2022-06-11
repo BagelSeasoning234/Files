@@ -1,5 +1,4 @@
-.root
-{
+.root {
     -very-light-gray: #f7f7f7;
     -light-gray: #efefef;
     -mid-gray: #c5c5c5;
@@ -10,32 +9,27 @@
     -fx-background-color: white;
 }
 
-.button
-{
+.button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
-.button:hover
-{
+.button:hover {
     -fx-background-color: -light-gray;
 }
 
-.button:armed
-{
+.button:armed {
     -fx-background-color: -mid-gray;
 }
 
-.label
-{
+.label {
     -fx-font-size: 20px;
     -fx-text-fill: -text-light-gray;
 }
 
 /* List */
 
-.list-view
-{
+.list-view {
     -fx-pref-width: 175;
     -fx-background-color: -light-gray;
     -fx-background-radius: 5;
@@ -43,33 +37,28 @@
     -fx-border-radius: 5;
 }
 
-.list-cell
-{
+.list-cell {
     -fx-background-color: transparent;
     -fx-padding: 0px;
     -fx-background-radius: 5;
 }
 
-.list-cell:hover .button
-{
+.list-cell:hover .button {
     -fx-background-color: -mid-gray;
 }
 
 /* Tabs */
 
-.tab-pane .tab-header-area .tab-header-background
-{
+.tab-pane .tab-header-area .tab-header-background {
     -fx-opacity: 0;
 }
 
-.tab-pane
-{
+.tab-pane {
     -fx-tab-min-width: 125px;
     -fx-tab-min-height: 25px;
 }
 
-.tab
-{
+.tab {
     /*
     Here's how the space between tabs works:
     There's 3 backgrounds. One's transparent with no insets, one has insets (spacing) on the right and bottom, and 1 has a little spacing all around, with more on the right and bottom so it's bigger than the border.
@@ -78,66 +67,57 @@
     -fx-background-color: transparent, tab-border-color, tab-color;
     tab-color: -light-gray;
     tab-border-color: -mid-gray;
-    -fx-background-insets: 0, 0 10 10 0, 1 11 11 1 ;
-    -fx-padding: 5 16 16 5 ;
+    -fx-background-insets: 0, 0 10 10 0, 1 11 11 1;
+    -fx-padding: 5 16 16 5;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
 }
 
-.tab-pane .tab:hover
-{
+.tab-pane .tab:hover {
     -fx-background-color: transparent, light-hover-tab-border-color, light-hover-tab-color;
     light-hover-tab-color: -very-light-gray;
     light-hover-tab-border-color: -mid-gray;
 }
 
-.tab-pane .tab:selected
-{
+.tab-pane .tab:selected {
     -fx-background-color: transparent, light-tab-border-color, light-tab-color;
     light-tab-color: white;
     light-tab-border-color: -mid-gray;
 }
 
-.tab-pane:focused .tab:selected .focus-indicator
-{
+.tab-pane:focused .tab:selected .focus-indicator {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
 
 /* Overflow button */
-.tab-header-area
-{
+.tab-header-area {
     -fx-padding: 0;
     -fx-background-insets: 0 0 50 0;
 }
 
 /* Overflow button */
-.tab-down-button
-{
+.tab-down-button {
     -fx-background-color: transparent;
     -fx-background-radius: 5;
     -fx-padding: 20 15 20 15;
 }
 
-.tab-down-button:hover
-{
+.tab-down-button:hover {
     -fx-background-color: -light-gray;
 }
 
-.tab-down-button:armed
-{
+.tab-down-button:armed {
     -fx-background-color: -mid-gray;
 }
 
-.tab .tab-label
-{
+.tab .tab-label {
     -fx-text-alignment: LEFT;
     -fx-text-fill: black;
 }
 
 /* Scroll bars */
-.scroll-pane
-{
+.scroll-pane {
     -fx-background: -light-gray;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
@@ -146,72 +126,61 @@
 
 /* Menus */
 
-.menu-bar
-{
+.menu-bar {
     -fx-background-color: transparent;
     -fx-padding: 0 0 10 0;
 }
 
-.menu
-{
+.menu {
     -fx-background-radius: 5;
 }
 
-.menu .label
-{
+.menu .label {
     -fx-padding: 2;
     -fx-font-size: 14;
     -fx-text-fill: -text-dark-gray;
 }
 
-.menu:hover
-{
+.menu:hover {
     -fx-background-color: -light-gray;
 }
 
-.menu:showing
-{
+.menu:showing {
     -fx-background-color: -light-gray;
 }
 
-.menu-item
-{
+.menu-item {
     -fx-mark-color: -text-dark-gray;
 }
 
-.menu-item .label
-{
+.menu-item .label {
     -fx-font-size: 14;
     -fx-text-fill: -text-dark-gray;
 }
 
-.context-menu
-{
+.context-menu {
     -fx-font-size: 14;
     -fx-text-fill: -text-dark-gray;
     -fx-background-radius: 5;
     -fx-padding: 5;
 }
 
-.menu-item:hover
-{
+.menu-item:hover {
     -fx-background-radius: 5;
     -fx-background-color: -light-gray;
 }
 
-.menu-item:focused
-{
+.menu-item:focused {
     -fx-background-radius: 5;
     -fx-background-color: -light-gray;
     -fx-focused-mark-color: -text-dark-gray;
 }
-.separator
-{
+
+.separator {
     -fx-padding: 5 0 5 0;
 }
 
-#locationBar
-{
+#locationBar {
     -fx-background-color: -light-gray;
     -fx-background-radius: 5;
     -fx-border-color: -mid-gray;
@@ -220,18 +189,15 @@
     -fx-highlight-text-fill: #323232;
 }
 
-#locationBar:hover
-{
+#locationBar:hover {
     -fx-border-color: -text-light-gray;
 }
 
-#locationBar:focused
-{
+#locationBar:focused {
     -fx-border-color: -text-dark-gray;
 }
 
-#fileGridView
-{
+#fileGridView {
     -fx-background-color: -light-gray;
     -fx-background-radius: 5;
 }

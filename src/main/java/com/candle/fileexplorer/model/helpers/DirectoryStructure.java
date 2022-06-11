@@ -1,7 +1,7 @@
 package com.candle.fileexplorer.model.helpers;
 
 import com.candle.fileexplorer.model.data.FileItem;
-import com.candle.fileexplorer.model.data.FileItemManager;
+import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileType;
 
 import java.io.*;
@@ -10,23 +10,52 @@ import java.util.ArrayList;
 /**
  * A helper class that gets information about file directories.
  */
-public class DirectoryStructure
-{
+public class DirectoryStructure {
     //region Public Methods
+
+    /**
+     * Returns the name of the home user folder.
+     */
+    public static String getHomeDirectoryName() {
+        File homefolder = new File(System.getProperty("user.home"));
+        return homefolder.getName();
+    }
+
+    /**
+     * Returns the trash folder directory.
+     */
+    public static String getTrashDirectory() {
+        String OS = System.getProperty("os.name");
+        switch (OS) {
+            case "Linux" -> {
+                return "~/.local/share/Trash/files";
+            }
+            case "Windows" -> {
+                return "C:\\$Recycle.Bin";
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the name of the trash folder.
+     */
+    public static String getTrashDirectoryName() {
+        File trashFolder = new File(getTrashDirectory());
+        return trashFolder.getName();
+    }
 
     /**
      * Returns a list of the mounted drives.
      */
-    public static ArrayList<FileItem> getDrives()
-    {
+    public static ArrayList<FileItem> getDrives() {
         String OS = System.getProperty("os.name");
-        if(OS.equals("Linux"))
+        if (OS.equals("Linux"))
             return getLinuxDrives();
-        else
-        {
+        else {
             ArrayList<FileItem> list = new ArrayList<>();
             for (File file : File.listRoots())
-                list.add(new FileItemManager(FileType.Drive, file.getPath()));
+                list.add(new DefaultFileItem(FileType.Drive, file.getPath()));
             return list;
         }
     }
@@ -34,27 +63,23 @@ public class DirectoryStructure
     /**
      * Get the top level contents of a given directory.
      */
-    public static ArrayList<FileItem> getDirectoryContents(String path, boolean showHiddenItems)
-    {
+    public static ArrayList<FileItem> getDirectoryContents(String path, boolean showHiddenItems) {
         File currentDirectory = new File(sanitizePath(path));
         if (!currentDirectory.isDirectory())
-            return null;
+            return new ArrayList<>();
 
         ArrayList<FileItem> result = new ArrayList<>();
         File[] contents = currentDirectory.listFiles();
-        if (contents != null && contents.length > 0)
-        {
+        if (contents != null && contents.length > 0) {
             FileType type;
-            for (File subFile : contents)
-            {
+            for (File subFile : contents) {
                 // Unless we're showing hidden files, skip to the next iteration if found.
-                if (!showHiddenItems)
-                {
+                if (!showHiddenItems) {
                     if (subFile.isHidden())
                         continue;
                 }
                 type = (subFile.isDirectory() ? FileType.Folder : FileType.File);
-                result.add(new FileItemManager(type, subFile.getPath()));
+                result.add(new DefaultFileItem(type, subFile.getPath()));
             }
         }
         return result;
@@ -63,10 +88,10 @@ public class DirectoryStructure
     /**
      * Cleans a directory path by adding spaces where necessary and switching ~ for the home directory.
      */
-    public static String sanitizePath(String path)
-    {
+    public static String sanitizePath(String path) {
         path = path.replace("\\040", " ");
         path = path.replace("~", System.getProperty("user.home"));
+        path = path.replace("\\", "/");
         return path;
     }
 
@@ -74,15 +99,13 @@ public class DirectoryStructure
 
     //region Private Methods
 
-    private static ArrayList<FileItem> getLinuxDrives()
-    {
+    private static ArrayList<FileItem> getLinuxDrives() {
         // Unfortunately, listRoots() doesn't work on linux and only returns /.
         // Instead, I have to go through /proc/mounts and look for /dev/sd* drives
         String mountedDrives = "/proc/mounts";
-        String textToFind = "/dev/sd";
+        String textToFind = "/dev/";
 
-        try
-        {
+        try {
             // Define the file readers
             FileReader fileReader = new FileReader(mountedDrives);
             BufferedReader reader = new BufferedReader(fileReader);
@@ -91,17 +114,16 @@ public class DirectoryStructure
             ArrayList<String> driveStrings = new ArrayList<>();
             ArrayList<FileItem> files = new ArrayList<>();
 
-            while (true)
-            {
-                try
-                {
+            while (true) {
+                try {
+                    // Loop until we've gone through all the lines.
                     line = reader.readLine();
                     if (line == null)
                         break;
+
                     int index = line.indexOf(textToFind);
-                    if (index != -1)
-                    {
-                        // Knowing that this is a /dev/sd... line, use spacers to get the beginning and end of the name.
+                    if (index != -1) {
+                        // Knowing that this is a /dev/... line, use spacers to get the beginning and end of the name.
                         int startIndex = line.indexOf(" ") + 1;
                         int endIndex = line.indexOf(" ", startIndex);
 
@@ -110,22 +132,17 @@ public class DirectoryStructure
                         if (sanitizedVersion != null)
                             driveStrings.add(sanitizedVersion);
                     }
-                    // Break once we've gone through all lines.
-                }
-                catch (IOException e)
-                {
+
+                } catch (IOException e) {
                     System.out.println("Error reading file line: " + e.getMessage());
                 }
             }
 
-            for(String drive : driveStrings)
-            {
-                files.add(new FileItemManager(FileType.Drive, drive));
+            for (String drive : driveStrings) {
+                files.add(new DefaultFileItem(FileType.Drive, drive));
             }
             return files;
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return null;
@@ -134,9 +151,8 @@ public class DirectoryStructure
     /**
      * Checks to see if a given string returns a valid drive name by cutting out boot partitions.
      */
-    private static String validateDrive(String drive)
-    {
-        String[] badDriveNames = { "boot", "timeshift" };
+    private static String validateDrive(String drive) {
+        String[] badDriveNames = {"boot", "timeshift", "shm", "pts", "mqueue", "hugepages"};
         for (String badName : badDriveNames)
             if (drive.contains(badName))
                 return null;

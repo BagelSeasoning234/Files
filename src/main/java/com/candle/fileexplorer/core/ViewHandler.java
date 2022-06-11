@@ -11,8 +11,7 @@ import java.io.IOException;
 /**
  * The class that is responsible for creating and changing between views.
  */
-public class ViewHandler
-{
+public class ViewHandler {
     //region Private Members
 
     /**
@@ -29,8 +28,7 @@ public class ViewHandler
     /**
      * Initializes the stage and view model factory variables.
      */
-    public ViewHandler(Stage stage, ViewModelFactory viewModelFactory)
-    {
+    public ViewHandler(Stage stage, ViewModelFactory viewModelFactory) {
         this.stage = stage;
         this.viewModelFactory = viewModelFactory;
     }
@@ -39,26 +37,25 @@ public class ViewHandler
 
     /**
      * Starts the application by opening up the main view.
+     *
      * @throws Exception If the view could not be found.
      */
-    public void start() throws Exception
-    {
+    public void start() throws Exception {
         openView("Main");
     }
 
     /**
      * Opens a specified view
+     *
      * @param viewToOpen The name of the view to open, WITHOUT the "View.fxml" part.
      * @throws IOException If the view could not be found.
      */
-    public void openView(String viewToOpen) throws IOException
-    {
+    public void openView(String viewToOpen) throws IOException {
         Scene scene = null;
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
 
-        if("Main".equals(viewToOpen))
-        {
+        if ("Main".equals(viewToOpen)) {
             String location = "/com/candle/fileexplorer/view/MainView.fxml";
             loader.setLocation(getClass().getResource(location));
             root = loader.load();

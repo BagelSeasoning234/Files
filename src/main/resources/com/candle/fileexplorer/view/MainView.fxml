@@ -6,12 +6,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.net.URL?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
@@ -24,6 +22,7 @@
 <?import com.candle.fileexplorer.view.FileGridController?>
 <?import javafx.scene.control.ScrollPane?>
 
+<?import com.candle.fileexplorer.view.QuickAccessController?>
 <BorderPane prefWidth="1075" prefHeight="700" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.candle.fileexplorer.view.MainController">
     <stylesheets>
@@ -39,60 +38,60 @@
             <!-- Menu Bar -->
             <MenuBar fx:id="menuBar">
                 <Menu text="File">
-                    <MenuItem text="New Item..." />
-                    <MenuItem text="New Window" />
-                    <MenuItem text="New Tab" />
-                    <SeparatorMenuItem />
-                    <MenuItem text="Rename..." />
-                    <MenuItem text="Duplicate Here" />
-                    <MenuItem text="Trash" />
-                    <SeparatorMenuItem />
-                    <MenuItem text="Close Tab" />
-                    <SeparatorMenuItem />
-                    <MenuItem text="Quit" />
+                    <MenuItem text="New Item..."/>
+                    <MenuItem text="New Window"/>
+                    <MenuItem text="New Tab"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Rename..."/>
+                    <MenuItem text="Duplicate Here"/>
+                    <MenuItem text="Trash"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Close Tab"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Quit"/>
                 </Menu>
 
                 <Menu text="Edit">
-                    <MenuItem text="Undo" />
-                    <MenuItem text="Redo" />
-                    <SeparatorMenuItem />
-                    <MenuItem text="Cut" />
-                    <MenuItem text="Copy" />
-                    <MenuItem text="Copy Location" />
-                    <MenuItem text="Paste" />
-                    <SeparatorMenuItem />
-                    <MenuItem text="Select All" />
-                    <MenuItem text="Deselect All" />
+                    <MenuItem text="Undo"/>
+                    <MenuItem text="Redo"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Cut"/>
+                    <MenuItem text="Copy"/>
+                    <MenuItem text="Copy Location"/>
+                    <MenuItem text="Paste"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Select All"/>
+                    <MenuItem text="Deselect All"/>
                 </Menu>
 
                 <Menu text="View">
-                    <MenuItem text="Refresh" />
-                    <SeparatorMenuItem />
+                    <MenuItem text="Refresh"/>
+                    <SeparatorMenuItem/>
                     <Menu text="Sort By">
                         <RadioMenuItem text="Name" selected="true"/>
-                        <RadioMenuItem text="Size" />
-                        <RadioMenuItem text="Modified" />
+                        <RadioMenuItem text="Size"/>
+                        <RadioMenuItem text="Modified"/>
                     </Menu>
-                    <SeparatorMenuItem />
-                    <CheckMenuItem text="Show Previews" />
-                    <CheckMenuItem text="Show Hidden Files" />
-                    <SeparatorMenuItem />
-                    <MenuItem text="Set Columns..." />
+                    <SeparatorMenuItem/>
+                    <CheckMenuItem text="Show Previews"/>
+                    <CheckMenuItem text="Show Hidden Files"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Set Columns..."/>
                 </Menu>
 
                 <Menu text="Go">
-                    <MenuItem text="Back" />
+                    <MenuItem text="Back"/>
                     <MenuItem text="Forward"/>
                     <MenuItem text="Home"/>
 
                 </Menu>
 
                 <Menu text="Settings">
-                    <MenuItem text="Configure Files..." />
+                    <MenuItem text="Configure Files..."/>
                 </Menu>
 
                 <Menu text="Help">
-                    <MenuItem text="About Files" />
+                    <MenuItem text="About Files"/>
                 </Menu>
             </MenuBar>
 
@@ -101,61 +100,62 @@
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Back.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Back.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Forward.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Forward.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Home.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Home.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Search.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Search.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
 
                 <!-- Location -->
-                <TextField fx:id="locationBar" text="/home/cachandler/Home" HBox.hgrow="ALWAYS" onAction="#locationBarUpdated" />
+                <TextField fx:id="locationBar" text="/home/cachandler/Home" HBox.hgrow="ALWAYS"
+                           onAction="#locationBarUpdated"/>
 
                 <!-- New, Cut, Copy, etc. -->
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Add.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Add.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Cut.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Cut.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Copy.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Copy.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
                 <Button>
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Paste.png" />
+                            <Image url="@/com/candle/fileexplorer/images/16/Paste.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -166,94 +166,7 @@
 
     <!-- Side Panel -->
     <left>
-        <ListView fx:id="leftPanel" focusTraversable="false">
-            <padding>
-                <Insets topRightBottomLeft="10.0" />
-            </padding>
-
-            <Label text="Quick Access"/>
-            <Button text="Home" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Desktop" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Downloads" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Documents" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Pictures" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Music" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Videos" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Folder.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Trash" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Trash.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-
-            <Region minHeight="10" VBox.vgrow="ALWAYS"/>
-
-            <Label text="Drives" />
-            <Button text="root" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Drive.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Drive 1" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Drive.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button text="Drive 2" mouseTransparent="true">
-                <graphic>
-                    <ImageView>
-                        <Image url="@/com/candle/fileexplorer/images/16/Drive.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-        </ListView>
+        <QuickAccessController fx:id="quickAccessView"/>
     </left>
 
     <!-- Folders and Files -->
