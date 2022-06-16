@@ -1,7 +1,7 @@
 package model;
 
-import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.DefaultFilesModel;
+import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.observer.DataListener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

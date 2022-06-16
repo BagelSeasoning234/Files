@@ -5,6 +5,8 @@ import com.candle.fileexplorer.model.observer.DataListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.io.File;
+
 /**
  * The view model used by the main view.
  */
@@ -66,6 +68,20 @@ public class MainViewModel implements DataListener {
 
     public StringProperty currentDirectoryProperty() {
         return currentDirectoryProperty;
+    }
+
+    /**
+     * Tells the data model to go back/up one directory.
+     */
+    public void goBackDirectory() {
+        dataModel.goBackwardInDirectoryHistory();
+    }
+
+    /**
+     * Tells the data model to go "forward" in history to the last selected directory.
+     */
+    public void goForwardDirectory() {
+        dataModel.goForwardInDirectoryHistory();
     }
 
     /**

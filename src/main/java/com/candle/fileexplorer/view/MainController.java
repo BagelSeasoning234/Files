@@ -69,6 +69,17 @@ public class MainController {
         viewModel.userUpdatedDirectory();
     }
 
+    /**
+     * Informs the view model to go back/up one directory.
+     */
+    public void goBackDirectory(ActionEvent event) {
+        viewModel.goBackDirectory();
+    }
+
+    public void goForwardDirectory(ActionEvent event) {
+        viewModel.goForwardDirectory();
+    }
+
     //endregion
 
 }

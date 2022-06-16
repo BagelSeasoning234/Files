@@ -1,8 +1,8 @@
 package com.candle.fileexplorer.view;
 
 import com.candle.fileexplorer.view.enums.GridSortOrder;
-import com.candle.fileexplorer.viewmodel.FileItemViewModel;
 import com.candle.fileexplorer.viewmodel.FileGridViewModel;
+import com.candle.fileexplorer.viewmodel.FileItemViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

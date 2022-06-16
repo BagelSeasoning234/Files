@@ -32,4 +32,16 @@ public interface FilesModel {
      * Gets a list of drive names on the computer.
      */
     ArrayList<FileItem> getDrives();
+
+    /**
+     * Sets the current directory to the location in history that was last selected before going back.
+     * (Similar to going "forward" on a web browser).
+     */
+    void goForwardInDirectoryHistory();
+
+    /**
+     * Sets the current directory to the location in history that was last selected.
+     * (Similar to going "backward" on a web browser).
+     */
+    void goBackwardInDirectoryHistory();
 }

@@ -1,6 +1,8 @@
 package view;
 
 import com.candle.fileexplorer.view.DirectoryButtonController;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.Start;
 import com.candle.fileexplorer.viewmodel.DirectoryButtonViewModel;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,22 +10,23 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.framework.junit5.ApplicationExtension;
 
 import static org.mockito.Mockito.verify;
 
 
 import static org.mockito.Mockito.mock;
 
-public class DirectoryButtonControllerTests extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class DirectoryButtonControllerTests {
 
     DirectoryButtonController testButton;
     DirectoryButtonViewModel viewModel;
     Image image;
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    @Start
+    public void start(Stage stage) {
         viewModel = mock(DirectoryButtonViewModel.class);
         image = new Image("/com/candle/fileexplorer/images/16/Folder.png");
         testButton = new DirectoryButtonController(viewModel, image);
@@ -36,8 +39,8 @@ public class DirectoryButtonControllerTests extends ApplicationTest {
     }
 
     @Test
-    public void goToDirectory_shouldTellViewModel_whenButtonClicked() {
-        clickOn(testButton);
+    public void goToDirectory_shouldTellViewModel_whenButtonClicked(FxRobot robot) {
+        robot.clickOn(testButton);
 
         verify(viewModel).goToDirectory();
     }

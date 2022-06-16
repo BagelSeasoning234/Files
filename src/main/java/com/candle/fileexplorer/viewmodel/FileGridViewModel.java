@@ -1,10 +1,9 @@
 package com.candle.fileexplorer.viewmodel;
 
-import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
 import com.candle.fileexplorer.model.observer.DataListener;
-import javafx.beans.property.SimpleListProperty;
+import com.candle.fileexplorer.model.FilesModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

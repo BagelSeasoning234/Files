@@ -17,6 +17,9 @@
 .button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
+    -fx-max-width: 150;
+    -fx-min-width: 150;
+    -fx-alignment: baseline-left;
 }
 
 .button:hover {

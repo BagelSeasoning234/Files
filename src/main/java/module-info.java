@@ -1,12 +1,11 @@
 module com.candle.fileexplorer {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
     requires org.junit.jupiter.api;
 
-
-    opens com.candle.fileexplorer to javafx.fxml;
     exports com.candle.fileexplorer;
-    exports com.candle.fileexplorer.core;
+    opens com.candle.fileexplorer to javafx.graphics;
     opens com.candle.fileexplorer.core to javafx.fxml;
     exports com.candle.fileexplorer.model;
     opens com.candle.fileexplorer.model to javafx.fxml;

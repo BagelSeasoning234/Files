@@ -16,16 +16,20 @@ ext {
     junitVersion = '5.8.2'
 }
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+subprojects {
+    apply plugin: "java"
+    java {
+        modularity.inferModulePath = true
+    }
+}
+
 application {
     mainModule = 'com.candle.fileexplorer'
-    mainClass = 'com.candle.fileexplorer.HelloApplication'
+    mainClass = 'com.candle.fileexplorer.StartFilesApp'
 }
 
 javafx {
@@ -35,8 +39,10 @@ javafx {
 
 dependencies {
 
+    // Tests
     implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-    implementation 'org.testng:testng:7.1.0'
+    implementation 'org.testng:testng:7.6.0'
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
@@ -46,8 +52,11 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.23.1'
 }
 
+
 run {
-    jvmArgs = ['--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED']
+    jvmArgs = [
+            '--add-exports=javafx.graphics/com.sun.javafx.application=org.testfx',
+    ]
 }
 
 test {

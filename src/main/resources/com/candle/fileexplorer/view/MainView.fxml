@@ -97,14 +97,14 @@
 
             <!-- Navigational buttons -->
             <HBox spacing="10">
-                <Button>
+                <Button onAction="#goBackDirectory">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Back.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button>
+                <Button onAction="#goForwardDirectory">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Forward.png"/>
