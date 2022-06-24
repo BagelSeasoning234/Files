@@ -35,6 +35,7 @@ public class FileGridViewModel implements DataListener {
      * Initializes the view model and sets the current directory to the user's home folder.
      */
     public FileGridViewModel(FilesModel dataModel) {
+        items = FXCollections.observableArrayList();
         this.dataModel = dataModel;
         dataModel.addListener(this);
         currentDirectoryChanged();
@@ -48,18 +49,14 @@ public class FileGridViewModel implements DataListener {
      * Updates the file items in the view model using the new current directory value.
      */
     public void updateContents() {
-        // Lazy instantiation
-        if (items == null)
-            items = FXCollections.observableArrayList();
-        else
+        if (items.size() > 0)
             items.clear();
 
         // Get the files/folders.
         ArrayList<FileItem> children = DirectoryStructure.getDirectoryContents(dataModel.getCurrentDirectory(), showHiddenItems);
 
         // Create the view models from the data and add them to an observable list.
-        if (children != null)
-            children.forEach((fileItem) -> items.add(new FileItemViewModel(fileItem)));
+        children.forEach((fileItem) -> items.add(new FileItemViewModel(fileItem)));
     }
 
     public ObservableList<FileItemViewModel> getItems() {

@@ -1,4 +1,4 @@
-package view;
+package com.candle.fileexplorertest.view;
 
 import com.candle.fileexplorer.view.DirectoryButtonController;
 import org.testfx.api.FxRobot;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 
 import static org.mockito.Mockito.verify;
-
 
 import static org.mockito.Mockito.mock;
 
@@ -41,7 +40,6 @@ public class DirectoryButtonControllerTests {
     @Test
     public void goToDirectory_shouldTellViewModel_whenButtonClicked(FxRobot robot) {
         robot.clickOn(testButton);
-
         verify(viewModel).goToDirectory();
     }
 }

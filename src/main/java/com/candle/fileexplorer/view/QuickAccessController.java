@@ -45,7 +45,7 @@ public class QuickAccessController extends ScrollPane {
         try {
             loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -93,7 +93,6 @@ public class QuickAccessController extends ScrollPane {
      */
     private void addQuickAccessButtons() {
         String folderPath = "/com/candle/fileexplorer/images/16/Folder.png";
-        String trashPath = "/com/candle/fileexplorer/images/16/Trash.png";
         Image folderImage = new Image(folderPath);
 
         String[] quickAccessItems = {"Home", "Desktop", "Downloads", "Documents", "Pictures", "Music", "Trash"};

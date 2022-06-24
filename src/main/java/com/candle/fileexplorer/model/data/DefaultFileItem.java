@@ -3,6 +3,7 @@ package com.candle.fileexplorer.model.data;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -53,6 +54,26 @@ public class DefaultFileItem implements FileItem {
     //endregion
 
     //region Public Methods
+
+    public boolean writeToDisk() {
+        switch (fileType) {
+            case File -> {
+                try {
+                    return file.createNewFile();
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+            case Folder -> {
+                try {
+                    return file.mkdir();
+                } catch (SecurityException e) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     public String getFileName() {

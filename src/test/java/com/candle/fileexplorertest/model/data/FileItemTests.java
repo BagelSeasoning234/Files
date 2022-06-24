@@ -1,4 +1,4 @@
-package model.data;
+package com.candle.fileexplorertest.model.data;
 
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileItem;

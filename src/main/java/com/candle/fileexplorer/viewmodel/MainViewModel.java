@@ -5,8 +5,6 @@ import com.candle.fileexplorer.model.observer.DataListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.io.File;
-
 /**
  * The view model used by the main view.
  */
@@ -16,22 +14,22 @@ public class MainViewModel implements DataListener {
     /**
      * The current directory property for use in the GUI.
      */
-    private StringProperty currentDirectoryProperty;
+    private final StringProperty currentDirectoryProperty;
 
     /**
      * The data model containing information about the explorer's current directory.
      */
-    FilesModel dataModel;
+    private final FilesModel dataModel;
 
     /**
      * The view model for the grid of items.
      */
-    private FileGridViewModel fileGridViewModel;
+    private final FileGridViewModel fileGridViewModel;
 
     /**
      * The view model for the quick access items.
      */
-    private QuickAccessViewModel quickAccessVM;
+    private final QuickAccessViewModel quickAccessViewModel;
 
     //endregion
 
@@ -41,14 +39,15 @@ public class MainViewModel implements DataListener {
      * Instantiates the main view model using the File Structure view model.
      *
      * @param gridVM        A reference to an existing file grid view model, which is created in the view model factory.
-     * @param quickAccessVM A reference to an existing quick access view model, which is created in the view model factory.
+     * @param quickAccessViewModel A reference to an existing quick access view model, which is created in the view model factory.
      * @param dataModel     A reference to an existing data model, which is created in the model factory.
      */
-    public MainViewModel(FileGridViewModel gridVM, QuickAccessViewModel quickAccessVM, FilesModel dataModel) {
-        this.fileGridViewModel = gridVM;
-        this.quickAccessVM = quickAccessVM;
-        this.dataModel = dataModel;
+    public MainViewModel(FileGridViewModel gridVM, QuickAccessViewModel quickAccessViewModel, FilesModel dataModel) {
         currentDirectoryProperty = new SimpleStringProperty();
+
+        this.fileGridViewModel = gridVM;
+        this.quickAccessViewModel = quickAccessViewModel;
+        this.dataModel = dataModel;
 
         dataModel.addListener(this);
         currentDirectoryChanged();
@@ -58,20 +57,28 @@ public class MainViewModel implements DataListener {
 
     //region Public Methods
 
-    public FileGridViewModel getFileStructureViewModel() {
+    public FileGridViewModel getFileGridViewModel() {
         return fileGridViewModel;
     }
 
     public QuickAccessViewModel getQuickAccessViewModel() {
-        return quickAccessVM;
+        return quickAccessViewModel;
     }
 
     public StringProperty currentDirectoryProperty() {
         return currentDirectoryProperty;
     }
 
+    public void addTab() {
+        dataModel.addTab(dataModel.getTabIndex() + 1);
+    }
+
+    public void setTabIndex(int index) {
+        dataModel.setTabIndex(index);
+    }
+
     /**
-     * Tells the data model to go back/up one directory.
+     * Tells the data model to go back one directory in history.
      */
     public void goBackDirectory() {
         dataModel.goBackwardInDirectoryHistory();
@@ -82,6 +89,21 @@ public class MainViewModel implements DataListener {
      */
     public void goForwardDirectory() {
         dataModel.goForwardInDirectoryHistory();
+    }
+
+    /**
+     * Tells the data model to go to the home directory.
+     */
+    public void goHomeDirectory() {
+        dataModel.setCurrentDirectory(System.getProperty("user.home"));
+    }
+
+    /**
+     * Tells the grid view to toggle the appearance of hidden items.
+     */
+    public void toggleHiddenItems() {
+        getFileGridViewModel().setShowHiddenItems(!getFileGridViewModel().getShowHiddenItems());
+        getFileGridViewModel().updateContents();
     }
 
     /**
@@ -98,7 +120,7 @@ public class MainViewModel implements DataListener {
 
     //endregion
 
-    //region Private Methods
+    //region Private Helper Methods
 
     //endregion
 }

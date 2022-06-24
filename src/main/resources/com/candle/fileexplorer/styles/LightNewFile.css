@@ -1,0 +1,55 @@
+.root {
+    -very-light-gray: #f7f7f7;
+    -light-gray: #efefef;
+    -mid-gray: #c5c5c5;
+    -text-light-gray: #949494;
+    -text-dark-gray: #3f3f3f;
+
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+}
+
+.button {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-border-color: -mid-gray;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-min-width: 100px;
+}
+
+.button:hover {
+    -fx-background-color: -light-gray;
+}
+
+.button:armed {
+    -fx-background-color: -mid-gray;
+}
+
+.radio-button .radio {
+    -fx-background-color: -very-light-gray;
+    -fx-border-color: -mid-gray;
+    -fx-border-radius: 10;
+}
+
+.radio-button:hover .radio {
+    -fx-background-color: -light-gray;
+}
+
+.text-field {
+    -fx-background-color: -light-gray;
+    -fx-background-radius: 5;
+    -fx-border-color: -mid-gray;
+    -fx-border-radius: 5;
+    -fx-highlight-fill: -mid-gray;
+    -fx-highlight-text-fill: #323232;
+    -fx-prompt-text-fill: -text-light-gray;
+}
+
+.text-field:hover {
+    -fx-border-color: -text-light-gray;
+}
+
+.text-field:focused {
+    -fx-border-color: -text-dark-gray;
+}

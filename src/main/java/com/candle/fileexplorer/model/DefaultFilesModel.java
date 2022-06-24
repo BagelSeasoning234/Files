@@ -6,10 +6,7 @@ import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * The implementation of the files' data model.
@@ -21,22 +18,27 @@ public class DefaultFilesModel implements FilesModel {
     /**
      * A list of objects to notify whenever changes are made in the model.
      */
-    private List<DataListener> listeners;
+    private final List<DataListener> listeners;
 
     /**
-     * A string representing the current file path.
+     * The index of the currently viewed tab.
      */
-    private String currentDirectory;
+    private int tabIndex;
 
     /**
-     * The "memory list" of the past 10 directory items.
+     * A hashmap that represents the directory histories for each tab.
      */
-    private ArrayList<String> directoryHistory;
+    private final HashMap<Integer, ArrayList<String>> directoryHistory;
 
     /**
-     * The index of the currently viewed directory in history.
+     * An array of strings representing the current file path for each tab.
      */
-    private int historyIndex;
+    private final ArrayList<String> currentDirectory;
+
+    /**
+     * An array of indices for the currently viewed directory in history for each tab.
+     */
+    private ArrayList<Integer> historyIndex;
 
     /**
      * The maximum number of directories to store in memory.
@@ -49,14 +51,50 @@ public class DefaultFilesModel implements FilesModel {
 
     public DefaultFilesModel() {
         listeners = new ArrayList<>();
-        directoryHistory = new ArrayList<>(10);
-        historyIndex = -1;
-        setCurrentDirectory(System.getProperty("user.home"));
+        historyIndex = new ArrayList<>();
+        currentDirectory = new ArrayList<>();
+        directoryHistory = new HashMap<>();
+        addTab(0);
     }
 
     //endregion
 
     //region Public Methods
+
+    public void createItem(FileType type, String name) {
+        FileItem item = new DefaultFileItem(type, currentDirectory + "/" + name);
+        item.writeToDisk();
+        notifyDirectoryChange();
+    }
+
+    @Override
+    public int getTabIndex() {
+        return tabIndex;
+    }
+
+    @Override
+    public void setTabIndex(int newIndex) {
+        this.tabIndex = newIndex;
+        notifyDirectoryChange();
+    }
+
+    @Override
+    public void addTab(int tabLocationIndex) {
+        String defaultLocation = System.getProperty("user.home");
+
+        directoryHistory.put(tabLocationIndex, new ArrayList<>(10));
+        directoryHistory.get(tabLocationIndex).add(defaultLocation);
+
+        currentDirectory.add(defaultLocation);
+        historyIndex.add(0);
+    }
+
+    @Override
+    public void removeTab(int tabLocationIndex) {
+        currentDirectory.remove(tabLocationIndex);
+        directoryHistory.remove(tabLocationIndex);
+        historyIndex.remove(tabLocationIndex);
+    }
 
     @Override
     public ArrayList<FileItem> getDrives() {
@@ -65,18 +103,18 @@ public class DefaultFilesModel implements FilesModel {
 
     @Override
     public String getCurrentDirectory() {
-        return currentDirectory;
+        return currentDirectory.get(tabIndex);
     }
 
     @Override
     public void setCurrentDirectory(String newDirectory) {
-        if (Objects.equals(newDirectory, currentDirectory))
+        if (Objects.equals(newDirectory, getCurrentDirectory()))
             return;
 
         FileItem testItem = new DefaultFileItem(newDirectory);
         if (testItem.getFileType() != FileType.File) {
             // We use the test item so that we'll get a clean user path back.
-            this.currentDirectory = testItem.getItemDirectory();
+            currentDirectory.set(tabIndex, testItem.getItemDirectory());
             notifyDirectoryChange();
             addDirectoryToHistory();
         }
@@ -87,18 +125,20 @@ public class DefaultFilesModel implements FilesModel {
         listeners.add(newListener);
     }
 
+    @Override
     public void goForwardInDirectoryHistory() {
-        if (historyIndex < directoryHistory.size() - 1) {
-            historyIndex++;
-            currentDirectory = directoryHistory.get(historyIndex);
+        if (getHistoryIndex() < getHistory().size() - 1) {
+            setHistoryIndex(getHistoryIndex() + 1);
+            currentDirectory.set(tabIndex, getHistory().get(getHistoryIndex()));
             notifyDirectoryChange();
         }
     }
 
+    @Override
     public void goBackwardInDirectoryHistory() {
-        if (historyIndex != 0) {
-            historyIndex--;
-            currentDirectory = directoryHistory.get(historyIndex);
+        if (getHistoryIndex() != 0) {
+            setHistoryIndex(getHistoryIndex() - 1);
+            currentDirectory.set(tabIndex, getHistory().get(getHistoryIndex()));
             notifyDirectoryChange();
         }
     }
@@ -119,33 +159,47 @@ public class DefaultFilesModel implements FilesModel {
      * Makes sure that the directory history data is up-to-date.
      */
     private void addDirectoryToHistory() {
-        if (historyIndex < MAX_STORED_DIRECTORIES - 1)
-            historyIndex++;
-
-        // At first, just add the item.
-        if (historyIndex == 0) {
-            directoryHistory.add(historyIndex, currentDirectory);
-            return;
-        }
-
-        // Is the index smaller than the array?
-        if (historyIndex <= directoryHistory.size() - 1) {      // Something's not right here.
+        // Is the index smaller than the number of stored dirs?
+        if (getHistoryIndex() < getHistory().size() - 1) {
             // We'll have to overwrite future directories.
-            directoryHistory.set(historyIndex, currentDirectory);
-            directoryHistory.subList(historyIndex, directoryHistory.size()).clear();
+            setHistoryIndex(getHistoryIndex() + 1);
+            getHistory().set(getHistoryIndex(), getCurrentDirectory());
+            getHistory().subList(getHistoryIndex() + 1, getHistory().size()).clear();
             return;
         }
 
-        // Is the size smaller than the max?
-        if (directoryHistory.size() < MAX_STORED_DIRECTORIES) {
-            // Since it's less than the max, we can just add a directory.
-            directoryHistory.add(historyIndex, currentDirectory);
+        // Is the number of stored dirs smaller than the max?
+        if (getHistory().size() < MAX_STORED_DIRECTORIES) {
+            // We can just add a directory.
+            setHistoryIndex(getHistoryIndex() + 1);
+            getHistory().add(currentDirectory.get(tabIndex));
             return;
         }
 
         // If we're here, then both are at the max, so we'll overwrite the earliest directory.
-        Collections.rotate(directoryHistory, -1);
-        directoryHistory.set(historyIndex, currentDirectory);
+        Collections.rotate(getHistory(), -1);
+        getHistory().set(getHistoryIndex(), currentDirectory.get(tabIndex));
+    }
+
+    /**
+     * A helper method that returns the directory history for the currently viewed tab.
+     */
+    private ArrayList<String> getHistory() {
+        return directoryHistory.get(tabIndex);
+    }
+
+    /**
+     * A helper method that returns the history index for the currently viewed tab.
+     */
+    private int getHistoryIndex() {
+        return historyIndex.get(tabIndex);
+    }
+
+    /**
+     * A helper method that sets the history index for the currently viewed tab.
+     */
+    private void setHistoryIndex(int newValue) {
+        historyIndex.set(tabIndex, newValue);
     }
 
     //endregion

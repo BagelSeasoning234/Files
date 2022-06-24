@@ -6,9 +6,12 @@ import com.candle.fileexplorer.viewmodel.FileItemViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -18,7 +21,7 @@ import java.util.Comparator;
 /**
  * The view class for the grid of files/folders in the GUI.
  */
-public class FileGridController extends GridPane {
+public class FileGridController extends ScrollPane {
     //region Private Members
 
     /**
@@ -37,14 +40,15 @@ public class FileGridController extends GridPane {
     private final int OPEN_ITEM_CLICK_COUNT = 2;
 
     /**
-     * The HGap and VGap spacing between items in the grid.
-     */
-    private final int ITEM_SPACING = 10;
-
-    /**
      * The order used to sort grid items.
      */
     private GridSortOrder sortOrder = GridSortOrder.Name;
+
+    /**
+     * The grid of items for this view.
+     */
+    @FXML
+    private GridPane gridPane;
 
     /**
      * A reference to the view model responsible for getting the file items.
@@ -56,6 +60,15 @@ public class FileGridController extends GridPane {
     //region Constructor
 
     public FileGridController() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/candle/fileexplorer/view/FileGridView.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //endregion
@@ -73,29 +86,6 @@ public class FileGridController extends GridPane {
         // Bind and setup contents
         viewModel.getItems().addListener(this::listListener);
         updateGridContents();
-
-        setVisualAppearance();
-        setEvents();
-    }
-
-    /**
-     * Handles mouse clicks on nodes in the grid.
-     */
-    public void handleMouseClick(MouseEvent event) {
-        Node clickedNode = getGridFileItem(event);
-        if (clickedNode == null)
-            return;
-
-        // Select the item.
-        if (event.getClickCount() == SELECTED_ITEM_CLICK_COUNT) {
-            clickedNode.requestFocus();
-        }
-        // Open the item.
-        else if (event.getClickCount() == OPEN_ITEM_CLICK_COUNT) {
-            String newCurrentDirectory = ((FileItemController) clickedNode).getItemDirectory();
-            viewModel.setCurrentDirectory(newCurrentDirectory);
-            //updateGridContents();
-        }
     }
 
     public GridSortOrder getSortOrder() {
@@ -109,6 +99,26 @@ public class FileGridController extends GridPane {
     //endregion
 
     //region Private Methods
+
+    /**
+     * Handles mouse clicks on nodes in the grid.
+     */
+    @FXML
+    private void handleMouseClick(MouseEvent event) {
+        Node clickedNode = getGridFileItem(event);
+        if (clickedNode == null)
+            return;
+
+        // Select the item.
+        if (event.getClickCount() == SELECTED_ITEM_CLICK_COUNT) {
+            clickedNode.requestFocus();
+        }
+        // Open the item.
+        else if (event.getClickCount() == OPEN_ITEM_CLICK_COUNT) {
+            String newCurrentDirectory = ((FileItemController) clickedNode).getItemDirectory();
+            viewModel.setCurrentDirectory(newCurrentDirectory);
+        }
+    }
 
     /**
      * The function that runs whenever items in the view model get updated.
@@ -125,7 +135,7 @@ public class FileGridController extends GridPane {
      * TODO: Optimize the grid construction in the future.
      */
     private void updateGridContents() {
-        this.getChildren().clear();
+        gridPane.getChildren().clear();
 
         int columnNumber = 0;
         int rowNumber = 0;
@@ -134,7 +144,7 @@ public class FileGridController extends GridPane {
             // For each item, create a new view and add it to the grid at the specified column and row indexes.
             FileItemController fileItemView = createFileView();
             fileItemView.init(item);
-            this.add(fileItemView, columnNumber, rowNumber);
+            gridPane.add(fileItemView, columnNumber, rowNumber);
 
             // Increment the column indexes.
             columnNumber++;
@@ -195,32 +205,16 @@ public class FileGridController extends GridPane {
     private Node getGridFileItem(MouseEvent event) {
         Node clickedNode = event.getPickResult().getIntersectedNode();
         // Get a child element of the grid.
-        if (clickedNode != this) {
+        if (clickedNode != gridPane) {
             // Walk up the hierarchy to get a direct sub-item of the grid
             Node parent = clickedNode.getParent();
-            while (parent != this) {
+            while (parent != gridPane) {
                 clickedNode = parent;
                 parent = clickedNode.getParent();
             }
             return clickedNode;
         }
         return null;
-    }
-
-    /**
-     * For some reason the CSS wasn't working, so I'm setting the values through Java.
-     */
-    private void setVisualAppearance() {
-        this.setHgap(ITEM_SPACING);
-        this.setVgap(ITEM_SPACING);
-        this.setPadding(new Insets(10));
-    }
-
-    /**
-     * For some reason the FXML references weren't working, so I'm setting the values through Java.
-     */
-    private void setEvents() {
-        this.setOnMouseClicked(this::handleMouseClick);
     }
 
     //endregion

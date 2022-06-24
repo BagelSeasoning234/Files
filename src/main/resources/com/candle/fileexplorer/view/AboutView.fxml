@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Button?>
+<?import java.net.URL?>
+
+<?import javafx.geometry.Insets?>
+<VBox fx:id="backgroundLayout" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.candle.fileexplorer.view.AboutController"
+      spacing="10" alignment="CENTER"
+      prefHeight="250" prefWidth="400">
+
+    <stylesheets>
+        <URL value="@/com/candle/fileexplorer/styles/LightAbout.css"/>
+    </stylesheets>
+    <padding>
+        <Insets topRightBottomLeft="10" />
+    </padding>
+
+    <Label fx:id="appTitle" text="Files" />
+    <Label fx:id="version" text="${controller.appVersion}" />
+
+    <TabPane tabClosingPolicy="UNAVAILABLE">
+        <Tab text="About" >
+            <ScrollPane>
+                <VBox>
+                    <Label text="A file manager application written in Java." />
+                </VBox>
+            </ScrollPane>
+        </Tab>
+        <Tab text="Components">
+            <ScrollPane>
+                <VBox>
+                    <Label text="${controller.javaFxVersion}" />
+                    <Label text="${controller.javaVersion}" />
+                </VBox>
+            </ScrollPane>
+
+        </Tab>
+        <Tab text="Authors">
+            <ScrollPane>
+                <VBox>
+                    <Label fx:id="authorName" text="Christopher Chandler" />
+                    <Label fx:id="authorDetails" text="Developer" />
+                </VBox>
+            </ScrollPane>
+        </Tab>
+    </TabPane>
+    <Button text="Close" onAction="#closeAboutWindow"/>
+</VBox>

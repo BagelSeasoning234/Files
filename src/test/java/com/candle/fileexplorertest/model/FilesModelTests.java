@@ -1,4 +1,4 @@
-package model;
+package com.candle.fileexplorertest.model;
 
 import com.candle.fileexplorer.model.DefaultFilesModel;
 import com.candle.fileexplorer.model.FilesModel;
@@ -55,5 +55,24 @@ public class FilesModelTests {
 
         model.setCurrentDirectory(tempFolder.toString());
         verify(mockListener).currentDirectoryChanged();
+    }
+
+    @Test
+    public void goBackward_shouldReturnToPreviousDir_afterDirChanged()
+    {
+        FilesModel model = new DefaultFilesModel();
+        model.setCurrentDirectory(tempFolder.toString());
+        model.goBackwardInDirectoryHistory();
+        Assertions.assertEquals(model.getCurrentDirectory(), System.getProperty("user.home"));
+    }
+
+    @Test
+    public void goForward_shouldReturnToNextDir_afterGoingBack()
+    {
+        FilesModel model = new DefaultFilesModel();
+        model.setCurrentDirectory(tempFolder.toString());
+        model.goBackwardInDirectoryHistory();
+        model.goForwardInDirectoryHistory();
+        Assertions.assertEquals(model.getCurrentDirectory(), tempFolder.toString());
     }
 }

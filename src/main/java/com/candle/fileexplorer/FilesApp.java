@@ -16,6 +16,7 @@ public class FilesApp extends Application {
         ModelFactory modelFactory = new ModelFactory();
         ViewModelFactory viewModelFactory = new ViewModelFactory(modelFactory);
         ViewHandler viewHandler = new ViewHandler(primaryStage, viewModelFactory);
-        viewHandler.start();    // Things get started here.
+        // Get things started.
+        viewHandler.start();
     }
 }

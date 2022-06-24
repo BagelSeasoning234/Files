@@ -1,0 +1,121 @@
+.root {
+    -very-light-gray: #f7f7f7;
+    -light-gray: #efefef;
+    -mid-gray: #c5c5c5;
+    -text-light-gray: #949494;
+    -text-dark-gray: #3f3f3f;
+
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+}
+
+.button {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-border-color: -mid-gray;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.button:hover {
+    -fx-background-color: -light-gray;
+}
+
+.button:armed {
+    -fx-background-color: -mid-gray;
+}
+
+#appTitle {
+    -fx-font-size: 26;
+}
+
+#authorName {
+    -fx-font-size: 16;
+}
+
+#authorDetails {
+    -fx-font-style: italic;
+}
+
+.scroll-pane {
+    -fx-background-radius: 5;
+    -fx-border-color: -mid-gray;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+/* Tabs */
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane {
+    -fx-tab-min-width: 75px;
+    -fx-tab-min-height: 15px;
+}
+
+.tab {
+    /*
+    Here's how the space between tabs works:
+    There's 3 backgrounds. One's transparent with no insets, one has insets (spacing) on the right and bottom, and 1 has a little spacing all around, with more on the right and bottom so it's bigger than the border.
+    Finally, there's padding all around to ensure that the contents don't escape the border.
+    */
+    -fx-background-color: transparent, tab-border-color, tab-color;
+    tab-color: -light-gray;
+    tab-border-color: -mid-gray;
+    -fx-background-insets: 0, 0 10 10 0, 1 11 11 1;
+    -fx-padding: 5 16 16 5;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: transparent, light-hover-tab-border-color, light-hover-tab-color;
+    light-hover-tab-color: -very-light-gray;
+    light-hover-tab-border-color: -mid-gray;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: transparent, light-tab-border-color, light-tab-color;
+    light-tab-color: white;
+    light-tab-border-color: -mid-gray;
+}
+
+.tab-pane:focused .tab:selected .focus-indicator {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Overflow button */
+.tab-header-area {
+    -fx-padding: 0;
+    -fx-background-insets: 0 0 50 0;
+}
+
+/* Overflow button */
+
+.tab-down-button {
+    -fx-padding: 0;
+}
+
+.tab-down-button .arrow {
+    -fx-padding: 0;
+}
+
+.tab-down-button:hover {
+    -fx-background-color: -light-gray;
+}
+
+.tab-down-button:armed {
+    -fx-background-color: -mid-gray;
+}
+
+.tab .tab-label {
+    -fx-text-alignment: LEFT;
+    -fx-text-fill: black;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-alignment: CENTER;
+}

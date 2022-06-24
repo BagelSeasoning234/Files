@@ -9,7 +9,6 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import java.net.URL?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
@@ -38,17 +37,17 @@
             <!-- Menu Bar -->
             <MenuBar fx:id="menuBar">
                 <Menu text="File">
-                    <MenuItem text="New Item..."/>
-                    <MenuItem text="New Window"/>
-                    <MenuItem text="New Tab"/>
+                    <MenuItem text="New Item..." onAction="#createNewItem"/>
+                    <MenuItem text="New Window" onAction="#openNewWindow"/>
+                    <MenuItem text="New Tab" onAction="#addTab"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Rename..."/>
                     <MenuItem text="Duplicate Here"/>
                     <MenuItem text="Trash"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Close Tab"/>
+                    <MenuItem text="Close Tab" onAction="#closeTab"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Quit"/>
+                    <MenuItem text="Quit" onAction="#closeApp"/>
                 </Menu>
 
                 <Menu text="Edit">
@@ -74,7 +73,7 @@
                     </Menu>
                     <SeparatorMenuItem/>
                     <CheckMenuItem text="Show Previews"/>
-                    <CheckMenuItem text="Show Hidden Files"/>
+                    <CheckMenuItem text="Show Hidden Files" onAction="#toggleHiddenItems"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Set Columns..."/>
                 </Menu>
@@ -91,7 +90,7 @@
                 </Menu>
 
                 <Menu text="Help">
-                    <MenuItem text="About Files"/>
+                    <MenuItem text="About Files" onAction="#aboutFilesApp"/>
                 </Menu>
             </MenuBar>
 
@@ -111,7 +110,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button>
+                <Button onAction="#goHomeDirectory">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Home.png"/>
@@ -131,7 +130,7 @@
                            onAction="#locationBarUpdated"/>
 
                 <!-- New, Cut, Copy, etc. -->
-                <Button>
+                <Button onAction="#createNewItem">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Add.png"/>
@@ -171,20 +170,10 @@
 
     <!-- Folders and Files -->
     <center>
-        <TabPane GridPane.rowIndex="0" GridPane.columnIndex="0" tabClosingPolicy="ALL_TABS">
+        <TabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS">
             <padding>
                 <Insets left="10.0"/>
             </padding>
-
-            <Tab text="Home">
-                <ScrollPane>
-                    <FileGridController fx:id="fileGridView"/>
-                </ScrollPane>
-            </Tab>
-            <Tab text="Videos"/>
-            <Tab text="Productivity"/>
-            <Tab text="Music"/>
-
         </TabPane>
     </center>
 

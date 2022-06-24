@@ -2,6 +2,12 @@ package com.candle.fileexplorer.model.data;
 
 public interface FileItem {
     /**
+     * Creates a new file/folder at the path specified when the item was first created.
+     * @return Whether the operation was successful.
+     */
+    boolean writeToDisk();
+
+    /**
      * Gets the name of the file item.
      */
     String getFileName();

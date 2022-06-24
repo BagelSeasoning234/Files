@@ -1,4 +1,4 @@
-package viewmodel;
+package com.candle.fileexplorertest.viewmodel;
 
 import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;

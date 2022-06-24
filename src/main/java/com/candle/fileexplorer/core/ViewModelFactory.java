@@ -1,8 +1,6 @@
 package com.candle.fileexplorer.core;
 
-import com.candle.fileexplorer.viewmodel.FileGridViewModel;
-import com.candle.fileexplorer.viewmodel.MainViewModel;
-import com.candle.fileexplorer.viewmodel.QuickAccessViewModel;
+import com.candle.fileexplorer.viewmodel.*;
 
 /**
  * The class that is responsible for creating the view models.
@@ -15,6 +13,13 @@ public class ViewModelFactory {
      */
     private MainViewModel mainViewModel;
 
+    /**
+     * A reference to the about window's view model.
+     */
+    private AboutViewModel aboutViewModel;
+
+    private NewFileViewModel newFileViewModel;
+
     //endregion
 
     /**
@@ -26,12 +31,24 @@ public class ViewModelFactory {
         FileGridViewModel fileGrid = new FileGridViewModel(modelFactory.getFilesModel());
         QuickAccessViewModel quickAccess = new QuickAccessViewModel(modelFactory.getFilesModel());
         mainViewModel = new MainViewModel(fileGrid, quickAccess, modelFactory.getFilesModel());
+
+        newFileViewModel = new NewFileViewModel(modelFactory.getFilesModel());
     }
 
     //region Public Methods
 
     public MainViewModel getMainViewModel() {
         return mainViewModel;
+    }
+
+    public AboutViewModel getAboutViewModel() {
+        if (aboutViewModel == null)
+            aboutViewModel = new AboutViewModel();
+        return aboutViewModel;
+    }
+
+    public NewFileViewModel getNewFileViewModel() {
+        return newFileViewModel;
     }
 
     //endregion

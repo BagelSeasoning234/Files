@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.candle.fileexplorer.view.NewFileController"
+      spacing="10" alignment="CENTER"
+      prefHeight="250" prefWidth="400">
+    <stylesheets>
+        <URL value="@/com/candle/fileexplorer/styles/LightNewFile.css"/>
+    </stylesheets>
+    <padding>
+        <Insets topRightBottomLeft="10" />
+    </padding>
+
+    <fx:define>
+        <ToggleGroup fx:id="itemTypeGroup" />
+    </fx:define>
+
+    <Label text="Enter file/folder name:" />
+    <HBox alignment="CENTER" spacing="10">
+        <RadioButton text="File" onAction="#setFile" toggleGroup="$itemTypeGroup" selected="true"/>
+        <RadioButton text="Folder" onAction="#setFolder" toggleGroup="$itemTypeGroup"/>
+    </HBox>
+    <TextField fx:id="itemNameField" promptText="File.txt, Folder" />
+    <HBox alignment="CENTER" spacing="10">
+        <Button text="OK" onAction="#createItem"/>
+        <Button text="Cancel" onAction="#cancel"/>
+    </HBox>
+
+</VBox>
