@@ -1,8 +1,5 @@
-package com.candle.fileexplorertest.model.data;
+package com.candle.fileexplorer.model.data;
 
-import com.candle.fileexplorer.model.data.DefaultFileItem;
-import com.candle.fileexplorer.model.data.FileItem;
-import com.candle.fileexplorer.model.data.FileType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +27,34 @@ public class FileItemTests {
 
         tempFile = tempFilePath.toAbsolutePath().toString();
         tempFolder = tempFolderPath.toAbsolutePath().toString();
+    }
+
+    @Test
+    public void writeToDisk_shouldCreateFile_givenFileType() {
+        String newFile = "file.txt";
+        String filePath = tempFolderPath.resolve(newFile).toAbsolutePath().toString();
+        FileItem fileItem = new DefaultFileItem(filePath);
+        fileItem.writeToDisk();
+
+        File testObject = new File(tempFolder + "/" + newFile);
+        Assertions.assertTrue(testObject.exists() && testObject.isFile());
+    }
+
+    @Test
+    public void writeToDisk_shouldCreateFolder_givenFolderType() {
+        String newFolder = "folder";
+        String folderLocation = tempFolder + "/" + newFolder;
+
+        FileItem folderItem = new DefaultFileItem(FileType.Folder, folderLocation);
+        folderItem.writeToDisk();
+
+        File testObject = new File(folderLocation);
+        Assertions.assertTrue(testObject.exists() && testObject.isDirectory());
+    }
+
+    @Test
+    public void writeToDisk_shouldDoNothing_givenDriveType() {
+
     }
 
     @Test
@@ -104,18 +129,6 @@ public class FileItemTests {
     public void isHiddenFile_shouldReturnFalse_onVisibleFile() {
         FileItem visibleFile = new DefaultFileItem(tempFile);
         Assertions.assertFalse(visibleFile.getIsHiddenFile());
-    }
-
-    @Test
-    public void getFileSize_shouldReturnSize_ofFolder() {
-        FileItem folder = new DefaultFileItem(tempFolder);
-        Assertions.assertEquals(folder.getFileSize(), new File(tempFile).length());
-    }
-
-    @Test
-    public void getFileSize_shouldReturnSize_ofFile() {
-        FileItem file = new DefaultFileItem(tempFile);
-        Assertions.assertEquals(file.getFileSize(), new File(tempFile).length());
     }
 
     @Test

@@ -8,6 +8,18 @@ public interface FileItem {
     boolean writeToDisk();
 
     /**
+     * Renames the existing file/folder at the specified when the item was first created.
+     * @param name The new name of the file/folder.
+     * @return Whether the operation was successful.
+     */
+    boolean rename(String name);
+
+    /**
+     * Sends the file/folder at the path specified when the item was first created to the recycle bin.
+     */
+    boolean sendToTrash();
+
+    /**
      * Gets the name of the file item.
      */
     String getFileName();
@@ -26,11 +38,6 @@ public interface FileItem {
      * Checks to see if the given file should be hidden by default.
      */
     boolean getIsHiddenFile();
-
-    /**
-     * Gets the size of the file.
-     */
-    long getFileSize();
 
     /**
      * Gets the time at which this item was last modified.

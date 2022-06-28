@@ -1,11 +1,13 @@
 package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.FilesModel;
-import com.candle.fileexplorer.model.data.FileType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class NewFileViewModel {
+/**
+ * The class that allows the 'rename' view to communicate with the database.
+ */
+public class RenameViewModel {
     //region Public Members/Properties
 
     /**
@@ -17,18 +19,21 @@ public class NewFileViewModel {
 
     //region Private Members
 
-    private final FilesModel dataModel;
-
     /**
-     * The type of item to be created (file/folder).
+     * The directory path for the file/folder to rename.
      */
-    private FileType type = FileType.File;
+    private String itemPath;
+
+    FilesModel dataModel;
 
     //endregion
 
     //region Constructors
 
-    public NewFileViewModel(FilesModel dataModel) {
+    /**
+     * Constructs a new instance of the class with the given reference to the data model.
+     */
+    public RenameViewModel(FilesModel dataModel) {
         this.dataModel = dataModel;
 
         itemNameProperty = new SimpleStringProperty();
@@ -38,8 +43,8 @@ public class NewFileViewModel {
 
     //region Accessors/Mutators
 
-    public void setType(FileType type) {
-        this.type = type;
+    public void setItemPath(String path) {
+        this.itemPath = path;
     }
 
     public StringProperty itemNameProperty() {
@@ -51,13 +56,13 @@ public class NewFileViewModel {
     //region Public Methods
 
     /**
-     * Tells the data model to create a new file/folder at the specified location.
+     * Tells the data model to rename the given file/folder at the specified location.
      */
-    public void createItem() {
-        if (canCreateItem()) {
-            dataModel.createItem(type, itemNameProperty.getValue());
+    public void renameItem() {
+        if (canRenameItem()) {
+            dataModel.renameItem(itemPath, itemNameProperty.getValue());
             itemNameProperty.setValue("");
-            type = FileType.File;
+            itemPath = "";
         }
     }
 
@@ -66,17 +71,16 @@ public class NewFileViewModel {
     //region Private Helper Methods
 
     /**
-     * Checks to see if a new item can be created at this location
+     * Checks to see if the given item can be renamed.
      */
-    private boolean canCreateItem() {
+    private boolean canRenameItem() {
         if (itemNameProperty.getValue() == null)
             return false;
 
         boolean nameIsNotEmpty = !itemNameProperty.getValue().equals("");
-        boolean typeIsValid = !type.equals(FileType.Drive);
         boolean nameIsValid = !itemNameProperty.getValue().contains("/");
 
-        return (nameIsNotEmpty && typeIsValid && nameIsValid);
+        return (nameIsNotEmpty && nameIsValid);
     }
 
     //endregion

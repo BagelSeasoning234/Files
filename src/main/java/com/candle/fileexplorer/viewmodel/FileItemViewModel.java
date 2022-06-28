@@ -13,17 +13,17 @@ public class FileItemViewModel {
     /**
      * The name of the file/folder/drive in this directory that is exposed to the view.
      */
-    private StringProperty fileName;
+    private final StringProperty fileName;
 
     /**
      * The type of item contained in this directory that is exposed to the view.
      */
-    private ObjectProperty<Image> imagePreview;
+    private final ObjectProperty<Image> imagePreview;
 
     /**
      * The data object to which this view model refers.
      */
-    private FileItem fileItem;
+    private final FileItem fileItem;
 
     //endregion
 
@@ -77,10 +77,6 @@ public class FileItemViewModel {
 
     public ObjectProperty<Image> imagePreviewProperty() {
         return imagePreview;
-    }
-
-    public long getFileSize() {
-        return fileItem.getFileSize();
     }
 
     public long getLastModifiedTime() {

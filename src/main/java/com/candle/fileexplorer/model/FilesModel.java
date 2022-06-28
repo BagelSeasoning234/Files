@@ -11,10 +11,7 @@ import java.util.ArrayList;
  * The interface for the files' data model.
  */
 public interface FilesModel {
-    /**
-     * Subscribes the specified object to be notified whenever changes are made to the data model.
-     */
-    void addListener(DataListener newListener);
+    //region Accessors/Mutators
 
     /**
      * Gets the index of the currently viewed tab.
@@ -25,6 +22,31 @@ public interface FilesModel {
      * Sets the index representing the currently viewed tab to the specified value.
      */
     void setTabIndex(int newIndex);
+
+    /**
+     * Gets a list of drive names on the computer.
+     */
+    ArrayList<FileItem> getDrives();
+
+    /**
+     * Returns a string with the current directory.
+     */
+    String getCurrentDirectory();
+
+    /**
+     * Sets the current directory at the given index to the given value.
+     * @param path The new directory to go to.
+     */
+    void setCurrentDirectory(String path);
+
+    //endregion
+
+    //region Public Methods
+
+    /**
+     * Subscribes the specified object to be notified whenever changes are made to the data model.
+     */
+    void addListener(DataListener newListener);
 
     /**
      * Tells the model to set up additional values in the array lists for the new tab.
@@ -44,20 +66,16 @@ public interface FilesModel {
     void createItem(FileType type, String name);
 
     /**
-     * Returns a string with the current directory.
+     * Renames the file/folder at the given directory.
+     * @param path The absolute path to the file/folder.
+     * @param name The new name for the file/folder.
      */
-    String getCurrentDirectory();
+    void renameItem(String path, String name);
 
     /**
-     * Sets the current directory at the given index to the given value.
-     * @param path The new directory to go to.
+     * Deletes the item at the given file/folder path.
      */
-    void setCurrentDirectory(String path);
-
-    /**
-     * Gets a list of drive names on the computer.
-     */
-    ArrayList<FileItem> getDrives();
+    void trashItem(String path);
 
     /**
      * Sets the current directory to the location in history that was last selected before going back.
@@ -70,4 +88,11 @@ public interface FilesModel {
      * (Similar to going "backward" on a web browser).
      */
     void goBackwardInDirectoryHistory();
+
+    /**
+     * Forces all listeners to update the currently viewed directory.
+     */
+    void forceUpdate();
+
+    //endregion
 }

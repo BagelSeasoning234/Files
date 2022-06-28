@@ -6,12 +6,12 @@ import com.candle.fileexplorer.viewmodel.FileItemViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -22,33 +22,28 @@ import java.util.Comparator;
  * The view class for the grid of files/folders in the GUI.
  */
 public class FileGridController extends ScrollPane {
+
     //region Private Members
 
-    /**
-     * The number of columns to be used in the grid pane.
-     */
-    private final int MAX_COLUMNS = 6;
-
-    /**
-     * The number of clicks necessary to select an item.
-     */
-    private final int SELECTED_ITEM_CLICK_COUNT = 1;
-
-    /**
-     * The number of clicks necessary to open an item.
-     */
-    private final int OPEN_ITEM_CLICK_COUNT = 2;
-
-    /**
-     * The order used to sort grid items.
-     */
-    private GridSortOrder sortOrder = GridSortOrder.Name;
+    //region GUI Elements
 
     /**
      * The grid of items for this view.
      */
     @FXML
     private GridPane gridPane;
+
+    //endregion
+
+    /**
+     * The number of columns to be used in the grid pane.
+     */
+    private int maxColumns = 6;
+
+    /**
+     * The order used to sort grid items.
+     */
+    private GridSortOrder sortOrder = GridSortOrder.Name;
 
     /**
      * A reference to the view model responsible for getting the file items.
@@ -57,7 +52,7 @@ public class FileGridController extends ScrollPane {
 
     //endregion
 
-    //region Constructor
+    //region Constructors
 
     public FileGridController() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/candle/fileexplorer/view/FileGridView.fxml"));
@@ -73,6 +68,27 @@ public class FileGridController extends ScrollPane {
 
     //endregion
 
+    //region Accessors/Mutators
+
+    public GridSortOrder getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(GridSortOrder sortOrder) {
+        this.sortOrder = sortOrder;
+        updateGridContents();
+    }
+
+    public int getMaxColumns() {
+        return maxColumns;
+    }
+
+    public void setMaxColumns(int maxColumns) {
+        this.maxColumns = maxColumns;
+    }
+
+    //endregion
+
     //region Public Methods
 
     /**
@@ -84,21 +100,32 @@ public class FileGridController extends ScrollPane {
         this.viewModel = viewModel;
 
         // Bind and setup contents
+        setWidthEventHandlers();
         viewModel.getItems().addListener(this::listListener);
         updateGridContents();
     }
 
-    public GridSortOrder getSortOrder() {
-        return sortOrder;
+    public FileItemController getSelectedFileItem() {
+        Node focusedItem = gridPane.getScene().getFocusOwner();
+        if (focusedItem instanceof FileItemController)
+            return (FileItemController) focusedItem;
+        else
+            return null;
     }
 
-    public void setSortOrder(GridSortOrder sortOrder) {
-        this.sortOrder = sortOrder;
+    /**
+     * Refreshes the contents of the view.
+     */
+    public void refresh() {
+        viewModel.updateContents();
+        updateGridContents();
     }
 
     //endregion
 
-    //region Private Methods
+    //region Private Helper Methods
+
+    //region On Clicked Methods
 
     /**
      * Handles mouse clicks on nodes in the grid.
@@ -109,16 +136,21 @@ public class FileGridController extends ScrollPane {
         if (clickedNode == null)
             return;
 
+        int openItemClickCount = 2;
+        int selectedItemClickCount = 1;
+
         // Select the item.
-        if (event.getClickCount() == SELECTED_ITEM_CLICK_COUNT) {
+        if (event.getClickCount() == selectedItemClickCount) {
             clickedNode.requestFocus();
         }
         // Open the item.
-        else if (event.getClickCount() == OPEN_ITEM_CLICK_COUNT) {
+        else if (event.getClickCount() == openItemClickCount) {
             String newCurrentDirectory = ((FileItemController) clickedNode).getItemDirectory();
             viewModel.setCurrentDirectory(newCurrentDirectory);
         }
     }
+
+    //endregion
 
     /**
      * The function that runs whenever items in the view model get updated.
@@ -148,7 +180,7 @@ public class FileGridController extends ScrollPane {
 
             // Increment the column indexes.
             columnNumber++;
-            if (columnNumber == MAX_COLUMNS) {
+            if (columnNumber == maxColumns) {
                 columnNumber = 0;
                 rowNumber++;
             }
@@ -160,17 +192,12 @@ public class FileGridController extends ScrollPane {
      * Using the defined sort order, this function reorganizes a list of FileItemViewModels.
      */
     private ObservableList<FileItemViewModel> sortItems(ObservableList<FileItemViewModel> items) {
-        // TODO: Make the Size sort algorithm account for folder sizes.
-        //  This approach might work: https://stackoverflow.com/questions/2149785/get-size-of-folder-or-file/19877372#19877372
-
         // I duplicate the array to prevent the function from making changes to the underlying view model's data. (Otherwise, this causes a stack overflow error).
         ObservableList<FileItemViewModel> newItemList = FXCollections.observableArrayList(items);
 
         switch (sortOrder) {
             // Sorts based on the alphabetical name of each item.
             case Name -> newItemList.sort((o1, o2) -> o1.getFileName().compareToIgnoreCase(o2.getFileName()));
-            // Sorts based on the size of each item.
-            case Size -> newItemList.sort(Comparator.comparingLong(FileItemViewModel::getFileSize));
             // Sorts based on the last modified date of each item.
             case Modified -> newItemList.sort(Comparator.comparing(FileItemViewModel::getLastModifiedTime));
         }
@@ -215,6 +242,19 @@ public class FileGridController extends ScrollPane {
             return clickedNode;
         }
         return null;
+    }
+
+    /**
+     * Sets up the "responsive ui" handlers that ensure the grid
+     * always has the correct number of columns.
+     */
+    private void setWidthEventHandlers() {
+        // TODO: Make the view responsive.
+        //  This link may help. https://libredd.it/r/JavaFX/comments/nkoa7z/javafx_app_with_responsive_design/
+
+        //gridPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+        //
+        //}));
     }
 
     //endregion

@@ -1,9 +1,8 @@
-package com.candle.fileexplorertest.model.helpers;
+package com.candle.fileexplorer.model.helpers;
 
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.FileType;
-import com.candle.fileexplorer.model.helpers.DirectoryStructure;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

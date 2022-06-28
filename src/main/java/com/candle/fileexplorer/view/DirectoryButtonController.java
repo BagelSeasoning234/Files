@@ -15,7 +15,7 @@ public class DirectoryButtonController extends Button {
     /**
      * A reference to the view model class that allows this object to set the data model's current directory.
      */
-    private DirectoryButtonViewModel viewModel;
+    private final DirectoryButtonViewModel viewModel;
 
     //endregion
 

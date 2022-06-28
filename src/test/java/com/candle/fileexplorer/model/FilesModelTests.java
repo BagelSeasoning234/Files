@@ -1,13 +1,13 @@
-package com.candle.fileexplorertest.model;
+package com.candle.fileexplorer.model;
 
-import com.candle.fileexplorer.model.DefaultFilesModel;
-import com.candle.fileexplorer.model.FilesModel;
+import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.observer.DataListener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
@@ -26,6 +26,58 @@ public class FilesModelTests {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void createItem_shouldCreateFile_whenTypeIsFile() {
+        FilesModel dataModel = new DefaultFilesModel();
+        String fileName = "file.txt";
+
+        dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
+        dataModel.createItem(FileType.File, fileName);
+
+        File fileObject = new File(dataModel.getCurrentDirectory() + "/" + fileName);
+        Assertions.assertTrue(fileObject.exists() && fileObject.isFile());
+    }
+
+    @Test
+    public void createItem_shouldCreateFolder_whenTypeIsFolder() {
+        FilesModel dataModel = new DefaultFilesModel();
+        String folderName = "folder";
+
+        dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
+        dataModel.createItem(FileType.Folder, folderName);
+
+        File folderObject = new File(dataModel.getCurrentDirectory() + "/" + folderName);
+        Assertions.assertTrue(folderObject.exists() && folderObject.isDirectory());
+    }
+
+    @Test
+    public void createItem_shouldNotifyListeners_afterWritingToDisk() {
+        DataListener listener = mock(DataListener.class);
+        FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addListener(listener);
+
+        String fileName = "file.png";
+        dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
+        dataModel.createItem(FileType.File, fileName);
+
+        verify(listener, times(2)).currentDirectoryChanged();
+    }
+
+    @Test
+    public void createItem_shouldNotNotifyListeners_IfTypeIsDrive() {
+        DataListener listener = mock(DataListener.class);
+        FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addListener(listener);
+
+        String fileName = "driveObject";
+        dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
+        dataModel.createItem(FileType.Drive, fileName);
+
+        verify(listener, times(1)).currentDirectoryChanged();
+    }
+
+
 
     @Test
     public void currentDirectory_shouldReturnUserHomeDirectory_byDefault() {

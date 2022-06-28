@@ -8,17 +8,11 @@ import com.candle.fileexplorer.viewmodel.*;
 public class ViewModelFactory {
     //region Private Members
 
-    /**
-     * A reference to the main window's view model.
-     */
-    private MainViewModel mainViewModel;
-
-    /**
-     * A reference to the about window's view model.
-     */
+    private final MainViewModel mainViewModel;
+    private final NewFileViewModel newFileViewModel;
+    private final RenameViewModel renameViewModel;
     private AboutViewModel aboutViewModel;
 
-    private NewFileViewModel newFileViewModel;
 
     //endregion
 
@@ -33,6 +27,7 @@ public class ViewModelFactory {
         mainViewModel = new MainViewModel(fileGrid, quickAccess, modelFactory.getFilesModel());
 
         newFileViewModel = new NewFileViewModel(modelFactory.getFilesModel());
+        renameViewModel = new RenameViewModel(modelFactory.getFilesModel());
     }
 
     //region Public Methods
@@ -49,6 +44,10 @@ public class ViewModelFactory {
 
     public NewFileViewModel getNewFileViewModel() {
         return newFileViewModel;
+    }
+
+    public RenameViewModel getRenameViewModel() {
+        return  renameViewModel;
     }
 
     //endregion

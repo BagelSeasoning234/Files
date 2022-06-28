@@ -1,8 +1,6 @@
 package com.candle.fileexplorer.core;
 
-import com.candle.fileexplorer.view.AboutController;
-import com.candle.fileexplorer.view.MainController;
-import com.candle.fileexplorer.view.NewFileController;
+import com.candle.fileexplorer.view.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,11 +18,11 @@ public class ViewHandler {
     /**
      * A reference to the application window.
      */
-    private Stage stage;
+    private final Stage stage;
     /**
      * A reference to the view model factory.
      */
-    private ViewModelFactory viewModelFactory;
+    private final ViewModelFactory viewModelFactory;
 
     //endregion
 
@@ -76,9 +74,10 @@ public class ViewHandler {
     /**
      * Opens a new window process with the specified view.
      * @param viewToOpen The name of the view to open, WITHOUT the "View.fxml" part.
+     * @param arg An optional additional argument, if the view supports it.
      * @throws IOException If the view could not be found.
      */
-    public void openSubView(String viewToOpen) throws IOException {
+    public void openSubView(String viewToOpen, String arg) throws IOException {
         Stage subStage = new Stage();
         Scene scene = null;
         Parent root = null;
@@ -104,6 +103,26 @@ public class ViewHandler {
             subStage.setTitle("New Item");
         }
 
+        if ("Rename".equals(viewToOpen)) {
+            String location = "/com/candle/fileexplorer/view/RenameView.fxml";
+            loader.setLocation(getClass().getResource(location));
+            root = loader.load();
+
+            RenameController view = loader.getController();
+            view.init(viewModelFactory.getRenameViewModel(), arg);
+            subStage.setTitle("Rename Item");
+        }
+
+        if ("Error".equals(viewToOpen)) {
+            String location = "/com/candle/fileexplorer/view/ErrorView.fxml";
+            loader.setLocation(getClass().getResource(location));
+            root = loader.load();
+
+            ErrorController view = loader.getController();
+            view.init(arg);
+            subStage.setTitle("Error");
+        }
+
         scene = new Scene(root);
         subStage.setScene(scene);
         subStage.initModality(Modality.APPLICATION_MODAL);
@@ -112,5 +131,4 @@ public class ViewHandler {
     }
 
     //endregion
-
 }

@@ -3,14 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.candle.fileexplorer.view.NewFileController"
+      fx:controller="com.candle.fileexplorer.view.RenameController"
       spacing="10" alignment="CENTER"
       prefHeight="200" prefWidth="400" onKeyPressed="#onKeyPressed">
 
+    <!-- The styling is the same for both, so I might as well use the same css file. -->
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/LightNewFile.css"/>
     </stylesheets>
@@ -19,18 +20,10 @@
         <Insets topRightBottomLeft="10" />
     </padding>
 
-    <fx:define>
-        <ToggleGroup fx:id="itemTypeGroup" />
-    </fx:define>
-
-    <Label text="Enter file/folder name:" />
-    <HBox alignment="CENTER" spacing="10">
-        <RadioButton text="File" onAction="#setFile" toggleGroup="$itemTypeGroup" selected="true"/>
-        <RadioButton text="Folder" onAction="#setFolder" toggleGroup="$itemTypeGroup"/>
-    </HBox>
+    <Label text="Enter new file/folder name:" />
     <TextField fx:id="itemNameField" promptText="File.txt, Folder" />
     <HBox alignment="CENTER" spacing="10">
-        <Button text="OK" onAction="#createItem"/>
+        <Button text="OK" onAction="#renameItem"/>
         <Button text="Cancel" onAction="#cancel"/>
     </HBox>
 

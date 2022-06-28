@@ -2,15 +2,17 @@ package com.candle.fileexplorer.view;
 
 import com.candle.fileexplorer.FilesApp;
 import com.candle.fileexplorer.core.ViewHandler;
+import com.candle.fileexplorer.view.enums.GridSortOrder;
 import com.candle.fileexplorer.viewmodel.MainViewModel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * The view class for the main view.
@@ -24,6 +26,8 @@ public class MainController {
 
     @FXML
     private TabPane tabPane;
+
+    private ArrayList<FileGridController> gridViews;
 
     /**
      * A collection of "quick access" directory paths, along with the current drives.
@@ -61,6 +65,7 @@ public class MainController {
     public void init(MainViewModel viewModel, ViewHandler viewHandler) {
         this.viewModel = viewModel;
         this.viewHandler = viewHandler;
+        gridViews = new ArrayList<>();
 
         // Bind data here
         quickAccessView.init(viewModel.getQuickAccessViewModel());
@@ -75,14 +80,6 @@ public class MainController {
     //region On Clicked Methods
 
     //region Toolbar
-
-    /**
-     * Informs the view model to update the backend with the new current directory.
-     */
-    @FXML
-    private void locationBarUpdated(ActionEvent event) {
-        viewModel.userUpdatedDirectory();
-    }
 
     /**
      * Informs the view model to go back in history.
@@ -108,19 +105,39 @@ public class MainController {
         viewModel.goHomeDirectory();
     }
 
+    /**
+     * Informs the view model to update the backend with the new current directory.
+     */
+    @FXML
+    private void locationBarUpdated(ActionEvent event) {
+        viewModel.userUpdatedDirectory();
+    }
+
+    // (The "create new item," "cut," "copy," and "paste" methods are located in the menu section.)
+
     //endregion
 
     //region Menu
+
+    //region File
 
     /**
      * Shows the "create new item" page for the application.
      */
     @FXML
     private void createNewItem(ActionEvent event) {
-        try {
-            viewHandler.openSubView("NewFile");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (viewModel.canModifyItem(viewModel.currentDirectoryProperty().getValue())) {
+            try {
+                viewHandler.openSubView("NewFile", "");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                viewHandler.openSubView("Error", "A file/folder cannot be created in this directory. It may be read-only.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -151,6 +168,44 @@ public class MainController {
     }
 
     @FXML
+    private void rename(ActionEvent event) {
+        FileItemController fileItemView = getCurrentGridView().getSelectedFileItem();
+        if (fileItemView == null)
+            return;
+
+        try {
+            if (viewModel.canModifyItem(fileItemView.getItemDirectory()))
+                viewHandler.openSubView("Rename", fileItemView.getItemDirectory());
+            else
+                viewHandler.openSubView("Error", "The selected file/folder could not be renamed. It may be read-only.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void duplicateHere(ActionEvent event) {
+        // TODO: Create the duplicate function.
+    }
+
+    @FXML
+    private void trashItem(ActionEvent event) {
+        FileItemController fileItemView = getCurrentGridView().getSelectedFileItem();
+        if (fileItemView == null)
+            return;
+
+        if (viewModel.canModifyItem(fileItemView.getItemDirectory()))
+            viewModel.trashItem(fileItemView.getItemDirectory());
+        else {
+            try {
+                viewHandler.openSubView("Error", "The selected file/folder could not be deleted. It may be read-only.");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
     private void closeTab(ActionEvent event) {
         attemptToCloseTab(tabPane.getSelectionModel().getSelectedItem());
     }
@@ -164,9 +219,57 @@ public class MainController {
         stage.close();
     }
 
+    //endregion
+
+    //region Edit
+
+    @FXML
+    private void undo(ActionEvent event) {
+        // TODO: Create the undo function.
+    }
+
+    @FXML
+    private void redo(ActionEvent event) {
+        // TODO: Create the redo function.
+    }
+
+    @FXML
+    private void cut(ActionEvent event) {
+        // TODO: Create the cut function.
+    }
+
+    @FXML
+    private void copy(ActionEvent event) {
+        // TODO: Create the copy function.
+    }
+
+    @FXML
+    private void copyLocation(ActionEvent event) {
+        // TODO: Create the copy location function.
+    }
+
+    @FXML
+    private void paste(ActionEvent event) {
+        // TODO: Create the paste function.
+    }
+
+    //endregion
+
+    //region View
+
     @FXML
     private void refresh(ActionEvent event) {
-        // TODO: Create the refresh function.
+        getCurrentGridView().refresh();
+    }
+
+    @FXML
+    private void sortByName(ActionEvent event) {
+        getCurrentGridView().setSortOrder(GridSortOrder.Name);
+    }
+
+    @FXML
+    private void sortByModified(ActionEvent event) {
+        getCurrentGridView().setSortOrder(GridSortOrder.Modified);
     }
 
     /**
@@ -177,17 +280,34 @@ public class MainController {
         viewModel.toggleHiddenItems();
     }
 
+    @FXML
+    private void setColumns(ActionEvent event) {
+        // TODO: Create the set columns function.
+    }
+
+    //endregion
+
+    //region Go
+
+    // (Go methods are handled in the toolbar region)
+
+    //endregion
+
+    //region Help
+
     /**
      * Shows the about page for the application.
      */
     @FXML
     private void aboutFilesApp(ActionEvent event) {
         try {
-            viewHandler.openSubView("About");
+            viewHandler.openSubView("About", "");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    //endregion
 
     //endregion
 
@@ -202,6 +322,7 @@ public class MainController {
         // TODO: Keep track of the current directory names on the view model/model so the tab can bind to them.
         Tab newTab = new Tab("Home");
         FileGridController tabView = new FileGridController();
+        gridViews.add(tabView);
 
         tabView.init(viewModel.getFileGridViewModel());
         newTab.setOnCloseRequest(e -> {
@@ -214,11 +335,14 @@ public class MainController {
 
     /**
      * A helper method that runs when the user attempts to close a tab.
-     * @param tab The tab that will be closed
+     * @param tab The tab that will be closed.
      */
     private void attemptToCloseTab(Tab tab) {
-        if (tabPane.getTabs().size() > 1)
+        if (tabPane.getTabs().size() > 1) {
+            int index = tabPane.getTabs().indexOf(tab);
+            viewModel.closeTab(index);
             tabPane.getTabs().remove(tab);
+        }
     }
 
     /**
@@ -227,6 +351,13 @@ public class MainController {
     private void tabChanged() {
         int newIndex = tabPane.getSelectionModel().getSelectedIndex();
         viewModel.setTabIndex(newIndex);
+    }
+
+    /**
+     * A helper method that returns the currently viewed grid controller.
+     */
+    private FileGridController getCurrentGridView() {
+        return gridViews.get(viewModel.getTabIndex());
     }
 
     //endregion

@@ -20,8 +20,7 @@ public class FileGridViewModel implements DataListener {
     /**
      * A list of file item view models to be exposed to the UI.
      */
-    private ObservableList<FileItemViewModel> items;
-
+    private final ObservableList<FileItemViewModel> items;
     /**
      * A boolean variable that is used to determine whether hidden files/folders should be displayed.
      */
@@ -29,7 +28,7 @@ public class FileGridViewModel implements DataListener {
 
     //endregion
 
-    //region Constructor
+    //region Constructors
 
     /**
      * Initializes the view model and sets the current directory to the user's home folder.
@@ -43,21 +42,7 @@ public class FileGridViewModel implements DataListener {
 
     //endregion
 
-    //region Public Methods
-
-    /**
-     * Updates the file items in the view model using the new current directory value.
-     */
-    public void updateContents() {
-        if (items.size() > 0)
-            items.clear();
-
-        // Get the files/folders.
-        ArrayList<FileItem> children = DirectoryStructure.getDirectoryContents(dataModel.getCurrentDirectory(), showHiddenItems);
-
-        // Create the view models from the data and add them to an observable list.
-        children.forEach((fileItem) -> items.add(new FileItemViewModel(fileItem)));
-    }
+    //region Accessors/Mutators
 
     public ObservableList<FileItemViewModel> getItems() {
         return items;
@@ -76,6 +61,24 @@ public class FileGridViewModel implements DataListener {
 
     public void setShowHiddenItems(boolean value) {
         this.showHiddenItems = value;
+    }
+
+    //endregion
+
+    //region Public Methods
+
+    /**
+     * Updates the file items in the view model using the new current directory value.
+     */
+    public void updateContents() {
+        if (items.size() > 0)
+            items.clear();
+
+        // Get the files/folders.
+        ArrayList<FileItem> children = DirectoryStructure.getDirectoryContents(dataModel.getCurrentDirectory(), showHiddenItems);
+
+        // Create the view models from the data and add them to an observable list.
+        children.forEach((fileItem) -> items.add(new FileItemViewModel(fileItem)));
     }
 
     @Override

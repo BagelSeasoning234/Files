@@ -22,14 +22,21 @@
 <?import javafx.scene.control.ScrollPane?>
 
 <?import com.candle.fileexplorer.view.QuickAccessController?>
+<?import javafx.scene.control.ToggleGroup?>
 <BorderPane prefWidth="1075" prefHeight="700" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.candle.fileexplorer.view.MainController">
+
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/Light.css"/>
     </stylesheets>
+
     <padding>
         <Insets topRightBottomLeft="10.0"/>
     </padding>
+
+    <fx:define>
+        <ToggleGroup fx:id="sortByGroup" />
+    </fx:define>
 
     <!-- Top Panel -->
     <top>
@@ -37,56 +44,47 @@
             <!-- Menu Bar -->
             <MenuBar fx:id="menuBar">
                 <Menu text="File">
-                    <MenuItem text="New Item..." onAction="#createNewItem"/>
-                    <MenuItem text="New Window" onAction="#openNewWindow"/>
-                    <MenuItem text="New Tab" onAction="#addTab"/>
+                    <MenuItem text="New Item..." onAction="#createNewItem" accelerator="Shortcut+I"/>
+                    <MenuItem text="New Window" onAction="#openNewWindow" accelerator="Shortcut+N"/>
+                    <MenuItem text="New Tab" onAction="#addTab" accelerator="Shortcut+T"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Rename..."/>
-                    <MenuItem text="Duplicate Here"/>
-                    <MenuItem text="Trash"/>
+                    <MenuItem text="Rename..." onAction="#rename" accelerator="F2"/>
+                    <MenuItem text="Duplicate Here" onAction="#duplicateHere" accelerator="Shortcut+D"/>
+                    <MenuItem text="Trash" onAction="#trashItem" accelerator="DELETE"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Close Tab" onAction="#closeTab"/>
+                    <MenuItem text="Close Tab" onAction="#closeTab" accelerator="Shortcut+W"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Quit" onAction="#closeApp"/>
+                    <MenuItem text="Quit" onAction="#closeApp" accelerator="Shortcut+Q"/>
                 </Menu>
 
                 <Menu text="Edit">
-                    <MenuItem text="Undo"/>
-                    <MenuItem text="Redo"/>
+                    <MenuItem text="Undo" onAction="#undo" accelerator="Shortcut+Z"/>
+                    <MenuItem text="Redo" onAction="#redo" accelerator="Shortcut+Y"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Cut"/>
-                    <MenuItem text="Copy"/>
-                    <MenuItem text="Copy Location"/>
-                    <MenuItem text="Paste"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Select All"/>
-                    <MenuItem text="Deselect All"/>
+                    <MenuItem text="Cut" onAction="#cut" accelerator="Shortcut+X"/>
+                    <MenuItem text="Copy" onAction="#copy" accelerator="Shortcut+C"/>
+                    <MenuItem text="Copy Location" onAction="#copyLocation"/>
+                    <MenuItem text="Paste" onAction="#paste" accelerator="Shortcut+V"/>
                 </Menu>
 
                 <Menu text="View">
-                    <MenuItem text="Refresh"/>
+                    <MenuItem text="Refresh" onAction="#refresh" accelerator="F5"/>
                     <SeparatorMenuItem/>
                     <Menu text="Sort By">
-                        <RadioMenuItem text="Name" selected="true"/>
-                        <RadioMenuItem text="Size"/>
-                        <RadioMenuItem text="Modified"/>
+                        <RadioMenuItem text="Name" selected="true" onAction="#sortByName" toggleGroup="$sortByGroup"/>
+                        <RadioMenuItem text="Modified" onAction="#sortByModified" toggleGroup="$sortByGroup"/>
                     </Menu>
                     <SeparatorMenuItem/>
-                    <CheckMenuItem text="Show Previews"/>
-                    <CheckMenuItem text="Show Hidden Files" onAction="#toggleHiddenItems"/>
+                    <CheckMenuItem text="Show Hidden Files" onAction="#toggleHiddenItems" accelerator="Shortcut+H"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Set Columns..."/>
+                    <MenuItem text="Set Columns..." onAction="#setColumns"/>
                 </Menu>
 
                 <Menu text="Go">
-                    <MenuItem text="Back"/>
-                    <MenuItem text="Forward"/>
-                    <MenuItem text="Home"/>
+                    <MenuItem text="Back" onAction="#goBackDirectory" accelerator="Shortcut+LEFT"/>
+                    <MenuItem text="Forward" onAction="#goForwardDirectory" accelerator="Shortcut+RIGHT"/>
+                    <MenuItem text="Home" onAction="#goHomeDirectory" accelerator="Shortcut+UP"/>
 
-                </Menu>
-
-                <Menu text="Settings">
-                    <MenuItem text="Configure Files..."/>
                 </Menu>
 
                 <Menu text="Help">
@@ -117,10 +115,10 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button>
+                <Button onAction="#refresh">
                     <graphic>
                         <ImageView>
-                            <Image url="@/com/candle/fileexplorer/images/16/Search.png"/>
+                            <Image url="@/com/candle/fileexplorer/images/16/Refresh.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -137,21 +135,21 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button>
+                <Button onAction="#cut">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Cut.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button>
+                <Button onAction="#copy">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Copy.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button>
+                <Button onAction="#paste">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Paste.png"/>

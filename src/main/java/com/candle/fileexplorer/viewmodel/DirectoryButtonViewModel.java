@@ -13,12 +13,11 @@ public class DirectoryButtonViewModel {
     /**
      * A reference to the data model for this application.
      */
-    private FilesModel dataModel;
+    private final FilesModel dataModel;
     /**
      * A reference to the file item associated with this directory button view model.
      */
-    private FileItem fileItem;
-
+    private final FileItem fileItem;
 
     //endregion
 
@@ -43,8 +42,6 @@ public class DirectoryButtonViewModel {
         String name = fileItem.getFileName();
         if (name.equals(DirectoryStructure.getHomeDirectoryName()))
             return "Home";
-        else if (name.equals(DirectoryStructure.getTrashDirectoryName()))
-            return "Trash";
         else
             return fileItem.getFileName();
     }
@@ -54,6 +51,19 @@ public class DirectoryButtonViewModel {
      */
     public void goToDirectory() {
         dataModel.setCurrentDirectory(fileItem.getItemDirectory());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+
+        DirectoryButtonViewModel otherObject;
+        if (!(obj instanceof DirectoryButtonViewModel))
+            return false;
+
+        otherObject = (DirectoryButtonViewModel) obj;
+        return (fileItem.equals(otherObject.fileItem) && dataModel.equals(otherObject.dataModel));
     }
 
     //endregion

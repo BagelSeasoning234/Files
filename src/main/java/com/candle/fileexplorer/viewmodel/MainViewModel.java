@@ -5,6 +5,8 @@ import com.candle.fileexplorer.model.observer.DataListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.io.File;
+
 /**
  * The view model used by the main view.
  */
@@ -33,7 +35,7 @@ public class MainViewModel implements DataListener {
 
     //endregion
 
-    //region Constructor
+    //region Constructors
 
     /**
      * Instantiates the main view model using the File Structure view model.
@@ -55,7 +57,11 @@ public class MainViewModel implements DataListener {
 
     //endregion
 
-    //region Public Methods
+    //region Accessors/Mutators
+
+    public StringProperty currentDirectoryProperty() {
+        return currentDirectoryProperty;
+    }
 
     public FileGridViewModel getFileGridViewModel() {
         return fileGridViewModel;
@@ -65,16 +71,46 @@ public class MainViewModel implements DataListener {
         return quickAccessViewModel;
     }
 
-    public StringProperty currentDirectoryProperty() {
-        return currentDirectoryProperty;
-    }
-
-    public void addTab() {
-        dataModel.addTab(dataModel.getTabIndex() + 1);
+    public int getTabIndex() {
+        return dataModel.getTabIndex();
     }
 
     public void setTabIndex(int index) {
         dataModel.setTabIndex(index);
+    }
+
+    //endregion
+
+    //region Public Methods
+
+    /**
+     * Checks to see if the given directory can be modified (i.e. item added, renamed, or deleted).
+     * @param directory The directory to check
+     */
+    public boolean canModifyItem(String directory) {
+        File currentDirectoryObject = new File(directory);
+        return currentDirectoryObject.canWrite();
+    }
+
+    /**
+     * Tells the data model to add another tab.
+     */
+    public void addTab() {
+        dataModel.addTab(dataModel.getTabIndex() + 1);
+    }
+
+    /**
+     * Tells the data model to remove the tab at the given index.
+     */
+    public void closeTab(int index) {
+        dataModel.removeTab(index);
+    }
+
+    /**
+     * Tells the data model to delete the item at the given directory.
+     */
+    public void trashItem(String path) {
+        dataModel.trashItem(path);
     }
 
     /**
@@ -107,7 +143,8 @@ public class MainViewModel implements DataListener {
     }
 
     /**
-     * The method used by the view to inform the view model that the user is ready to go to the new directory.
+     * The method used by the view to inform the view model that
+     * the user is ready to go to the new directory.
      */
     public void userUpdatedDirectory() {
         dataModel.setCurrentDirectory(currentDirectoryProperty.getValue());

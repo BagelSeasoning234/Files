@@ -1,0 +1,37 @@
+.root {
+    -very-light-gray: #f7f7f7;
+    -light-gray: #efefef;
+    -mid-gray: #c5c5c5;
+    -text-light-gray: #949494;
+    -text-dark-gray: #3f3f3f;
+
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+}
+
+.button {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-border-color: -mid-gray;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.button:hover {
+    -fx-background-color: -light-gray;
+}
+
+.button:armed {
+    -fx-background-color: -mid-gray;
+}
+
+#title {
+    -fx-font-size: 26;
+}
+
+.scroll-pane {
+    -fx-background-radius: 5;
+    -fx-border-color: -mid-gray;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}

@@ -22,26 +22,10 @@ public class DirectoryStructure {
     }
 
     /**
-     * Returns the trash folder directory.
-     */
-    public static String getTrashDirectory() {
-        String OS = System.getProperty("os.name");
-        switch (OS) {
-            case "Linux" -> {
-                return "~/.local/share/Trash/files";
-            }
-            case "Windows" -> {
-                return "C:\\$Recycle.Bin";
-            }
-        }
-        return null;
-    }
-
-    /**
      * Returns the name of the trash folder.
      */
     public static String getTrashDirectoryName() {
-        File trashFolder = new File(getTrashDirectory());
+        File trashFolder = new File(FileDeleter.getTrashDirectory());
         return trashFolder.getName();
     }
 

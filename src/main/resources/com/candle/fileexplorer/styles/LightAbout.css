@@ -25,6 +25,10 @@
     -fx-background-color: -mid-gray;
 }
 
+.hyperlink {
+    -fx-text-fill: -text-dark-gray;
+}
+
 #appTitle {
     -fx-font-size: 26;
 }

@@ -4,6 +4,7 @@ import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
+import com.candle.fileexplorer.model.helpers.FileDeleter;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class QuickAccessViewModel {
         if (directory.equals("Home"))
             directoryPath = System.getProperty("user.home");
         else if (directory.equals("Trash"))
-            directoryPath = DirectoryStructure.getTrashDirectory();
+            directoryPath = FileDeleter.getTrashDirectory();
         else
             directoryPath = System.getProperty("user.home") + "/" + directory;
 

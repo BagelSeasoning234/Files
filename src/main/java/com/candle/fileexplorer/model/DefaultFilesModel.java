@@ -2,28 +2,31 @@ package com.candle.fileexplorer.model;
 
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
+import com.candle.fileexplorer.model.helpers.FileOpener;
 import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileType;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 /**
  * The implementation of the files' data model.
  */
 public class DefaultFilesModel implements FilesModel {
-
     //region Private Members
+
+    /**
+     * The maximum number of directories to store in memory.
+     */
+    private final int MAX_STORED_DIRECTORIES = 10;
 
     /**
      * A list of objects to notify whenever changes are made in the model.
      */
     private final List<DataListener> listeners;
-
-    /**
-     * The index of the currently viewed tab.
-     */
-    private int tabIndex;
 
     /**
      * A hashmap that represents the directory histories for each tab.
@@ -38,16 +41,16 @@ public class DefaultFilesModel implements FilesModel {
     /**
      * An array of indices for the currently viewed directory in history for each tab.
      */
-    private ArrayList<Integer> historyIndex;
+    private final ArrayList<Integer> historyIndex;
 
     /**
-     * The maximum number of directories to store in memory.
+     * The index of the currently viewed tab.
      */
-    private final int MAX_STORED_DIRECTORIES = 10;
+    private int tabIndex;
 
     //endregion
 
-    //region Constructor
+    //region Constructors
 
     public DefaultFilesModel() {
         listeners = new ArrayList<>();
@@ -59,13 +62,7 @@ public class DefaultFilesModel implements FilesModel {
 
     //endregion
 
-    //region Public Methods
-
-    public void createItem(FileType type, String name) {
-        FileItem item = new DefaultFileItem(type, currentDirectory + "/" + name);
-        item.writeToDisk();
-        notifyDirectoryChange();
-    }
+    //region Accessors/Mutators
 
     @Override
     public int getTabIndex() {
@@ -76,24 +73,6 @@ public class DefaultFilesModel implements FilesModel {
     public void setTabIndex(int newIndex) {
         this.tabIndex = newIndex;
         notifyDirectoryChange();
-    }
-
-    @Override
-    public void addTab(int tabLocationIndex) {
-        String defaultLocation = System.getProperty("user.home");
-
-        directoryHistory.put(tabLocationIndex, new ArrayList<>(10));
-        directoryHistory.get(tabLocationIndex).add(defaultLocation);
-
-        currentDirectory.add(defaultLocation);
-        historyIndex.add(0);
-    }
-
-    @Override
-    public void removeTab(int tabLocationIndex) {
-        currentDirectory.remove(tabLocationIndex);
-        directoryHistory.remove(tabLocationIndex);
-        historyIndex.remove(tabLocationIndex);
     }
 
     @Override
@@ -118,11 +97,57 @@ public class DefaultFilesModel implements FilesModel {
             notifyDirectoryChange();
             addDirectoryToHistory();
         }
+        else {
+            FileOpener.openFileInDefaultApp(newDirectory);
+        }
     }
+
+    //endregion
+
+    //region Public Methods
 
     @Override
     public void addListener(DataListener newListener) {
         listeners.add(newListener);
+    }
+
+    @Override
+    public void addTab(int tabLocationIndex) {
+        String defaultLocation = System.getProperty("user.home");
+
+        directoryHistory.put(tabLocationIndex, new ArrayList<>(10));
+        directoryHistory.get(tabLocationIndex).add(defaultLocation);
+
+        currentDirectory.add(defaultLocation);
+        historyIndex.add(0);
+    }
+
+    @Override
+    public void removeTab(int tabLocationIndex) {
+        currentDirectory.remove(tabLocationIndex);
+        directoryHistory.remove(tabLocationIndex);
+        historyIndex.remove(tabLocationIndex);
+    }
+
+    @Override
+    public void createItem(FileType type, String name) {
+        FileItem item = new DefaultFileItem(type, getCurrentDirectory() + "/" + name);
+        if (item.writeToDisk())
+            notifyDirectoryChange();
+    }
+
+    @Override
+    public void renameItem(String path, String name) {
+        FileItem item = new DefaultFileItem(path);
+        if (item.rename(name))
+            notifyDirectoryChange();
+    }
+
+    @Override
+    public void trashItem(String path) {
+        FileItem item = new DefaultFileItem(path);
+        if (item.sendToTrash())
+            notifyDirectoryChange();
     }
 
     @Override
@@ -143,9 +168,14 @@ public class DefaultFilesModel implements FilesModel {
         }
     }
 
+    @Override
+    public void forceUpdate() {
+        notifyDirectoryChange();
+    }
+
     //endregion
 
-    //region Private Methods
+    //region Private Helper Methods
 
     /**
      * Notifies all listeners that the current directory has been updated.

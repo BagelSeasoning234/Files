@@ -10,11 +10,12 @@
 <?import java.net.URL?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <VBox fx:id="backgroundLayout" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.candle.fileexplorer.view.AboutController"
       spacing="10" alignment="CENTER"
-      prefHeight="250" prefWidth="400">
+      prefHeight="280" prefWidth="400" onKeyPressed="#onKeyPressed">
 
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/LightAbout.css"/>
@@ -37,8 +38,9 @@
         <Tab text="Components">
             <ScrollPane>
                 <VBox>
-                    <Label text="${controller.javaFxVersion}" />
-                    <Label text="${controller.javaVersion}" />
+                    <Hyperlink text="${controller.javaFxVersion}" onMouseClicked="#openJavaFx"/>
+                    <Hyperlink text="${controller.javaVersion}" onMouseClicked="#openJava" />
+                    <Hyperlink text="Trash-CLI: Dependency for Linux Version" onMouseClicked="#openTrashcli"/>
                 </VBox>
             </ScrollPane>
 
@@ -52,5 +54,5 @@
             </ScrollPane>
         </Tab>
     </TabPane>
-    <Button text="Close" onAction="#closeAboutWindow"/>
+    <Button fx:id="closeButton" text="Close" onAction="#closeAboutWindow"/>
 </VBox>

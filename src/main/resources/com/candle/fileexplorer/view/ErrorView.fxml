@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.candle.fileexplorer.view.ErrorController"
+      spacing="10" alignment="CENTER"
+      prefHeight="200" prefWidth="400">
+
+    <stylesheets>
+        <URL value="@/com/candle/fileexplorer/styles/LightError.css"/>
+    </stylesheets>
+
+    <padding>
+        <Insets topRightBottomLeft="10" />
+    </padding>
+
+    <Label fx:id="title" text="Error" />
+    <Label fx:id="errorText" wrapText="true" textAlignment="CENTER"/>
+    <Button text="Close" onAction="#close" />
+</VBox>

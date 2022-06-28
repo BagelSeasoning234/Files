@@ -1,8 +1,7 @@
-package com.candle.fileexplorertest.viewmodel;
+package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;
-import com.candle.fileexplorer.viewmodel.DirectoryButtonViewModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -29,13 +28,13 @@ public class DirectoryButtonViewModelTests {
         FileItem mockItem = mock(FileItem.class);
         File file = null;
         switch (System.getProperty("os.name")) {
-            case "Linux" -> file = new File(System.getProperty("user.home") + "/.local/share/Trash/files");
+            case "Linux" -> file = new File(System.getProperty("user.home") + "/.local/share/Trash");
             case "Windows" -> file = new File("C:\\$Recycle.Bin");
         }
         when(mockItem.getFileName()).thenReturn(file.getName());
 
         DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel, mockItem);
-        Assertions.assertEquals(vm.getDirectoryName(), "Trash");
+        Assertions.assertEquals("Trash", vm.getDirectoryName());
     }
 
     @Test
