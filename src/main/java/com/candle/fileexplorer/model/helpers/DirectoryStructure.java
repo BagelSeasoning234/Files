@@ -22,14 +22,6 @@ public class DirectoryStructure {
     }
 
     /**
-     * Returns the name of the trash folder.
-     */
-    public static String getTrashDirectoryName() {
-        File trashFolder = new File(FileUtilities.getTrashDirectory());
-        return trashFolder.getName();
-    }
-
-    /**
      * Returns a list of the mounted drives.
      */
     public static ArrayList<FileItem> getDrives() {

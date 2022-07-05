@@ -79,21 +79,9 @@ public class FileGridController extends ScrollPane {
 
     //region Accessors/Mutators
 
-    public GridSortOrder getSortOrder() {
-        return sortOrder;
-    }
-
     public void setSortOrder(GridSortOrder sortOrder) {
         this.sortOrder = sortOrder;
         updateGridContents();
-    }
-
-    public int getMaxColumns() {
-        return maxColumns;
-    }
-
-    public void setMaxColumns(int maxColumns) {
-        this.maxColumns = maxColumns;
     }
 
     //endregion
