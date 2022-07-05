@@ -1,7 +1,8 @@
 package com.candle.fileexplorer.model.data;
 
-import com.candle.fileexplorer.model.helpers.DirectoryStructure;
-import com.candle.fileexplorer.model.helpers.FileDeleter;
+import com.candle.fileexplorer.model.helpers.FileUtilities;
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class DefaultFileItem implements FileItem {
      * @param path     The path to the file.
      */
     public DefaultFileItem(FileType fileType, String path) {
-        file = new File(DirectoryStructure.sanitizePath(path));
+        file = new File(FileUtilities.sanitizePath(path));
         this.fileType = fileType;
     }
 
@@ -46,16 +47,71 @@ public class DefaultFileItem implements FileItem {
      * @param path The path to the file.
      */
     public DefaultFileItem(String path) {
-        file = new File(DirectoryStructure.sanitizePath(path));
-        if (file.exists())
-            fileType = file.isDirectory() ? FileType.Folder : FileType.File;
-        else
-            fileType = FileType.File;
+        String cleanPath = FileUtilities.sanitizePath(path);
+        file = new File(cleanPath);
+        fileType = FileUtilities.determineType(path);
     }
 
     //endregion
 
     //region Public Methods
+
+    @Override
+    public File getFile() {
+        return file;
+    }
+
+    @Override
+    public void moveTo(String targetPath) {
+        File targetDestination = new File(targetPath + "/" + file.getName());
+        if (file.getAbsolutePath().equals(targetDestination.getAbsolutePath())) {
+            System.out.println("The file/folder already exists.");
+            return;
+        }
+
+        switch (fileType) {
+            case File -> {
+                try {
+                    FileUtils.moveFile(file, targetDestination);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case Folder -> {
+                try {
+                    FileUtils.moveDirectory(file, targetDestination);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void copyTo(String targetPath) {
+        File targetDestination = new File(targetPath + "/" + file.getName());
+        if (file.getAbsolutePath().equals(targetDestination.getAbsolutePath())) {
+            System.out.println("The file/folder already exists.");
+            return;
+        }
+
+        switch (fileType) {
+            case File -> {
+                try {
+                    FileUtils.copyFile(file, targetDestination);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case Folder -> {
+                try {
+                    FileUtils.copyDirectory(file, targetDestination);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 
     @Override
     public boolean writeToDisk() {
@@ -92,7 +148,7 @@ public class DefaultFileItem implements FileItem {
     @Override
     public boolean sendToTrash() {
         if (fileType != FileType.Drive) {
-            return FileDeleter.sendItemToTrash(file.getAbsolutePath());
+            return FileUtilities.sendItemToTrash(file.getAbsolutePath());
         }
         else
             return false;
@@ -131,8 +187,7 @@ public class DefaultFileItem implements FileItem {
      */
     @Override
     public boolean equals(Object obj) {
-        DefaultFileItem otherItem = (DefaultFileItem) obj;
-        if (otherItem != null) {
+        if (obj instanceof DefaultFileItem otherItem) {
             boolean fileMatch = file.equals(otherItem.file);
             boolean typeMatch = fileType.equals(otherItem.fileType);
             return (fileMatch && typeMatch);

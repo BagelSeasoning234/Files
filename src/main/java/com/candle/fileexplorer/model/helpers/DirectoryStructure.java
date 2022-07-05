@@ -25,7 +25,7 @@ public class DirectoryStructure {
      * Returns the name of the trash folder.
      */
     public static String getTrashDirectoryName() {
-        File trashFolder = new File(FileDeleter.getTrashDirectory());
+        File trashFolder = new File(FileUtilities.getTrashDirectory());
         return trashFolder.getName();
     }
 
@@ -48,7 +48,7 @@ public class DirectoryStructure {
      * Get the top level contents of a given directory.
      */
     public static ArrayList<FileItem> getDirectoryContents(String path, boolean showHiddenItems) {
-        File currentDirectory = new File(sanitizePath(path));
+        File currentDirectory = new File(FileUtilities.sanitizePath(path));
         if (!currentDirectory.isDirectory())
             return new ArrayList<>();
 
@@ -69,16 +69,6 @@ public class DirectoryStructure {
         return result;
     }
 
-    /**
-     * Cleans a directory path by adding spaces where necessary and switching ~ for the home directory.
-     */
-    public static String sanitizePath(String path) {
-        path = path.replace("\\040", " ");
-        path = path.replace("~", System.getProperty("user.home"));
-        path = path.replace("\\", "/");
-        return path;
-    }
-
     //endregion
 
     //region Private Methods
@@ -94,7 +84,7 @@ public class DirectoryStructure {
             FileReader fileReader = new FileReader(mountedDrives);
             BufferedReader reader = new BufferedReader(fileReader);
             // A string to store the lines
-            String line = "";
+            String line;
             ArrayList<String> driveStrings = new ArrayList<>();
             ArrayList<FileItem> files = new ArrayList<>();
 
@@ -142,7 +132,7 @@ public class DirectoryStructure {
                 return null;
 
         // If everything worked, sanitize the string and return it.
-        return sanitizePath(drive);
+        return FileUtilities.sanitizePath(drive);
     }
 
 

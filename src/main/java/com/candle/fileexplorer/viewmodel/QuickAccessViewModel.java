@@ -3,8 +3,7 @@ package com.candle.fileexplorer.viewmodel;
 import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
-import com.candle.fileexplorer.model.helpers.DirectoryStructure;
-import com.candle.fileexplorer.model.helpers.FileDeleter;
+import com.candle.fileexplorer.model.helpers.FileUtilities;
 
 import java.util.ArrayList;
 
@@ -48,17 +47,16 @@ public class QuickAccessViewModel {
     }
 
     /**
-     * Creates a new view model for each quick access item.
-     *
+     * Creates a new directory button view model for the given directory name.
      * @param directory The name of the directory, such as "Pictures," "Documents," or "Trash."
      * @return The view model for the directory.
      */
-    public DirectoryButtonViewModel getQuickAccess(String directory) {
+    public DirectoryButtonViewModel getQuickAccessButtonViewModel(String directory) {
         String directoryPath;
         if (directory.equals("Home"))
             directoryPath = System.getProperty("user.home");
         else if (directory.equals("Trash"))
-            directoryPath = FileDeleter.getTrashDirectory();
+            directoryPath = FileUtilities.getTrashDirectory();
         else
             directoryPath = System.getProperty("user.home") + "/" + directory;
 

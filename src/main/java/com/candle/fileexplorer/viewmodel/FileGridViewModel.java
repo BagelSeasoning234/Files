@@ -1,13 +1,16 @@
 package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.data.FileItem;
+import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
 import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.FilesModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FileGridViewModel implements DataListener {
     //region Private Members
@@ -20,7 +23,8 @@ public class FileGridViewModel implements DataListener {
     /**
      * A list of file item view models to be exposed to the UI.
      */
-    private final ObservableList<FileItemViewModel> items;
+    private final ObservableList<FileItem> items;
+
     /**
      * A boolean variable that is used to determine whether hidden files/folders should be displayed.
      */
@@ -44,7 +48,7 @@ public class FileGridViewModel implements DataListener {
 
     //region Accessors/Mutators
 
-    public ObservableList<FileItemViewModel> getItems() {
+    public ObservableList<FileItem> getItems() {
         return items;
     }
 
@@ -75,10 +79,7 @@ public class FileGridViewModel implements DataListener {
             items.clear();
 
         // Get the files/folders.
-        ArrayList<FileItem> children = DirectoryStructure.getDirectoryContents(dataModel.getCurrentDirectory(), showHiddenItems);
-
-        // Create the view models from the data and add them to an observable list.
-        children.forEach((fileItem) -> items.add(new FileItemViewModel(fileItem)));
+        items.addAll(DirectoryStructure.getDirectoryContents(dataModel.getCurrentDirectory(), showHiddenItems));
     }
 
     @Override

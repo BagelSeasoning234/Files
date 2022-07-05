@@ -79,8 +79,9 @@ public class RenameViewModel {
 
         boolean nameIsNotEmpty = !itemNameProperty.getValue().equals("");
         boolean nameIsValid = !itemNameProperty.getValue().contains("/");
+        boolean pathIsValid = !itemPath.equals("");
 
-        return (nameIsNotEmpty && nameIsValid);
+        return (nameIsNotEmpty && nameIsValid && pathIsValid);
     }
 
     //endregion

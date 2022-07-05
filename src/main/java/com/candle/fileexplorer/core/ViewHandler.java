@@ -52,7 +52,7 @@ public class ViewHandler {
      * @throws IOException If the view could not be found.
      */
     public void openPrimaryView(String viewToOpen) throws IOException {
-        Scene scene = null;
+        Scene scene;
         FXMLLoader loader = new FXMLLoader();
         Parent root = null;
 
@@ -64,6 +64,9 @@ public class ViewHandler {
             MainController view = loader.getController();
             view.init(viewModelFactory.getMainViewModel(), this);
             stage.setTitle("Files");
+
+            stage.setMinHeight(350);
+            stage.setMinWidth(550);
         }
 
         scene = new Scene(root);
@@ -79,7 +82,7 @@ public class ViewHandler {
      */
     public void openSubView(String viewToOpen, String arg) throws IOException {
         Stage subStage = new Stage();
-        Scene scene = null;
+        Scene scene;
         Parent root = null;
         FXMLLoader loader = new FXMLLoader();
 

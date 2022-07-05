@@ -1,6 +1,21 @@
 package com.candle.fileexplorer.model.data;
 
+import java.io.File;
+
 public interface FileItem {
+
+    /**
+     * Moves the given file/folder to the target destination.
+     * @param targetPath The absolute path to the destination folder.
+     */
+    void moveTo(String targetPath);
+
+    /**
+     * Copies the given file/folder to the target destination.
+     * @param targetPath The absolute path to the destination folder.
+     */
+    void copyTo(String targetPath);
+
     /**
      * Creates a new file/folder at the path specified when the item was first created.
      * @return Whether the operation was successful.
@@ -43,4 +58,9 @@ public interface FileItem {
      * Gets the time at which this item was last modified.
      */
     long getLastModifiedTime();
+
+    /**
+     * Gets the file object for this class.
+     */
+    File getFile();
 }

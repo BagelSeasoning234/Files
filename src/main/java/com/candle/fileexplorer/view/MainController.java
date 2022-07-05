@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -184,11 +185,6 @@ public class MainController {
     }
 
     @FXML
-    private void duplicateHere(ActionEvent event) {
-        // TODO: Create the duplicate function.
-    }
-
-    @FXML
     private void trashItem(ActionEvent event) {
         FileItemController fileItemView = getCurrentGridView().getSelectedFileItem();
         if (fileItemView == null)
@@ -224,33 +220,43 @@ public class MainController {
     //region Edit
 
     @FXML
-    private void undo(ActionEvent event) {
-        // TODO: Create the undo function.
-    }
-
-    @FXML
-    private void redo(ActionEvent event) {
-        // TODO: Create the redo function.
-    }
-
-    @FXML
     private void cut(ActionEvent event) {
-        // TODO: Create the cut function.
+        File file = getCurrentGridView().getSelectedFileItem().getFile();
+        if (file.canWrite())
+            viewModel.cut(file);
+        else {
+            try {
+                viewHandler.openSubView("Error", "The selected file/folder could not be cut. It may be read-only.");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @FXML
     private void copy(ActionEvent event) {
-        // TODO: Create the copy function.
+        File file = getCurrentGridView().getSelectedFileItem().getFile();
+        viewModel.copy(file);
     }
 
     @FXML
     private void copyLocation(ActionEvent event) {
-        // TODO: Create the copy location function.
+        String location = getCurrentGridView().getSelectedFileItem().getItemDirectory();
+        viewModel.copyLocation(location);
     }
 
     @FXML
     private void paste(ActionEvent event) {
-        // TODO: Create the paste function.
+        ArrayList<File> fileList = (ArrayList<File>) Clipboard.getSystemClipboard().getFiles();
+        if (viewModel.canModifyItem(viewModel.currentDirectoryProperty().getValue()))
+            viewModel.paste(fileList);
+        else {
+            try {
+                viewHandler.openSubView("Error", "The selected file/folder could not be pasted into this directory. It may be read-only.");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     //endregion
@@ -278,11 +284,6 @@ public class MainController {
     @FXML
     private void toggleHiddenItems(ActionEvent event) {
         viewModel.toggleHiddenItems();
-    }
-
-    @FXML
-    private void setColumns(ActionEvent event) {
-        // TODO: Create the set columns function.
     }
 
     //endregion

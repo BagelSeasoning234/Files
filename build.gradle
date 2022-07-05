@@ -21,7 +21,7 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.candle.fileexplorer'
+    mainModule = 'FileExplorer.main'
     mainClass = 'com.candle.fileexplorer.StartFilesApp'
 }
 
@@ -56,6 +56,20 @@ jlink {
 
 jlinkZip {
     group = 'distribution'
+}
+
+sourceSets.main {
+    resources {
+        srcDir 'src/main/resources'
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+
+    tasks.withType(Copy).all {
+        duplicatesStrategy 'exclude'
+    }
 }
 
 task createProperties(dependsOn: processResources) {

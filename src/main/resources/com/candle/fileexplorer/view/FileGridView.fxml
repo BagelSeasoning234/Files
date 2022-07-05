@@ -7,7 +7,7 @@
             xmlns:fx="http://javafx.com/fxml">
     <GridPane fx:id="gridPane" hgap="10" vgap="10" onMouseClicked="#handleMouseClick">
         <padding>
-            <Insets topRightBottomLeft="10" />
+            <Insets top="10" bottom="10" left="10" />
         </padding>
     </GridPane>
 </fx:root>

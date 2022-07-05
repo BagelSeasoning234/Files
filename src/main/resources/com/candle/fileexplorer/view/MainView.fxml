@@ -11,15 +11,12 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.CheckMenuItem?>
-<?import com.candle.fileexplorer.view.FileGridController?>
-<?import javafx.scene.control.ScrollPane?>
 
 <?import com.candle.fileexplorer.view.QuickAccessController?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -49,7 +46,6 @@
                     <MenuItem text="New Tab" onAction="#addTab" accelerator="Shortcut+T"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Rename..." onAction="#rename" accelerator="F2"/>
-                    <MenuItem text="Duplicate Here" onAction="#duplicateHere" accelerator="Shortcut+D"/>
                     <MenuItem text="Trash" onAction="#trashItem" accelerator="DELETE"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Close Tab" onAction="#closeTab" accelerator="Shortcut+W"/>
@@ -58,9 +54,6 @@
                 </Menu>
 
                 <Menu text="Edit">
-                    <MenuItem text="Undo" onAction="#undo" accelerator="Shortcut+Z"/>
-                    <MenuItem text="Redo" onAction="#redo" accelerator="Shortcut+Y"/>
-                    <SeparatorMenuItem/>
                     <MenuItem text="Cut" onAction="#cut" accelerator="Shortcut+X"/>
                     <MenuItem text="Copy" onAction="#copy" accelerator="Shortcut+C"/>
                     <MenuItem text="Copy Location" onAction="#copyLocation"/>
@@ -76,8 +69,6 @@
                     </Menu>
                     <SeparatorMenuItem/>
                     <CheckMenuItem text="Show Hidden Files" onAction="#toggleHiddenItems" accelerator="Shortcut+H"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Set Columns..." onAction="#setColumns"/>
                 </Menu>
 
                 <Menu text="Go">

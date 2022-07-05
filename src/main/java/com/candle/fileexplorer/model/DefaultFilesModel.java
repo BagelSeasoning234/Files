@@ -1,14 +1,15 @@
 package com.candle.fileexplorer.model;
 
+import com.candle.fileexplorer.model.data.ClipboardMode;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
-import com.candle.fileexplorer.model.helpers.FileOpener;
+import com.candle.fileexplorer.model.helpers.FileUtilities;
 import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileType;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -17,11 +18,6 @@ import java.util.List;
  */
 public class DefaultFilesModel implements FilesModel {
     //region Private Members
-
-    /**
-     * The maximum number of directories to store in memory.
-     */
-    private final int MAX_STORED_DIRECTORIES = 10;
 
     /**
      * A list of objects to notify whenever changes are made in the model.
@@ -47,6 +43,11 @@ public class DefaultFilesModel implements FilesModel {
      * The index of the currently viewed tab.
      */
     private int tabIndex;
+
+    /**
+     * Determines whether pasted items should be moved or duplicated.
+     */
+    private ClipboardMode clipboardMode = ClipboardMode.Copy;
 
     //endregion
 
@@ -90,16 +91,25 @@ public class DefaultFilesModel implements FilesModel {
         if (Objects.equals(newDirectory, getCurrentDirectory()))
             return;
 
-        FileItem testItem = new DefaultFileItem(newDirectory);
-        if (testItem.getFileType() != FileType.File) {
-            // We use the test item so that we'll get a clean user path back.
-            currentDirectory.set(tabIndex, testItem.getItemDirectory());
+        String cleanPath = FileUtilities.sanitizePath(newDirectory);
+        if (FileUtilities.determineType(cleanPath) != FileType.File) {
+            currentDirectory.set(tabIndex, cleanPath);
             notifyDirectoryChange();
             addDirectoryToHistory();
         }
         else {
-            FileOpener.openFileInDefaultApp(newDirectory);
+            FileUtilities.openFileInDefaultApp(newDirectory);
         }
+    }
+
+    @Override
+    public ClipboardMode getClipboardMode() {
+        return clipboardMode;
+    }
+
+    @Override
+    public void setClipboardMode(ClipboardMode mode) {
+        this.clipboardMode = mode;
     }
 
     //endregion
@@ -120,6 +130,8 @@ public class DefaultFilesModel implements FilesModel {
 
         currentDirectory.add(defaultLocation);
         historyIndex.add(0);
+
+        setTabIndex(tabLocationIndex);
     }
 
     @Override
@@ -127,6 +139,9 @@ public class DefaultFilesModel implements FilesModel {
         currentDirectory.remove(tabLocationIndex);
         directoryHistory.remove(tabLocationIndex);
         historyIndex.remove(tabLocationIndex);
+
+        if (getTabIndex() == tabLocationIndex)
+            setTabIndex(0);
     }
 
     @Override
@@ -173,6 +188,22 @@ public class DefaultFilesModel implements FilesModel {
         notifyDirectoryChange();
     }
 
+    @Override
+    public void paste(String sourcePath) {
+        switch (clipboardMode) {
+            case Cut -> {
+                FileItem cutItem = new DefaultFileItem(sourcePath);
+                cutItem.moveTo(getCurrentDirectory());
+                notifyDirectoryChange();
+            }
+            case Copy -> {
+                FileItem copyItem = new DefaultFileItem(sourcePath);
+                copyItem.copyTo(getCurrentDirectory());
+                notifyDirectoryChange();
+            }
+        }
+    }
+
     //endregion
 
     //region Private Helper Methods
@@ -189,6 +220,8 @@ public class DefaultFilesModel implements FilesModel {
      * Makes sure that the directory history data is up-to-date.
      */
     private void addDirectoryToHistory() {
+        int maxStoredDirectories = 10;
+
         // Is the index smaller than the number of stored dirs?
         if (getHistoryIndex() < getHistory().size() - 1) {
             // We'll have to overwrite future directories.
@@ -199,7 +232,7 @@ public class DefaultFilesModel implements FilesModel {
         }
 
         // Is the number of stored dirs smaller than the max?
-        if (getHistory().size() < MAX_STORED_DIRECTORIES) {
+        if (getHistory().size() < maxStoredDirectories) {
             // We can just add a directory.
             setHistoryIndex(getHistoryIndex() + 1);
             getHistory().add(currentDirectory.get(tabIndex));

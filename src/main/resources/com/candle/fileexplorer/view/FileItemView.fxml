@@ -3,20 +3,20 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.control.Label?>
 
 <fx:root type="VBox" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          prefHeight="128.0" prefWidth="128.0"
+         maxWidth="128.0"
          alignment="CENTER">
 
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/LightFileItem.css"/>
     </stylesheets>
 
-    <ImageView fx:id="filePreview" StackPane.alignment="CENTER" mouseTransparent="true">
-        <Image url="@/com/candle/fileexplorer/images/64/File.png"/>
+    <ImageView fx:id="filePreview" StackPane.alignment="CENTER" mouseTransparent="true"
+               cache="true" cacheHint="SPEED">
     </ImageView>
     <Label fx:id="fileName" text="File.png" StackPane.alignment="BOTTOM_CENTER" mouseTransparent="true"
            wrapText="true"/>

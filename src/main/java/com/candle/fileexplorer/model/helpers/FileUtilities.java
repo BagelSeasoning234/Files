@@ -1,41 +1,75 @@
 package com.candle.fileexplorer.model.helpers;
 
-import java.io.*;
-import java.nio.file.StandardCopyOption;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import com.candle.fileexplorer.model.data.FileType;
+import javafx.concurrent.Task;
 
-import static org.apache.commons.io.FileUtils.moveDirectory;
-import static org.apache.commons.io.FileUtils.moveFile;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
- * The class that is used to move items to the trash.
+ * A helper class that contains static methods for various file utilities,
+ * such as sanitizing directory paths, opening files, and moving them to the recycle bin.
  */
-public class FileDeleter {
-    //region Private Static Members
+public class FileUtilities {
 
-    /**
-     * The location of the trash folder on Linux-based devices.
-     */
+    //region Private Members
+
     private static final String linuxTrashLocation = System.getProperty("user.home") + "/.local/share/Trash";
-
-    /**
-     * The location of the trashed files/folders on Linux-based devices.
-     */
-    private static final String linuxTrashFilesLocation = System.getProperty("user.home") + "/.local/share/Trash/files";
-
-    /**
-     * The location of the folder that contains information about trashed files/folders.
-     */
-    private static final String linuxTrashInfoLocation = System.getProperty("user.home") + "/.local/share/Trash/info";
-
     private static final String windowsTrashLocation = "C:\\$Recycle.Bin";
-
-    private static String timeZone = "America/Denver";
 
     //endregion
 
     //region Public Methods
+
+    /**
+     * Cleans a directory path by adding spaces where necessary and switching ~ for the home directory.
+     */
+    public static String sanitizePath(String path) {
+        path = path.replace("\\040", " ");
+        path = path.replace("~", System.getProperty("user.home"));
+        path = path.replace("\\", "/");
+        return path;
+    }
+
+    /**
+     * Tries to determine if the item at the given path is a file or a folder.
+     * NOTE: This method should only be used when the file/folder currently exists on the user's disk,
+     * as otherwise it will automatically return a file.
+     * @param path The absolute path to the file/folder.
+     * @return The filetype that was determined.
+     */
+    public static FileType determineType(String path) {
+        File item = new File(path);
+        if (item.exists())
+            return item.isDirectory() ? FileType.Folder : FileType.File;
+        else
+            return FileType.File;
+    }
+
+    /**
+     * Opens a given file in the user's default application.
+     * @param path The absolute path to the file.
+     */
+    public static void openFileInDefaultApp(String path) {
+        // Opens the file in a new thread to prevent the application from hanging indefinitely.
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    Desktop.getDesktop().open(new File(path));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
 
     /**
      * Returns the trash folder directory.
@@ -50,7 +84,7 @@ public class FileDeleter {
                 return windowsTrashLocation;
             }
         }
-        return null;
+        return "";
     }
 
     /**
@@ -60,15 +94,15 @@ public class FileDeleter {
     public static boolean sendItemToTrash(String path) {
         String OS = System.getProperty("os.name");
         if (OS.equals("Linux")) {
-                ProcessBuilder builder = new ProcessBuilder();
-                if (trashDependencyExists(builder))
-                    return runTrashShellCommand(builder, path);
-                else {
-                    System.out.println("The 'trash-cli' dependency could not be found.");
-                    System.out.println("Since you are using a Linux-based operating system, this package is necessary in order to perform operations involving the Trash Bin.");
-                    System.out.println("The dependency should be installable via your package manager's repositories, or at 'https://github.com/andreafrancia/trash-cli'.");
-                    return false;
-                }
+            ProcessBuilder builder = new ProcessBuilder();
+            if (trashDependencyExists(builder))
+                return runTrashShellCommand(builder, path);
+            else {
+                System.out.println("The 'trash-cli' dependency could not be found.");
+                System.out.println("Since you are using a Linux-based operating system, this package is necessary in order to perform operations involving the Trash Bin.");
+                System.out.println("The dependency should be installable via your package manager's repositories, or at 'https://github.com/andreafrancia/trash-cli'.");
+                return false;
+            }
         }
         else
             return java.awt.Desktop.getDesktop().moveToTrash(new File(path));
@@ -130,29 +164,6 @@ public class FileDeleter {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Gets the file/folder name and extension (if present) of the given path
-     * @param path The path to check.
-     */
-    private static String getPathNameAndExtension(String path) {
-        int startIndex = path.lastIndexOf("/") + 1;
-        try {
-            return path.substring(startIndex);
-        } catch (IndexOutOfBoundsException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Gets the current time in YYYY MM DD T HH:MM:SS format.
-     */
-    private static String getLocalTime() {
-        ZoneId id = ZoneId.systemDefault();;
-        ZonedDateTime time = ZonedDateTime.now(id);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss");
-        return time.format(formatter);
     }
 
     //endregion

@@ -47,6 +47,6 @@ public class QuickAccessViewModelTests {
 
         QuickAccessViewModel viewModel = new QuickAccessViewModel(dataModel);
 
-        Assertions.assertEquals(expectedResult, viewModel.getQuickAccess("Home"));
+        Assertions.assertEquals(expectedResult, viewModel.getQuickAccessButtonViewModel("Home"));
     }
 }

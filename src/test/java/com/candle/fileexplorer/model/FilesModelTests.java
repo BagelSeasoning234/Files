@@ -77,7 +77,33 @@ public class FilesModelTests {
         verify(listener, times(1)).currentDirectoryChanged();
     }
 
+    @Test
+    public void addTab_shouldUpdateTabIndex_afterCreatingNewTab() {
+        FilesModel dataModel = new DefaultFilesModel();
+        int expectedIndex = dataModel.getTabIndex() + 1;
+        dataModel.addTab(expectedIndex);
+        Assertions.assertEquals(expectedIndex, dataModel.getTabIndex());
+    }
 
+    @Test
+    public void removeTab_shouldSetTabIndexToZero_ifTabWasDeleted() {
+        FilesModel dataModel = new DefaultFilesModel();
+        int firstIndex = dataModel.getTabIndex();
+        dataModel.addTab(firstIndex + 1);
+        dataModel.removeTab(firstIndex + 1);
+        Assertions.assertEquals(firstIndex, dataModel.getTabIndex());
+    }
+
+    @Test
+    public void removeTab_shouldNotSetTabIndexToZero_ifTabWasDifferent() {
+        FilesModel dataModel = new DefaultFilesModel();
+        int firstIndex = dataModel.getTabIndex();
+        dataModel.addTab(firstIndex + 1);
+        dataModel.addTab(firstIndex + 2);
+
+        dataModel.removeTab(firstIndex + 1);
+        Assertions.assertEquals(firstIndex + 2, dataModel.getTabIndex());
+    }
 
     @Test
     public void currentDirectory_shouldReturnUserHomeDirectory_byDefault() {

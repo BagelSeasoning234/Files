@@ -2,6 +2,7 @@
     -very-light-gray: #f7f7f7;
     -light-gray: #efefef;
     -mid-gray: #c5c5c5;
+    -dark-gray: #a0a0a0;
     -text-light-gray: #949494;
     -text-dark-gray: #3f3f3f;
 
@@ -202,3 +203,34 @@
     -fx-background-radius: 5;
 }
 
+/** Scroll bar */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -mid-gray;
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: -dark-gray;
+}
+
+.scroll-bar .thumb:pressed {
+    -fx-background-color: -text-light-gray;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+
+.increment-button:hover, .decrement-button:hover {
+    -fx-background-color: -mid-gray;
+}
+
+.increment-button:pressed, .decrement-button:pressed {
+    -fx-background-color: -dark-gray;
+}

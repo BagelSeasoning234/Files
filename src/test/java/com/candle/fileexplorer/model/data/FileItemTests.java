@@ -54,7 +54,14 @@ public class FileItemTests {
 
     @Test
     public void writeToDisk_shouldDoNothing_givenDriveType() {
+        String newDrive = "drive";
+        String driveLocation = tempFolder + "/" + newDrive;
 
+        FileItem folderItem = new DefaultFileItem(FileType.Drive, driveLocation);
+        folderItem.writeToDisk();
+
+        File testObject = new File(driveLocation);
+        Assertions.assertFalse(testObject.exists());
     }
 
     @Test

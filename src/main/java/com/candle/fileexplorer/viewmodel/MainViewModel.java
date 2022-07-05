@@ -1,11 +1,16 @@
 package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.FilesModel;
+import com.candle.fileexplorer.model.data.ClipboardMode;
+import com.candle.fileexplorer.model.helpers.FileUtilities;
 import com.candle.fileexplorer.model.observer.DataListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * The view model used by the main view.
@@ -82,6 +87,38 @@ public class MainViewModel implements DataListener {
     //endregion
 
     //region Public Methods
+
+    /**
+     * Cuts the currently selected item.
+     */
+    public void cut(File item) {
+        copy(item);
+        dataModel.setClipboardMode(ClipboardMode.Cut);
+    }
+
+    public void copy(File item) {
+        if (item != null) {
+            ClipboardContent content = new ClipboardContent();
+            ArrayList<File> fileList = new ArrayList<>();
+            fileList.add(item);
+            content.putFiles(fileList);
+            Clipboard.getSystemClipboard().setContent(content);
+        }
+        dataModel.setClipboardMode(ClipboardMode.Copy);
+    }
+
+    public void copyLocation(String location) {
+        if (!location.equals("")) {
+            ClipboardContent content = new ClipboardContent();
+            content.putString(location);
+            Clipboard.getSystemClipboard().setContent(content);
+        }
+    }
+
+    public void paste(ArrayList<File> itemList) {
+        for (File item : itemList)
+            dataModel.paste(item.getAbsolutePath());
+    }
 
     /**
      * Checks to see if the given directory can be modified (i.e. item added, renamed, or deleted).

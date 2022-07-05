@@ -1,9 +1,11 @@
 package com.candle.fileexplorer.model;
 
+import com.candle.fileexplorer.model.data.ClipboardMode;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.observer.DataListener;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -17,7 +19,6 @@ public interface FilesModel {
      * Gets the index of the currently viewed tab.
      */
     int getTabIndex();
-
     /**
      * Sets the index representing the currently viewed tab to the specified value.
      */
@@ -38,6 +39,16 @@ public interface FilesModel {
      * @param path The new directory to go to.
      */
     void setCurrentDirectory(String path);
+
+    /**
+     * Gets the current setting for data retrieved from the clipboard.
+     */
+    ClipboardMode getClipboardMode();
+
+    /**
+     * Updates the setting for data retrieved from the clipboard.
+     */
+    void setClipboardMode(ClipboardMode mode);
 
     //endregion
 
@@ -93,6 +104,12 @@ public interface FilesModel {
      * Forces all listeners to update the currently viewed directory.
      */
     void forceUpdate();
+
+    /**
+     * Pastes a given file/folder to the current directory based on the current clipboard mode.
+     * @param sourcePath The original path of the file/folder.
+     */
+    void paste(String sourcePath);
 
     //endregion
 }
