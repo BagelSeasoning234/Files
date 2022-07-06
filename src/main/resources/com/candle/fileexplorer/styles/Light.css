@@ -57,6 +57,8 @@
 .tab-pane {
     -fx-tab-min-width: 125px;
     -fx-tab-min-height: 25px;
+    -fx-open-tab-animation: NONE;
+    -fx-close-tab-animation: NONE;
 }
 
 .tab {
@@ -113,18 +115,8 @@
 }
 
 .tab .tab-label {
-    -fx-text-alignment: LEFT;
     -fx-text-fill: black;
 }
-
-/* Scroll bars */
-.scroll-pane {
-    -fx-background: -light-gray;
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
-    -fx-border-color: -mid-gray;
-}
-
 /* Menus */
 
 .menu-bar {
@@ -203,9 +195,17 @@
     -fx-background-radius: 5;
 }
 
-/** Scroll bar */
-.scroll-bar {
+/* Scroll bars */
+.scroll-pane {
+    -fx-background: -light-gray;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: -mid-gray;
     -fx-background-color: transparent;
+}
+
+.scroll-bar {
+    -fx-background-color: -light-gray;
 }
 
 .scroll-bar .thumb {

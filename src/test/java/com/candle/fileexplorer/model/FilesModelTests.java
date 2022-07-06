@@ -81,7 +81,7 @@ public class FilesModelTests {
     public void addTab_shouldUpdateTabIndex_afterCreatingNewTab() {
         FilesModel dataModel = new DefaultFilesModel();
         int expectedIndex = dataModel.getTabIndex() + 1;
-        dataModel.addTab(expectedIndex);
+        dataModel.addTab();
         Assertions.assertEquals(expectedIndex, dataModel.getTabIndex());
     }
 
@@ -89,7 +89,7 @@ public class FilesModelTests {
     public void removeTab_shouldSetTabIndexToZero_ifTabWasDeleted() {
         FilesModel dataModel = new DefaultFilesModel();
         int firstIndex = dataModel.getTabIndex();
-        dataModel.addTab(firstIndex + 1);
+        dataModel.addTab();
         dataModel.removeTab(firstIndex + 1);
         Assertions.assertEquals(firstIndex, dataModel.getTabIndex());
     }
@@ -98,8 +98,8 @@ public class FilesModelTests {
     public void removeTab_shouldNotSetTabIndexToZero_ifTabWasDifferent() {
         FilesModel dataModel = new DefaultFilesModel();
         int firstIndex = dataModel.getTabIndex();
-        dataModel.addTab(firstIndex + 1);
-        dataModel.addTab(firstIndex + 2);
+        dataModel.addTab();
+        dataModel.addTab();
 
         dataModel.removeTab(firstIndex + 1);
         Assertions.assertEquals(firstIndex + 2, dataModel.getTabIndex());

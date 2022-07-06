@@ -21,7 +21,8 @@
 <?import com.candle.fileexplorer.view.QuickAccessController?>
 <?import javafx.scene.control.ToggleGroup?>
 <BorderPane prefWidth="1075" prefHeight="700" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.candle.fileexplorer.view.MainController">
+            fx:controller="com.candle.fileexplorer.view.MainController" fx:id="root"
+            focusTraversable="true">
 
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/Light.css"/>
@@ -85,28 +86,28 @@
 
             <!-- Navigational buttons -->
             <HBox spacing="10">
-                <Button onAction="#goBackDirectory">
+                <Button onAction="#goBackDirectory" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Back.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button onAction="#goForwardDirectory">
+                <Button onAction="#goForwardDirectory" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Forward.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button onAction="#goHomeDirectory">
+                <Button onAction="#goHomeDirectory" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Home.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button onAction="#refresh">
+                <Button onAction="#refresh" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Refresh.png"/>
@@ -119,28 +120,28 @@
                            onAction="#locationBarUpdated"/>
 
                 <!-- New, Cut, Copy, etc. -->
-                <Button onAction="#createNewItem">
+                <Button onAction="#createNewItem" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Add.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button onAction="#cut">
+                <Button onAction="#cut" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Cut.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button onAction="#copy">
+                <Button onAction="#copy" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Copy.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button onAction="#paste">
+                <Button onAction="#paste" focusTraversable="false">
                     <graphic>
                         <ImageView>
                             <Image url="@/com/candle/fileexplorer/images/16/Paste.png"/>

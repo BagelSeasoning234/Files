@@ -5,7 +5,9 @@ import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 
 /**
@@ -65,8 +67,7 @@ public class DefaultFileItem implements FileItem {
     public void moveTo(String targetPath) {
         File targetDestination = new File(targetPath + "/" + file.getName());
         if (file.getAbsolutePath().equals(targetDestination.getAbsolutePath())) {
-            System.out.println("The file/folder already exists.");
-            return;
+            throw new IllegalStateException();
         }
 
         switch (fileType) {
@@ -91,14 +92,15 @@ public class DefaultFileItem implements FileItem {
     public void copyTo(String targetPath) {
         File targetDestination = new File(targetPath + "/" + file.getName());
         if (file.getAbsolutePath().equals(targetDestination.getAbsolutePath())) {
-            System.out.println("The file/folder already exists.");
-            return;
+            throw new IllegalStateException();
         }
 
         switch (fileType) {
             case File -> {
                 try {
                     FileUtils.copyFile(file, targetDestination);
+                } catch (FileNotFoundException e) {
+                    // If the user tries to copy a file from the clipboard that has been deleted, do nothing.
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -136,6 +138,8 @@ public class DefaultFileItem implements FileItem {
             try {
                 Files.move(file.toPath(), file.toPath().resolveSibling(name));
                 return true;
+            } catch (FileAlreadyExistsException e) {
+                return false;
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;

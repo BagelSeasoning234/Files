@@ -25,6 +25,16 @@ public class FileUtilities {
     //region Public Methods
 
     /**
+     * Returns the name of the given file/folder.
+     * This is just the last name in the path's name sequence (after "/").
+     * @param path The absolute path to the file/folder.
+     */
+    public static String getPathName(String path) {
+        File temp = new File(path);
+        return temp.getName();
+    }
+
+    /**
      * Cleans a directory path by adding spaces where necessary and switching ~ for the home directory.
      */
     public static String sanitizePath(String path) {
@@ -98,10 +108,7 @@ public class FileUtilities {
             if (trashDependencyExists(builder))
                 return runTrashShellCommand(builder, path);
             else {
-                System.out.println("The 'trash-cli' dependency could not be found.");
-                System.out.println("Since you are using a Linux-based operating system, this package is necessary in order to perform operations involving the Trash Bin.");
-                System.out.println("The dependency should be installable via your package manager's repositories, or at 'https://github.com/andreafrancia/trash-cli'.");
-                return false;
+                throw new IllegalStateException();
             }
         }
         else

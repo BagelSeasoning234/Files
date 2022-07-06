@@ -9,10 +9,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +24,10 @@ public class MainController {
     //region Private Members
 
     //region GUI Elements
+
+    @FXML
+    private BorderPane root;
+
     @FXML
     private MenuBar menuBar;
 
@@ -190,8 +196,24 @@ public class MainController {
         if (fileItemView == null)
             return;
 
-        if (viewModel.canModifyItem(fileItemView.getItemDirectory()))
-            viewModel.trashItem(fileItemView.getItemDirectory());
+        if (viewModel.canModifyItem(fileItemView.getItemDirectory())) {
+            try {
+                viewModel.trashItem(fileItemView.getItemDirectory());
+            } catch (IllegalStateException e) {
+                try {
+                    String dependencyError = """
+                            The 'trash-cli' dependency could not be found.
+
+                            Since you are using a Linux-based operating system, this package is necessary in order to perform operations involving the Trash Bin.
+                            
+                            The dependency should be installable via your package manager's repositories, or at 'https://github.com/andreafrancia/trash-cli'.
+                            """;
+                    viewHandler.openSubView("Error", dependencyError);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
         else {
             try {
                 viewHandler.openSubView("Error", "The selected file/folder could not be deleted. It may be read-only.");
@@ -221,7 +243,11 @@ public class MainController {
 
     @FXML
     private void cut(ActionEvent event) {
-        File file = getCurrentGridView().getSelectedFileItem().getFile();
+        FileItemController itemView = getCurrentGridView().getSelectedFileItem();
+        if (itemView == null)
+            return;
+
+        File file = itemView.getFile();
         if (file.canWrite())
             viewModel.cut(file);
         else {
@@ -235,21 +261,44 @@ public class MainController {
 
     @FXML
     private void copy(ActionEvent event) {
+        FileItemController itemView = getCurrentGridView().getSelectedFileItem();
+        if (itemView == null)
+            return;
+
         File file = getCurrentGridView().getSelectedFileItem().getFile();
         viewModel.copy(file);
     }
 
     @FXML
     private void copyLocation(ActionEvent event) {
-        String location = getCurrentGridView().getSelectedFileItem().getItemDirectory();
+        FileItemController itemView = getCurrentGridView().getSelectedFileItem();
+        if (itemView == null)
+            return;
+
+        String location = itemView.getItemDirectory();
         viewModel.copyLocation(location);
     }
 
     @FXML
     private void paste(ActionEvent event) {
-        ArrayList<File> fileList = (ArrayList<File>) Clipboard.getSystemClipboard().getFiles();
-        if (viewModel.canModifyItem(viewModel.currentDirectoryProperty().getValue()))
-            viewModel.paste(fileList);
+        ArrayList<File> fileList;
+        try {
+            fileList = (ArrayList<File>) Clipboard.getSystemClipboard().getFiles();
+        } catch (ClassCastException e) {
+            return;
+        }
+        if (viewModel.canModifyItem(viewModel.currentDirectoryProperty().getValue())) {
+            try {
+                viewModel.paste(fileList);
+            } catch (IllegalStateException e) {
+                try {
+                    String dependencyError = "There is a file/folder with an identical name in this directory.";
+                    viewHandler.openSubView("Error", dependencyError);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
         else {
             try {
                 viewHandler.openSubView("Error", "The selected file/folder could not be pasted into this directory. It may be read-only.");
@@ -320,8 +369,8 @@ public class MainController {
      * A helper method that creates a new tab object with a file grid view.
      */
     private Tab createTabView() {
-        // TODO: Keep track of the current directory names on the view model/model so the tab can bind to them.
-        Tab newTab = new Tab("Home");
+        Tab newTab = new Tab();
+        newTab.textProperty().bind(viewModel.getLastTabNameProperty());
         FileGridController tabView = new FileGridController();
         gridViews.add(tabView);
 

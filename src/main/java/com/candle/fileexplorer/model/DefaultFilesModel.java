@@ -7,9 +7,7 @@ import com.candle.fileexplorer.model.helpers.FileUtilities;
 import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileType;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.util.*;
 import java.util.List;
 
@@ -25,19 +23,19 @@ public class DefaultFilesModel implements FilesModel {
     private final List<DataListener> listeners;
 
     /**
-     * A hashmap that represents the directory histories for each tab.
+     * A two-dimensional array that represents the directory histories for each tab.
      */
-    private final HashMap<Integer, ArrayList<String>> directoryHistory;
+    private final ArrayList<ArrayList<String>> directoryHistories;
 
     /**
      * An array of strings representing the current file path for each tab.
      */
-    private final ArrayList<String> currentDirectory;
+    private final ArrayList<String> currentDirectories;
 
     /**
      * An array of indices for the currently viewed directory in history for each tab.
      */
-    private final ArrayList<Integer> historyIndex;
+    private final ArrayList<Integer> historyIndices;
 
     /**
      * The index of the currently viewed tab.
@@ -55,10 +53,9 @@ public class DefaultFilesModel implements FilesModel {
 
     public DefaultFilesModel() {
         listeners = new ArrayList<>();
-        historyIndex = new ArrayList<>();
-        currentDirectory = new ArrayList<>();
-        directoryHistory = new HashMap<>();
-        addTab(0);
+        historyIndices = new ArrayList<>();
+        currentDirectories = new ArrayList<>();
+        directoryHistories = new ArrayList<>();
     }
 
     //endregion
@@ -83,7 +80,7 @@ public class DefaultFilesModel implements FilesModel {
 
     @Override
     public String getCurrentDirectory() {
-        return currentDirectory.get(tabIndex);
+        return currentDirectories.get(tabIndex);
     }
 
     @Override
@@ -93,7 +90,7 @@ public class DefaultFilesModel implements FilesModel {
 
         String cleanPath = FileUtilities.sanitizePath(newDirectory);
         if (FileUtilities.determineType(cleanPath) != FileType.File) {
-            currentDirectory.set(tabIndex, cleanPath);
+            currentDirectories.set(tabIndex, cleanPath);
             notifyDirectoryChange();
             addDirectoryToHistory();
         }
@@ -122,26 +119,29 @@ public class DefaultFilesModel implements FilesModel {
     }
 
     @Override
-    public void addTab(int tabLocationIndex) {
+    public void addTab() {
+        int tabLocationIndex = (currentDirectories.size() == 0) ? 0 : currentDirectories.size();
         String defaultLocation = System.getProperty("user.home");
 
-        directoryHistory.put(tabLocationIndex, new ArrayList<>(10));
-        directoryHistory.get(tabLocationIndex).add(defaultLocation);
+        directoryHistories.add(tabLocationIndex, new ArrayList<>(10));
+        directoryHistories.get(tabLocationIndex).add(defaultLocation);
 
-        currentDirectory.add(defaultLocation);
-        historyIndex.add(0);
+        currentDirectories.add(defaultLocation);
+        historyIndices.add(0);
 
         setTabIndex(tabLocationIndex);
     }
 
     @Override
     public void removeTab(int tabLocationIndex) {
-        currentDirectory.remove(tabLocationIndex);
-        directoryHistory.remove(tabLocationIndex);
-        historyIndex.remove(tabLocationIndex);
+        currentDirectories.remove(tabLocationIndex);
+        directoryHistories.remove(tabLocationIndex);
+        historyIndices.remove(tabLocationIndex);
 
         if (getTabIndex() == tabLocationIndex)
             setTabIndex(0);
+        else
+            setTabIndex(getTabIndex() - 1);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class DefaultFilesModel implements FilesModel {
     public void goForwardInDirectoryHistory() {
         if (getHistoryIndex() < getHistory().size() - 1) {
             setHistoryIndex(getHistoryIndex() + 1);
-            currentDirectory.set(tabIndex, getHistory().get(getHistoryIndex()));
+            currentDirectories.set(tabIndex, getHistory().get(getHistoryIndex()));
             notifyDirectoryChange();
         }
     }
@@ -178,7 +178,7 @@ public class DefaultFilesModel implements FilesModel {
     public void goBackwardInDirectoryHistory() {
         if (getHistoryIndex() != 0) {
             setHistoryIndex(getHistoryIndex() - 1);
-            currentDirectory.set(tabIndex, getHistory().get(getHistoryIndex()));
+            currentDirectories.set(tabIndex, getHistory().get(getHistoryIndex()));
             notifyDirectoryChange();
         }
     }
@@ -235,34 +235,34 @@ public class DefaultFilesModel implements FilesModel {
         if (getHistory().size() < maxStoredDirectories) {
             // We can just add a directory.
             setHistoryIndex(getHistoryIndex() + 1);
-            getHistory().add(currentDirectory.get(tabIndex));
+            getHistory().add(currentDirectories.get(tabIndex));
             return;
         }
 
         // If we're here, then both are at the max, so we'll overwrite the earliest directory.
         Collections.rotate(getHistory(), -1);
-        getHistory().set(getHistoryIndex(), currentDirectory.get(tabIndex));
+        getHistory().set(getHistoryIndex(), currentDirectories.get(tabIndex));
     }
 
     /**
      * A helper method that returns the directory history for the currently viewed tab.
      */
     private ArrayList<String> getHistory() {
-        return directoryHistory.get(tabIndex);
+        return directoryHistories.get(tabIndex);
     }
 
     /**
      * A helper method that returns the history index for the currently viewed tab.
      */
     private int getHistoryIndex() {
-        return historyIndex.get(tabIndex);
+        return historyIndices.get(tabIndex);
     }
 
     /**
      * A helper method that sets the history index for the currently viewed tab.
      */
     private void setHistoryIndex(int newValue) {
-        historyIndex.set(tabIndex, newValue);
+        historyIndices.set(tabIndex, newValue);
     }
 
     //endregion

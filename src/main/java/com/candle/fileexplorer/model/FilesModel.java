@@ -5,8 +5,6 @@ import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.observer.DataListener;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -62,7 +60,7 @@ public interface FilesModel {
     /**
      * Tells the model to set up additional values in the array lists for the new tab.
      */
-    void addTab(int tabLocationIndex);
+    void addTab();
 
     /**
      * Tells the model to discard the values in the array lists associated with the given tab.

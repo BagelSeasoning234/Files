@@ -23,6 +23,8 @@ public class MainViewModel implements DataListener {
      */
     private final StringProperty currentDirectoryProperty;
 
+    private final ArrayList<StringProperty> tabNameProperties;
+
     /**
      * The data model containing information about the explorer's current directory.
      */
@@ -51,13 +53,13 @@ public class MainViewModel implements DataListener {
      */
     public MainViewModel(FileGridViewModel gridVM, QuickAccessViewModel quickAccessViewModel, FilesModel dataModel) {
         currentDirectoryProperty = new SimpleStringProperty();
+        tabNameProperties = new ArrayList<>();
 
         this.fileGridViewModel = gridVM;
         this.quickAccessViewModel = quickAccessViewModel;
         this.dataModel = dataModel;
 
         dataModel.addListener(this);
-        currentDirectoryChanged();
     }
 
     //endregion
@@ -66,6 +68,12 @@ public class MainViewModel implements DataListener {
 
     public StringProperty currentDirectoryProperty() {
         return currentDirectoryProperty;
+    }
+
+    public StringProperty getLastTabNameProperty() {
+        // Always returns the last created property.
+        // This works because the view is binding the tab text to the associated property when it's first created.
+        return tabNameProperties.get(tabNameProperties.size() - 1);
     }
 
     public FileGridViewModel getFileGridViewModel() {
@@ -133,7 +141,7 @@ public class MainViewModel implements DataListener {
      * Tells the data model to add another tab.
      */
     public void addTab() {
-        dataModel.addTab(dataModel.getTabIndex() + 1);
+        dataModel.addTab();
     }
 
     /**
@@ -141,6 +149,7 @@ public class MainViewModel implements DataListener {
      */
     public void closeTab(int index) {
         dataModel.removeTab(index);
+        tabNameProperties.remove(index);
     }
 
     /**
@@ -190,11 +199,26 @@ public class MainViewModel implements DataListener {
     @Override
     public void currentDirectoryChanged() {
         currentDirectoryProperty.setValue(dataModel.getCurrentDirectory());
+
+        updateTabNameProperties();
     }
 
     //endregion
 
     //region Private Helper Methods
+
+    private void updateTabNameProperties() {
+        String tabName = FileUtilities.getPathName(currentDirectoryProperty.getValue());
+
+        StringProperty tabNameProperty;
+        try {
+            tabNameProperty = tabNameProperties.get(dataModel.getTabIndex());
+        } catch (IndexOutOfBoundsException e) {
+            tabNameProperties.add(dataModel.getTabIndex(), new SimpleStringProperty(tabName));
+            tabNameProperty = tabNameProperties.get(dataModel.getTabIndex());
+        }
+        tabNameProperty.setValue(tabName);
+    }
 
     //endregion
 }

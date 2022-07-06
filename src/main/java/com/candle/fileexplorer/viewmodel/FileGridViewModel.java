@@ -1,16 +1,11 @@
 package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.data.FileItem;
-import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
 import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.FilesModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FileGridViewModel implements DataListener {
     //region Private Members
@@ -41,7 +36,7 @@ public class FileGridViewModel implements DataListener {
         items = FXCollections.observableArrayList();
         this.dataModel = dataModel;
         dataModel.addListener(this);
-        currentDirectoryChanged();
+        //updateContents();
     }
 
     //endregion
