@@ -18,7 +18,8 @@ public class DirectoryButtonViewModelTests {
 
         when(mockItem.getFileName()).thenReturn(file.getName());
 
-        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel, mockItem);
+        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel,
+                mockItem);
         Assertions.assertEquals(vm.getDirectoryName(), "Home");
     }
 
@@ -28,12 +29,14 @@ public class DirectoryButtonViewModelTests {
         FileItem mockItem = mock(FileItem.class);
         File file = null;
         switch (System.getProperty("os.name")) {
-            case "Linux" -> file = new File(System.getProperty("user.home") + "/.local/share/Trash");
+            case "Linux" -> file = new File(System.getProperty("user.home") + "/" +
+                    ".local/share/Trash");
             case "Windows" -> file = new File("C:\\$Recycle.Bin");
         }
         when(mockItem.getFileName()).thenReturn(file.getName());
 
-        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel, mockItem);
+        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel,
+                mockItem);
         Assertions.assertEquals("Trash", vm.getDirectoryName());
     }
 
@@ -45,7 +48,8 @@ public class DirectoryButtonViewModelTests {
         FileItem mockItem = mock(FileItem.class);
         when(mockItem.getFileName()).thenReturn(folderName);
 
-        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel, mockItem);
+        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel,
+                mockItem);
         Assertions.assertEquals(vm.getDirectoryName(), folderName);
     }
 
@@ -57,7 +61,8 @@ public class DirectoryButtonViewModelTests {
         String newDirectory = System.getProperty("user.home") + "/Pictures";
         when(mockItem.getItemDirectory()).thenReturn(newDirectory);
 
-        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel, mockItem);
+        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel,
+                mockItem);
         vm.goToDirectory();
         verify(mockModel).setCurrentDirectory(newDirectory);
     }

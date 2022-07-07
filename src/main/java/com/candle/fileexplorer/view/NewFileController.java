@@ -35,7 +35,8 @@ public class NewFileController {
     //region Public Methods
 
     /**
-     * Initializes the New Item sub-window with the given instance of the view model.
+     * Initializes the New Item sub-window with the given instance of the
+     * view model.
      */
     public void init(NewFileViewModel viewModel) {
         this.viewModel = viewModel;

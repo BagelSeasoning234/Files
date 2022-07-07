@@ -16,7 +16,8 @@ public class AboutViewModel {
         FileInputStream stream = null;
         String version = null;
         try {
-            String location = System.getProperty("user.dir") + "/build/resources/version.properties";
+            String location = System.getProperty("user.dir") + "/build" +
+                    "/resources/version.properties";
             stream = new FileInputStream(location);
             properties = new Properties();
             properties.load(stream);

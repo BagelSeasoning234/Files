@@ -3,6 +3,7 @@ package com.candle.fileexplorer.view;
 import com.candle.fileexplorer.FilesApp;
 import com.candle.fileexplorer.core.ViewHandler;
 import com.candle.fileexplorer.view.enums.GridSortOrder;
+import com.candle.fileexplorer.view.helpers.ContextMenuActions;
 import com.candle.fileexplorer.viewmodel.MainViewModel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,7 +13,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -36,7 +36,8 @@ public class MainController {
     private ArrayList<FileGridController> gridViews;
 
     /**
-     * A collection of "quick access" directory paths, along with the current drives.
+     * A collection of "quick access" directory paths, along with the current
+     * drives.
      */
     @FXML
     private QuickAccessController quickAccessView;
@@ -44,7 +45,15 @@ public class MainController {
     @FXML
     private TextField locationBar;
 
+    @FXML
+    private ToggleGroup sortByGroup;
+
     //endregion
+
+    /**
+     * The class that's used to call "new, rename, paste, etc" operations.
+     */
+    private ContextMenuActions contextMenuActions;
 
     /**
      * The view model class for this object.
@@ -63,13 +72,15 @@ public class MainController {
     public void init(MainViewModel viewModel) {
         this.viewModel = viewModel;
         gridViews = new ArrayList<>();
+        contextMenuActions = new ContextMenuActions();
 
         // Bind data here
         quickAccessView.init(viewModel.getQuickAccessViewModel());
         locationBar.textProperty().bindBidirectional(viewModel.currentDirectoryProperty());
 
         // Setup tabs
-        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> tabChanged());
+        tabPane.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> tabChanged());
         addTab(new ActionEvent());
     }
 
@@ -132,14 +143,16 @@ public class MainController {
     }
 
     /**
-     * Informs the view model to update the backend with the new current directory.
+     * Informs the view model to update the backend with the new current
+     * directory.
      */
     @FXML
     private void locationBarUpdated(ActionEvent event) {
         viewModel.userUpdatedDirectory();
     }
 
-    // (The "create new item," "cut," "copy," and "paste" methods are located in the menu section.)
+    // (The "create new item," "cut," "copy," and "paste" methods are located
+    // in the menu section.)
 
     //endregion
 
@@ -152,19 +165,7 @@ public class MainController {
      */
     @FXML
     private void createNewItem(ActionEvent event) {
-        if (viewModel.canModifyItem(viewModel.currentDirectoryProperty().getValue())) {
-            try {
-                ViewHandler.getInstance().openSubView("NewFile", "");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                ViewHandler.getInstance().openSubView("Error", "A file/folder cannot be created in this directory. It may be read-only.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        contextMenuActions.createNewItem(viewModel.currentDirectoryProperty().getValue());
     }
 
     /**
@@ -195,51 +196,23 @@ public class MainController {
 
     @FXML
     private void rename(ActionEvent event) {
-        FileItemController fileItemView = getCurrentGridView().getSelectedFileItem();
+        FileItemController fileItemView =
+                getCurrentGridView().getSelectedFileItem();
         if (fileItemView == null)
             return;
 
-        try {
-            if (viewModel.canModifyItem(fileItemView.getItemDirectory()))
-                ViewHandler.getInstance().openSubView("Rename", fileItemView.getItemDirectory());
-            else
-                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be renamed. It may be read-only.");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        contextMenuActions.renameItem(fileItemView.getItemDirectory());
     }
 
     @FXML
     private void trashItem(ActionEvent event) {
-        FileItemController fileItemView = getCurrentGridView().getSelectedFileItem();
+        FileItemController fileItemView =
+                getCurrentGridView().getSelectedFileItem();
         if (fileItemView == null)
             return;
 
-        if (viewModel.canModifyItem(fileItemView.getItemDirectory())) {
-            try {
-                viewModel.trashItem(fileItemView.getItemDirectory());
-            } catch (IllegalStateException e) {
-                try {
-                    String dependencyError = """
-                            The 'trash-cli' dependency could not be found.
-
-                            Since you are using a Linux-based operating system, this package is necessary in order to perform operations involving the Trash Bin.
-                            
-                            The dependency should be installable via your package manager's repositories. Alternatively, there is a link to the GitHub page in the Help -> About Files -> Components section.
-                            """;
-                    ViewHandler.getInstance().openSubView("Error", dependencyError);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-        else {
-            try {
-                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be deleted. It may be read-only.");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        contextMenuActions.trashItem(fileItemView.getItemDirectory(),
+                viewModel.getFilesModel());
     }
 
     @FXML
@@ -262,69 +235,39 @@ public class MainController {
 
     @FXML
     private void cut(ActionEvent event) {
-        FileItemController itemView = getCurrentGridView().getSelectedFileItem();
+        FileItemController itemView =
+                getCurrentGridView().getSelectedFileItem();
         if (itemView == null)
             return;
 
-        File file = itemView.getFile();
-        if (file.canWrite())
-            viewModel.cut(file);
-        else {
-            try {
-                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be cut. It may be read-only.");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        contextMenuActions.cutItem(itemView.getItemDirectory(),
+                viewModel.getFilesModel());
     }
 
     @FXML
     private void copy(ActionEvent event) {
-        FileItemController itemView = getCurrentGridView().getSelectedFileItem();
+        FileItemController itemView =
+                getCurrentGridView().getSelectedFileItem();
         if (itemView == null)
             return;
 
-        File file = getCurrentGridView().getSelectedFileItem().getFile();
-        viewModel.copy(file);
+        contextMenuActions.copyItem(itemView.getItemDirectory(),
+                viewModel.getFilesModel());
     }
 
     @FXML
     private void copyLocation(ActionEvent event) {
-        FileItemController itemView = getCurrentGridView().getSelectedFileItem();
+        FileItemController itemView =
+                getCurrentGridView().getSelectedFileItem();
         if (itemView == null)
             return;
 
-        String location = itemView.getItemDirectory();
-        viewModel.copyLocation(location);
+        contextMenuActions.copyItemLocation(itemView.getItemDirectory());
     }
 
     @FXML
     private void paste(ActionEvent event) {
-        ArrayList<File> fileList;
-        try {
-            fileList = (ArrayList<File>) Clipboard.getSystemClipboard().getFiles();
-        } catch (ClassCastException e) {
-            return;
-        }
-        if (viewModel.canModifyItem(viewModel.currentDirectoryProperty().getValue())) {
-            try {
-                viewModel.paste(fileList);
-            } catch (IllegalStateException e) {
-                try {
-                    String dependencyError = "There is a file/folder with an identical name in this directory.";
-                    ViewHandler.getInstance().openSubView("Error", dependencyError);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-        else {
-            try {
-                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be pasted into this directory. It may be read-only.");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        contextMenuActions.pasteItem(viewModel.getFilesModel());
     }
 
     //endregion
@@ -338,12 +281,12 @@ public class MainController {
 
     @FXML
     private void sortByName(ActionEvent event) {
-        getCurrentGridView().setSortOrder(GridSortOrder.Name);
+        contextMenuActions.sortBy(getCurrentGridView(), GridSortOrder.Name);
     }
 
     @FXML
     private void sortByModified(ActionEvent event) {
-        getCurrentGridView().setSortOrder(GridSortOrder.Modified);
+        contextMenuActions.sortBy(getCurrentGridView(), GridSortOrder.Modified);
     }
 
     /**
@@ -390,7 +333,7 @@ public class MainController {
     private Tab createTabView() {
         Tab newTab = new Tab();
         newTab.textProperty().bind(viewModel.getLastTabNameProperty());
-        FileGridController tabView = new FileGridController();
+        FileGridController tabView = new FileGridController(contextMenuActions);
         gridViews.add(tabView);
 
         tabView.init(viewModel.getFileGridViewModel());
@@ -404,6 +347,7 @@ public class MainController {
 
     /**
      * A helper method that runs when the user attempts to close a tab.
+     *
      * @param tab The tab that will be closed.
      */
     private void attemptToCloseTab(Tab tab) {

@@ -39,10 +39,12 @@ public class QuickAccessController extends ScrollPane {
     //region Constructor
 
     /**
-     * Creates a new instance of the quick access view by calling the fxml loader.
+     * Creates a new instance of the quick access view by calling the fxml
+     * loader.
      */
     public QuickAccessController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/candle/fileexplorer/view/QuickAccessView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com" +
+                "/candle/fileexplorer/view/QuickAccessView.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
@@ -93,17 +95,22 @@ public class QuickAccessController extends ScrollPane {
     }
 
     /**
-     * Adds the quick access buttons like "Pictures," "Desktop," and "Documents" to the list view.
+     * Adds the quick access buttons like "Pictures," "Desktop," and
+     * "Documents" to the list view.
      */
     private void addQuickAccessButtons() {
         String folderPath = "/com/candle/fileexplorer/images/16/Folder.png";
         Image folderImage = new Image(folderPath);
 
-        String[] quickAccessItems = {"Home", "Desktop", "Downloads", "Documents", "Pictures", "Music", "Trash"};
+        String[] quickAccessItems = {"Home", "Desktop", "Downloads",
+                "Documents", "Pictures", "Music", "Trash"};
 
         for (String item : quickAccessItems) {
-            DirectoryButtonViewModel directoryButtonVM = viewModel.getQuickAccessButtonViewModel(item);
-            DirectoryButtonController button = new DirectoryButtonController(directoryButtonVM, folderImage);
+            DirectoryButtonViewModel directoryButtonVM =
+                    viewModel.getQuickAccessButtonViewModel(item);
+            DirectoryButtonController button =
+                    new DirectoryButtonController(directoryButtonVM,
+                            folderImage);
             quickAccessList.getChildren().add(button);
         }
     }

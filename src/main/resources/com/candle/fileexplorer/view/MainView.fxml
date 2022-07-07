@@ -21,7 +21,8 @@
 <?import com.candle.fileexplorer.view.QuickAccessController?>
 <?import javafx.scene.control.ToggleGroup?>
 <BorderPane prefWidth="1075" prefHeight="700" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.candle.fileexplorer.view.MainController" fx:id="root">
+            fx:controller="com.candle.fileexplorer.view.MainController"
+            fx:id="root">
 
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/Light.css"/>
@@ -32,7 +33,7 @@
     </padding>
 
     <fx:define>
-        <ToggleGroup fx:id="sortByGroup" />
+        <ToggleGroup fx:id="sortByGroup"/>
     </fx:define>
 
     <!-- Top Panel -->
@@ -41,41 +42,61 @@
             <!-- Menu Bar -->
             <MenuBar fx:id="menuBar">
                 <Menu text="File">
-                    <MenuItem text="New Item..." onAction="#createNewItem" accelerator="Shortcut+I"/>
-                    <MenuItem text="New Window" onAction="#openNewWindow" accelerator="Shortcut+N"/>
-                    <MenuItem text="New Tab" onAction="#addTab" accelerator="Shortcut+T"/>
+                    <MenuItem text="New Item..." onAction="#createNewItem"
+                              accelerator="Shortcut+I"/>
+                    <MenuItem text="New Window" onAction="#openNewWindow"
+                              accelerator="Shortcut+N"/>
+                    <MenuItem text="New Tab" onAction="#addTab"
+                              accelerator="Shortcut+T"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Rename..." onAction="#rename" accelerator="F2"/>
-                    <MenuItem text="Trash" onAction="#trashItem" accelerator="DELETE"/>
+                    <MenuItem text="Rename..." onAction="#rename"
+                              accelerator="F2"/>
+                    <MenuItem text="Trash" onAction="#trashItem"
+                              accelerator="DELETE"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Close Tab" onAction="#closeTab" accelerator="Shortcut+W"/>
+                    <MenuItem text="Close Tab" onAction="#closeTab"
+                              accelerator="Shortcut+W"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Quit" onAction="#closeApp" accelerator="Shortcut+Q"/>
+                    <MenuItem text="Quit" onAction="#closeApp"
+                              accelerator="Shortcut+Q"/>
                 </Menu>
 
                 <Menu text="Edit">
-                    <MenuItem text="Cut Item" onAction="#cut" accelerator="Shortcut+X"/>
-                    <MenuItem text="Copy Item" onAction="#copy" accelerator="Shortcut+C"/>
-                    <MenuItem text="Paste Item" onAction="#paste" accelerator="Shortcut+V"/>
+                    <MenuItem text="Cut Item" onAction="#cut"
+                              accelerator="Shortcut+X"/>
+                    <MenuItem text="Copy Item" onAction="#copy"
+                              accelerator="Shortcut+C"/>
+                    <MenuItem text="Paste Item" onAction="#paste"
+                              accelerator="Shortcut+V"/>
                     <SeparatorMenuItem/>
                     <MenuItem text="Copy Location" onAction="#copyLocation"/>
                 </Menu>
 
                 <Menu text="View">
-                    <MenuItem text="Refresh" onAction="#refresh" accelerator="F5"/>
+                    <MenuItem text="Refresh" onAction="#refresh"
+                              accelerator="F5"/>
                     <SeparatorMenuItem/>
                     <Menu text="Sort By">
-                        <RadioMenuItem text="Name" selected="true" onAction="#sortByName" toggleGroup="$sortByGroup"/>
-                        <RadioMenuItem text="Modified" onAction="#sortByModified" toggleGroup="$sortByGroup"/>
+                        <RadioMenuItem text="Name" selected="true"
+                                       onAction="#sortByName"
+                                       toggleGroup="$sortByGroup"/>
+                        <RadioMenuItem text="Modified"
+                                       onAction="#sortByModified"
+                                       toggleGroup="$sortByGroup"/>
                     </Menu>
                     <SeparatorMenuItem/>
-                    <CheckMenuItem text="Show Hidden Files" onAction="#toggleHiddenItems" accelerator="Shortcut+H"/>
+                    <CheckMenuItem text="Show Hidden Files"
+                                   onAction="#toggleHiddenItems"
+                                   accelerator="Shortcut+H"/>
                 </Menu>
 
                 <Menu text="Go">
-                    <MenuItem text="Back" onAction="#goBackDirectory" accelerator="Shortcut+LEFT"/>
-                    <MenuItem text="Forward" onAction="#goForwardDirectory" accelerator="Shortcut+RIGHT"/>
-                    <MenuItem text="Home" onAction="#goHomeDirectory" accelerator="Shortcut+UP"/>
+                    <MenuItem text="Back" onAction="#goBackDirectory"
+                              accelerator="Shortcut+LEFT"/>
+                    <MenuItem text="Forward" onAction="#goForwardDirectory"
+                              accelerator="Shortcut+RIGHT"/>
+                    <MenuItem text="Home" onAction="#goHomeDirectory"
+                              accelerator="Shortcut+UP"/>
 
                 </Menu>
 
@@ -116,7 +137,8 @@
                 </Button>
 
                 <!-- Location -->
-                <TextField fx:id="locationBar" text="/home/cachandler/Home" HBox.hgrow="ALWAYS"
+                <TextField fx:id="locationBar" text="/home/cachandler/Home"
+                           HBox.hgrow="ALWAYS"
                            onAction="#locationBarUpdated"/>
 
                 <!-- New, Cut, Copy, etc. -->
@@ -160,7 +182,8 @@
 
     <!-- Folders and Files -->
     <center>
-        <TabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS" onMouseClicked="#handleNavButtons">
+        <TabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS"
+                 onMouseClicked="#handleNavButtons">
             <padding>
                 <Insets left="10.0"/>
             </padding>

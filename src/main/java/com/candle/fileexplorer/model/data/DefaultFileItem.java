@@ -32,7 +32,8 @@ public class DefaultFileItem implements FileItem {
     /**
      * Creates a new file item with the specified data values.
      *
-     * @param fileType The type of file item being created, be it a drive, folder, or file.
+     * @param fileType The type of file item being created, be it a drive,
+     *                 folder, or file.
      * @param path     The path to the file.
      */
     public DefaultFileItem(FileType fileType, String path) {
@@ -45,6 +46,7 @@ public class DefaultFileItem implements FileItem {
      * returns a folder or a file.
      * NOTE: This function should not be used for drives, and will automatically
      * set the type to a file if the item does not currently exist on disk.
+     *
      * @param path The path to the file.
      */
     public DefaultFileItem(String path) {
@@ -56,11 +58,6 @@ public class DefaultFileItem implements FileItem {
     //endregion
 
     //region Public Methods
-
-    @Override
-    public File getFile() {
-        return file;
-    }
 
     @Override
     public void moveTo(String targetPath) {
@@ -99,9 +96,12 @@ public class DefaultFileItem implements FileItem {
                 try {
                     FileUtils.copyFile(file, targetDestination);
                 } catch (FileNotFoundException e) {
-                    // Gets called if the user tries to copy a file from the clipboard that has been deleted
-                    // (i.e. file was deleted, but it's still sitting on the clipboard).
-                    // It doesn't exist anymore, so there's no point in doing anything.
+                    // Gets called if the user tries to copy a file from the
+                    // clipboard that has been deleted
+                    // (i.e. file was deleted, but it's still sitting on the
+                    // clipboard).
+                    // It doesn't exist anymore, so there's no point in doing
+                    // anything.
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -145,8 +145,7 @@ public class DefaultFileItem implements FileItem {
                 e.printStackTrace();
                 return false;
             }
-        }
-        else
+        } else
             return false;
     }
 
@@ -154,14 +153,14 @@ public class DefaultFileItem implements FileItem {
     public boolean sendToTrash() {
         if (fileType != FileType.Drive) {
             return FileOperations.sendItemToTrash(file.getAbsolutePath());
-        }
-        else
+        } else
             return false;
     }
 
     @Override
     public String getFileName() {
-        // File.getName doesn't work for "/", so I have to manually return the name.
+        // File.getName doesn't work for "/", so I have to manually return
+        // the name.
         if (file.equals(new File("/")))
             return "/";
         return file.getName();

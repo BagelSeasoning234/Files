@@ -19,12 +19,16 @@ public class ViewModelFactory {
 
     /**
      * Instantiates the view models.
+     *
      * @param modelFactory A reference to the model factory.
      */
     public ViewModelFactory(ModelFactory modelFactory) {
-        FileGridViewModel fileGrid = new FileGridViewModel(modelFactory.getFilesModel());
-        QuickAccessViewModel quickAccess = new QuickAccessViewModel(modelFactory.getFilesModel());
-        mainViewModel = new MainViewModel(fileGrid, quickAccess, modelFactory.getFilesModel());
+        FileGridViewModel fileGrid =
+                new FileGridViewModel(modelFactory.getFilesModel());
+        QuickAccessViewModel quickAccess =
+                new QuickAccessViewModel(modelFactory.getFilesModel());
+        mainViewModel = new MainViewModel(fileGrid, quickAccess,
+                modelFactory.getFilesModel());
 
         newFileViewModel = new NewFileViewModel(modelFactory.getFilesModel());
         renameViewModel = new RenameViewModel(modelFactory.getFilesModel());
@@ -49,7 +53,7 @@ public class ViewModelFactory {
     }
 
     public RenameViewModel getRenameViewModel() {
-        return  renameViewModel;
+        return renameViewModel;
     }
 
     //endregion

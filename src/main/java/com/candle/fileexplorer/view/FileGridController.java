@@ -1,10 +1,10 @@
 package com.candle.fileexplorer.view;
 
-import com.candle.fileexplorer.core.ViewHandler;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.helpers.FileOperations;
 import com.candle.fileexplorer.view.enums.GridSortOrder;
+import com.candle.fileexplorer.view.helpers.ContextMenuActions;
 import com.candle.fileexplorer.viewmodel.FileGridViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -35,13 +35,17 @@ public class FileGridController extends ScrollPane {
     @FXML
     private ContextMenu contextMenu;
 
-    /**
-     * The grid of items for this view.
-     */
     @FXML
     private GridPane gridPane;
 
     //endregion
+
+    /**
+     * The UI element that is currently focused.
+     */
+    private Node focusedNode;
+
+    private final ContextMenuActions contextMenuActions;
 
     /**
      * The number of columns to be used in the grid pane.
@@ -59,20 +63,27 @@ public class FileGridController extends ScrollPane {
     private FileGridViewModel viewModel;
 
     /**
-     * The file thumbnail image for use in file items that are of the type "File."
+     * The file thumbnail image for use in file items that are of the type
+     * "File."
      */
-    Image fileThumbnail = new Image("/com/candle/fileexplorer/images/64/File.png", 64, 64, true, false, true);
+    Image fileThumbnail = new Image("/com/candle/fileexplorer/images/64/File" +
+            ".png", 64, 64, true, false, true);
     /**
-     * The folder thumbnail image for use in file items that are of the type "Folder."
+     * The folder thumbnail image for use in file items that are of the type
+     * "Folder."
      */
-    Image folderThumbnail = new Image("/com/candle/fileexplorer/images/64/Folder.png", 64, 64, true, false, true);
+    Image folderThumbnail = new Image("/com/candle/fileexplorer/images/64" +
+            "/Folder.png", 64, 64, true, false, true);
 
     //endregion
 
     //region Constructors
 
-    public FileGridController() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/candle/fileexplorer/view/FileGridView.fxml"));
+    public FileGridController(ContextMenuActions contextMenuActions) {
+        this.contextMenuActions = contextMenuActions;
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com" +
+                "/candle/fileexplorer/view/FileGridView.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
@@ -98,6 +109,7 @@ public class FileGridController extends ScrollPane {
 
     /**
      * Initializes the view by binding the view model data to the grid.
+     *
      * @param viewModel A reference to the file structure view model.
      */
     public void init(FileGridViewModel viewModel) {
@@ -130,32 +142,84 @@ public class FileGridController extends ScrollPane {
 
     //endregion
 
-    //region Private Helper Methods
-
     //region On Clicked Methods
 
     //region Context Menu
-
-    // TODO: Add the other context menu functions.
 
     /**
      * Opens up the "create new item" dialog window.
      */
     @FXML
     private void createNewItem(ActionEvent event) {
-        if (canModifyItem(viewModel.getCurrentDirectory())) {
-            try {
-                ViewHandler.getInstance().openSubView("NewFile", "");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                ViewHandler.getInstance().openSubView("Error", "A file/folder cannot be created in this directory. It may be read-only.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        contextMenuActions.createNewItem(viewModel.getCurrentDirectory());
+    }
+
+    /**
+     * Opens the "rename item" dialog window.
+     */
+    @FXML
+    private void renameItem(ActionEvent event) {
+        contextMenuActions.renameItem(getFocusedItemPath());
+    }
+
+    /**
+     * Sends the currently selected item to the trash bin.
+     */
+    @FXML
+    private void trashItem(ActionEvent event) {
+        contextMenuActions.trashItem(getFocusedItemPath(),
+                viewModel.getFilesModel());
+    }
+
+    /**
+     * Adds the currently selected item to the clipboard and sets up the data
+     * model to paste it somewhere
+     * with the "cut" operation.
+     */
+    @FXML
+    private void cutItem(ActionEvent event) {
+        contextMenuActions.cutItem(getFocusedItemPath(),
+                viewModel.getFilesModel());
+    }
+
+    /**
+     * Adds the currently selected item to the clipboard and sets up the data
+     * model to paste it somewhere
+     * with the "copy" operation.
+     */
+    @FXML
+    private void copyItem(ActionEvent event) {
+        contextMenuActions.copyItem(getFocusedItemPath(),
+                viewModel.getFilesModel());
+    }
+
+    /**
+     * Gets the currently selected item and adds its location to the clipboard.
+     */
+    @FXML
+    private void copyItemLocation(ActionEvent event) {
+        contextMenuActions.copyItemLocation(getFocusedItemPath());
+    }
+
+    /**
+     * Pastes the item that's currently on the clipboard to the current
+     * directory.
+     */
+    @FXML
+    private void pasteItem(ActionEvent event) {
+        contextMenuActions.pasteItem(viewModel.getFilesModel());
+    }
+
+    /**
+     * Opens the focused file/folder in the user's default application.
+     */
+    @FXML
+    private void openItemInDefaultApp(ActionEvent event) {
+        String itemPath = getFocusedItemPath();
+        if (!itemPath.equals(""))
+            contextMenuActions.openItemInDefaultApp(itemPath);
+        else
+            contextMenuActions.openItemInDefaultApp(viewModel.getCurrentDirectory());
     }
 
     //endregion
@@ -165,8 +229,8 @@ public class FileGridController extends ScrollPane {
      */
     @FXML
     private void handleMouseClick(MouseEvent event) {
-        Node clickedNode = getGridFileItem(event);
-        if (clickedNode == null)
+        focusedNode = getGridFileItem(event);
+        if (focusedNode == null)
             return;
 
         int openItemClickCount = 2;
@@ -174,12 +238,11 @@ public class FileGridController extends ScrollPane {
 
         // Select the item.
         if (event.getClickCount() == selectedItemClickCount) {
-            clickedNode.requestFocus();
+            focusedNode.requestFocus();
         }
         // Open the item.
         else if (event.getClickCount() == openItemClickCount) {
-            String newCurrentDirectory = ((FileItemController) clickedNode).getItemDirectory();
-            viewModel.setCurrentDirectory(newCurrentDirectory);
+            viewModel.setCurrentDirectory(getFocusedItemPath());
         }
     }
 
@@ -187,9 +250,17 @@ public class FileGridController extends ScrollPane {
 
     //region Private Helper Methods
 
-    private boolean canModifyItem(String path) {
-        File item = new File(path);
-        return item.canWrite();
+    /**
+     * Gets the absolute path of the item that is currently focused.
+     *
+     * @return The path, if found. Returns an empty string otherwise.
+     */
+    private String getFocusedItemPath() {
+        FileItemController item = (FileItemController) focusedNode;
+        if (item != null)
+            return item.getItemDirectory();
+        else
+            return "";
     }
 
     /**
@@ -202,7 +273,8 @@ public class FileGridController extends ScrollPane {
     }
 
     /**
-     * Iterates through elements in the view model as it adds them to the grid view.
+     * Iterates through elements in the view model as it adds them to the
+     * grid view.
      * Currently, the function re-adds everything when updated.
      * TODO: Optimize the grid construction in the future.
      */
@@ -213,9 +285,11 @@ public class FileGridController extends ScrollPane {
         int rowNumber = 0;
 
         for (FileItem item : sortItems(viewModel.getItems())) {
-            // For each item, create a new view and add it to the grid at the specified column and row indexes.
+            // For each item, create a new view and add it to the grid at the
+            // specified column and row indexes.
             FileItemController fileItemView = createFileView();
-            fileItemView.init(item, (item.getFileType() == FileType.File) ? fileThumbnail : folderThumbnail);
+            fileItemView.init(item, (item.getFileType() == FileType.File) ?
+                    fileThumbnail : folderThumbnail);
             gridPane.add(fileItemView, columnNumber, rowNumber);
 
             // Increment the column indexes.
@@ -229,15 +303,20 @@ public class FileGridController extends ScrollPane {
     }
 
     /**
-     * Using the defined sort order, this function reorganizes a list of FileItemViewModels.
+     * Using the defined sort order, this function reorganizes a list of
+     * FileItemViewModels.
      */
     private ObservableList<FileItem> sortItems(ObservableList<FileItem> items) {
-        // I duplicate the array to prevent the function from making changes to the underlying view model's data. (Otherwise, this causes a stack overflow error).
-        ObservableList<FileItem> newItemList = FXCollections.observableArrayList(items);
+        // I duplicate the array to prevent the function from making changes
+        // to the underlying view model's data. (Otherwise, this causes a
+        // stack overflow error).
+        ObservableList<FileItem> newItemList =
+                FXCollections.observableArrayList(items);
 
         switch (sortOrder) {
             // Sorts based on the alphabetical name of each item.
-            case Name -> newItemList.sort((o1, o2) -> o1.getFileName().compareToIgnoreCase(o2.getFileName()));
+            case Name ->
+                    newItemList.sort((o1, o2) -> o1.getFileName().compareToIgnoreCase(o2.getFileName()));
             // Sorts based on the last modified date of each item.
             case Modified -> newItemList.sort(Comparator.comparing(FileItem::getLastModifiedTime));
         }
@@ -252,9 +331,11 @@ public class FileGridController extends ScrollPane {
         FileItemController fileItemView = new FileItemController();
         // Load the FXML file
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/candle/fileexplorer/view/FileItemView.fxml"));
+        loader.setLocation(getClass().getResource("/com/candle/fileexplorer" +
+                "/view/FileItemView.fxml"));
         loader.setRoot(fileItemView);
-        // For some reason, the FXML elements aren't initialized properly unless the controller is set here.
+        // For some reason, the FXML elements aren't initialized properly
+        // unless the controller is set here.
         loader.setController(fileItemView);
 
         try {
@@ -266,7 +347,8 @@ public class FileGridController extends ScrollPane {
     }
 
     /**
-     * A helper function that gets the clicked file item from the grid using the clicked mouse event.
+     * A helper function that gets the clicked file item from the grid using
+     * the clicked mouse event.
      */
     private Node getGridFileItem(MouseEvent event) {
         Node clickedNode = event.getPickResult().getIntersectedNode();

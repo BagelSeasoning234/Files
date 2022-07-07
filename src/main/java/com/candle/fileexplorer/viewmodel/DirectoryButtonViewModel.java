@@ -15,7 +15,8 @@ public class DirectoryButtonViewModel {
      */
     private final FilesModel dataModel;
     /**
-     * A reference to the file item associated with this directory button view model.
+     * A reference to the file item associated with this directory button
+     * view model.
      */
     private final FileItem fileItem;
 
@@ -24,7 +25,8 @@ public class DirectoryButtonViewModel {
     //region Constructor
 
     /**
-     * Constructs a new instance of the directory button view model with a reference to the data model.
+     * Constructs a new instance of the directory button view model with a
+     * reference to the data model.
      */
     public DirectoryButtonViewModel(FilesModel dataModel, FileItem item) {
         this.dataModel = dataModel;

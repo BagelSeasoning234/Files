@@ -51,7 +51,8 @@ public class NewFileViewModel {
     //region Public Methods
 
     /**
-     * Tells the data model to create a new file/folder at the specified location.
+     * Tells the data model to create a new file/folder at the specified
+     * location.
      */
     public void createItem() {
         if (canCreateItem()) {

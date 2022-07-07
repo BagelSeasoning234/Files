@@ -1,15 +1,11 @@
 package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.FilesModel;
-import com.candle.fileexplorer.model.data.ClipboardMode;
 import com.candle.fileexplorer.model.helpers.FileOperations;
 import com.candle.fileexplorer.model.observer.DataListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -23,10 +19,14 @@ public class MainViewModel implements DataListener {
      */
     private final StringProperty currentDirectoryProperty;
 
+    /**
+     * A collection of currently open tab names.
+     */
     private final ArrayList<StringProperty> tabNameProperties;
 
     /**
-     * The data model containing information about the explorer's current directory.
+     * The data model containing information about the explorer's current
+     * directory.
      */
     private final FilesModel dataModel;
 
@@ -47,11 +47,18 @@ public class MainViewModel implements DataListener {
     /**
      * Instantiates the main view model using the File Structure view model.
      *
-     * @param gridVM        A reference to an existing file grid view model, which is created in the view model factory.
-     * @param quickAccessViewModel A reference to an existing quick access view model, which is created in the view model factory.
-     * @param dataModel     A reference to an existing data model, which is created in the model factory.
+     * @param gridVM               A reference to an existing file grid view
+     *                             model, which is created in the view model
+     *                             factory.
+     * @param quickAccessViewModel A reference to an existing quick access
+     *                             view model, which is created in the view
+     *                             model factory.
+     * @param dataModel            A reference to an existing data model,
+     *                             which is created in the model factory.
      */
-    public MainViewModel(FileGridViewModel gridVM, QuickAccessViewModel quickAccessViewModel, FilesModel dataModel) {
+    public MainViewModel(FileGridViewModel gridVM,
+                         QuickAccessViewModel quickAccessViewModel,
+                         FilesModel dataModel) {
         currentDirectoryProperty = new SimpleStringProperty();
         tabNameProperties = new ArrayList<>();
 
@@ -72,8 +79,13 @@ public class MainViewModel implements DataListener {
 
     public StringProperty getLastTabNameProperty() {
         // Always returns the last created property.
-        // This works because the view is binding the tab text to the associated property when it's first created.
+        // This works because the view is binding the tab text to the
+        // associated property when it's first created.
         return tabNameProperties.get(tabNameProperties.size() - 1);
+    }
+
+    public FilesModel getFilesModel() {
+        return dataModel;
     }
 
     public FileGridViewModel getFileGridViewModel() {
@@ -97,47 +109,6 @@ public class MainViewModel implements DataListener {
     //region Public Methods
 
     /**
-     * Cuts the currently selected item.
-     */
-    public void cut(File item) {
-        copy(item);
-        dataModel.setClipboardMode(ClipboardMode.Cut);
-    }
-
-    public void copy(File item) {
-        if (item != null) {
-            ClipboardContent content = new ClipboardContent();
-            ArrayList<File> fileList = new ArrayList<>();
-            fileList.add(item);
-            content.putFiles(fileList);
-            Clipboard.getSystemClipboard().setContent(content);
-        }
-        dataModel.setClipboardMode(ClipboardMode.Copy);
-    }
-
-    public void copyLocation(String location) {
-        if (!location.equals("")) {
-            ClipboardContent content = new ClipboardContent();
-            content.putString(location);
-            Clipboard.getSystemClipboard().setContent(content);
-        }
-    }
-
-    public void paste(ArrayList<File> itemList) {
-        for (File item : itemList)
-            dataModel.paste(item.getAbsolutePath());
-    }
-
-    /**
-     * Checks to see if the given directory can be modified (i.e. item added, renamed, or deleted).
-     * @param directory The directory to check
-     */
-    public boolean canModifyItem(String directory) {
-        File currentDirectoryObject = new File(directory);
-        return currentDirectoryObject.canWrite();
-    }
-
-    /**
      * Tells the data model to add another tab.
      */
     public void addTab() {
@@ -153,13 +124,6 @@ public class MainViewModel implements DataListener {
     }
 
     /**
-     * Tells the data model to delete the item at the given directory.
-     */
-    public void trashItem(String path) {
-        dataModel.trashItem(path);
-    }
-
-    /**
      * Tells the data model to go back one directory in history.
      */
     public void goBackDirectory() {
@@ -167,7 +131,8 @@ public class MainViewModel implements DataListener {
     }
 
     /**
-     * Tells the data model to go "forward" in history to the last selected directory.
+     * Tells the data model to go "forward" in history to the last selected
+     * directory.
      */
     public void goForwardDirectory() {
         dataModel.goForwardInDirectoryHistory();
@@ -199,7 +164,6 @@ public class MainViewModel implements DataListener {
     @Override
     public void currentDirectoryChanged() {
         currentDirectoryProperty.setValue(dataModel.getCurrentDirectory());
-
         updateTabNameProperties();
     }
 
@@ -207,14 +171,20 @@ public class MainViewModel implements DataListener {
 
     //region Private Helper Methods
 
+    /**
+     * Updates the name of the currently viewed tab, and adds new entries to
+     * the property list when necessary.
+     */
     private void updateTabNameProperties() {
-        String tabName = FileOperations.getPathName(currentDirectoryProperty.getValue());
+        String tabName =
+                FileOperations.getPathName(currentDirectoryProperty.getValue());
 
         StringProperty tabNameProperty;
         try {
             tabNameProperty = tabNameProperties.get(dataModel.getTabIndex());
         } catch (IndexOutOfBoundsException e) {
-            tabNameProperties.add(dataModel.getTabIndex(), new SimpleStringProperty(tabName));
+            tabNameProperties.add(dataModel.getTabIndex(),
+                    new SimpleStringProperty(tabName));
             tabNameProperty = tabNameProperties.get(dataModel.getTabIndex());
         }
         tabNameProperty.setValue(tabName);

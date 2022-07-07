@@ -50,9 +50,5 @@ public class FileItemController extends VBox {
         return fileItem.getItemDirectory();
     }
 
-    public File getFile() {
-        return fileItem.getFile();
-    }
-
     //endregion
 }

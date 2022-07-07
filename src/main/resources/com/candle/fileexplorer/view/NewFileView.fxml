@@ -16,17 +16,19 @@
     </stylesheets>
 
     <padding>
-        <Insets topRightBottomLeft="10" />
+        <Insets topRightBottomLeft="10"/>
     </padding>
 
     <fx:define>
-        <ToggleGroup fx:id="itemTypeGroup" />
+        <ToggleGroup fx:id="itemTypeGroup"/>
     </fx:define>
 
-    <Label text="Enter file/folder name:" />
+    <Label text="Enter file/folder name:"/>
     <HBox alignment="CENTER" spacing="10">
-        <RadioButton text="File" onAction="#setFile" toggleGroup="$itemTypeGroup" selected="true"/>
-        <RadioButton text="Folder" onAction="#setFolder" toggleGroup="$itemTypeGroup"/>
+        <RadioButton text="File" onAction="#setFile"
+                     toggleGroup="$itemTypeGroup" selected="true"/>
+        <RadioButton text="Folder" onAction="#setFolder"
+                     toggleGroup="$itemTypeGroup"/>
     </HBox>
     <TextField fx:id="itemNameField" promptText="File.txt, Folder"/>
     <HBox alignment="CENTER" spacing="10">

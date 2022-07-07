@@ -21,26 +21,29 @@
         <URL value="@/com/candle/fileexplorer/styles/LightAbout.css"/>
     </stylesheets>
     <padding>
-        <Insets topRightBottomLeft="10" />
+        <Insets topRightBottomLeft="10"/>
     </padding>
 
-    <Label fx:id="appTitle" text="Files" />
-    <Label fx:id="version" text="${controller.appVersion}" />
+    <Label fx:id="appTitle" text="Files"/>
+    <Label fx:id="version" text="${controller.appVersion}"/>
 
     <TabPane tabClosingPolicy="UNAVAILABLE">
-        <Tab text="About" >
+        <Tab text="About">
             <ScrollPane>
                 <VBox>
-                    <Label text="A file manager application written in Java." />
+                    <Label text="A file manager application written in Java."/>
                 </VBox>
             </ScrollPane>
         </Tab>
         <Tab text="Components">
             <ScrollPane>
                 <VBox>
-                    <Hyperlink text="${controller.javaFxVersion}" onMouseClicked="#openJavaFx"/>
-                    <Hyperlink text="${controller.javaVersion}" onMouseClicked="#openJava" />
-                    <Hyperlink text="Trash-CLI: Dependency for Linux Version" onMouseClicked="#openTrashcli"/>
+                    <Hyperlink text="${controller.javaFxVersion}"
+                               onMouseClicked="#openJavaFx"/>
+                    <Hyperlink text="${controller.javaVersion}"
+                               onMouseClicked="#openJava"/>
+                    <Hyperlink text="Trash-CLI: Dependency for Linux Version"
+                               onMouseClicked="#openTrashcli"/>
                 </VBox>
             </ScrollPane>
 
@@ -48,8 +51,8 @@
         <Tab text="Authors">
             <ScrollPane>
                 <VBox>
-                    <Label fx:id="authorName" text="Christopher Chandler" />
-                    <Label fx:id="authorDetails" text="Developer" />
+                    <Label fx:id="authorName" text="Christopher Chandler"/>
+                    <Label fx:id="authorDetails" text="Developer"/>
                 </VBox>
             </ScrollPane>
         </Tab>

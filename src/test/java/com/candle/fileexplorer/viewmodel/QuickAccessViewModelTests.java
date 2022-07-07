@@ -43,10 +43,12 @@ public class QuickAccessViewModelTests {
         FilesModel dataModel = new DefaultFilesModel();
         String homeDirectory = System.getProperty("user.home");
         FileItem homeItem = new DefaultFileItem(homeDirectory);
-        DirectoryButtonViewModel expectedResult = new DirectoryButtonViewModel(dataModel, homeItem);
+        DirectoryButtonViewModel expectedResult =
+                new DirectoryButtonViewModel(dataModel, homeItem);
 
         QuickAccessViewModel viewModel = new QuickAccessViewModel(dataModel);
 
-        Assertions.assertEquals(expectedResult, viewModel.getQuickAccessButtonViewModel("Home"));
+        Assertions.assertEquals(expectedResult,
+                viewModel.getQuickAccessButtonViewModel("Home"));
     }
 }

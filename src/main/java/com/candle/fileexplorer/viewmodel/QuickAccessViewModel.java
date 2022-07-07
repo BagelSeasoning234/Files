@@ -40,7 +40,8 @@ public class QuickAccessViewModel {
     //region Public Methods
 
     /**
-     * Returns a list of directory button view models for each drive found on the pc.
+     * Returns a list of directory button view models for each drive found on
+     * the pc.
      */
     public ArrayList<DirectoryButtonViewModel> getDriveVms() {
         return drives;
@@ -48,7 +49,9 @@ public class QuickAccessViewModel {
 
     /**
      * Creates a new directory button view model for the given directory name.
-     * @param directory The name of the directory, such as "Pictures," "Documents," or "Trash."
+     *
+     * @param directory The name of the directory, such as "Pictures,"
+     *                  "Documents," or "Trash."
      * @return The view model for the directory.
      */
     public DirectoryButtonViewModel getQuickAccessButtonViewModel(String directory) {
@@ -69,7 +72,8 @@ public class QuickAccessViewModel {
     //region Private Methods
 
     /**
-     * Updates the drive array by getting a list of logical drives from the computer.
+     * Updates the drive array by getting a list of logical drives from the
+     * computer.
      */
     private void updateDrives() {
         if (drives == null)

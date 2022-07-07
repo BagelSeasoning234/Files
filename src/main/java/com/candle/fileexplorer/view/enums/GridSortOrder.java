@@ -5,6 +5,5 @@ package com.candle.fileexplorer.view.enums;
  */
 public enum GridSortOrder {
     Name,
-    Size,
     Modified,
 }

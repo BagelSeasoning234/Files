@@ -68,7 +68,8 @@ public class ViewHandler {
     /**
      * Opens a specified view in the main application.
      *
-     * @param viewToOpen The name of the view to open, WITHOUT the "View.fxml" part.
+     * @param viewToOpen The name of the view to open, WITHOUT the "View
+     *                   .fxml" part.
      * @throws IOException If the view could not be found.
      */
     public void openPrimaryView(String viewToOpen) throws IOException {
@@ -98,8 +99,11 @@ public class ViewHandler {
 
     /**
      * Opens a new window process with the specified view.
-     * @param viewToOpen The name of the view to open, WITHOUT the "View.fxml" part.
-     * @param arg An optional additional argument, if the view supports it.
+     *
+     * @param viewToOpen The name of the view to open, WITHOUT the "View
+     *                   .fxml" part.
+     * @param arg        An optional additional argument, if the view
+     *                   supports it.
      * @throws IOException If the view could not be found.
      */
     public void openSubView(String viewToOpen, String arg) throws IOException {

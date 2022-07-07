@@ -37,7 +37,8 @@ public class FilesModelTests {
         dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
         dataModel.createItem(FileType.File, fileName);
 
-        File fileObject = new File(dataModel.getCurrentDirectory() + "/" + fileName);
+        File fileObject =
+                new File(dataModel.getCurrentDirectory() + "/" + fileName);
         Assertions.assertTrue(fileObject.exists() && fileObject.isFile());
     }
 
@@ -50,7 +51,8 @@ public class FilesModelTests {
         dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
         dataModel.createItem(FileType.Folder, folderName);
 
-        File folderObject = new File(dataModel.getCurrentDirectory() + "/" + folderName);
+        File folderObject =
+                new File(dataModel.getCurrentDirectory() + "/" + folderName);
         Assertions.assertTrue(folderObject.exists() && folderObject.isDirectory());
     }
 
@@ -117,7 +119,8 @@ public class FilesModelTests {
     public void currentDirectory_shouldReturnUserHomeDirectory_byDefault() {
         FilesModel model = new DefaultFilesModel();
         model.addTab();
-        Assertions.assertEquals(System.getProperty("user.home"), model.getCurrentDirectory());
+        Assertions.assertEquals(System.getProperty("user.home"),
+                model.getCurrentDirectory());
     }
 
     @Test
@@ -125,7 +128,8 @@ public class FilesModelTests {
         FilesModel model = new DefaultFilesModel();
         model.addTab();
         model.setCurrentDirectory(tempFolder.toString());
-        Assertions.assertEquals(tempFolder.toString(), model.getCurrentDirectory());
+        Assertions.assertEquals(tempFolder.toString(),
+                model.getCurrentDirectory());
     }
 
     @Test
@@ -133,7 +137,8 @@ public class FilesModelTests {
         FilesModel model = new DefaultFilesModel();
         model.addTab();
         model.setCurrentDirectory(tempFile.toString());
-        Assertions.assertEquals(System.getProperty("user.home"), model.getCurrentDirectory());
+        Assertions.assertEquals(System.getProperty("user.home"),
+                model.getCurrentDirectory());
     }
 
     @Test
@@ -148,24 +153,24 @@ public class FilesModelTests {
     }
 
     @Test
-    public void goBackward_shouldReturnToPreviousDir_afterDirChanged()
-    {
+    public void goBackward_shouldReturnToPreviousDir_afterDirChanged() {
         FilesModel model = new DefaultFilesModel();
         model.addTab();
         model.setCurrentDirectory(tempFolder.toString());
         model.goBackwardInDirectoryHistory();
-        Assertions.assertEquals(System.getProperty("user.home"), model.getCurrentDirectory());
+        Assertions.assertEquals(System.getProperty("user.home"),
+                model.getCurrentDirectory());
     }
 
     @Test
-    public void goForward_shouldReturnToNextDir_afterGoingBack()
-    {
+    public void goForward_shouldReturnToNextDir_afterGoingBack() {
         FilesModel model = new DefaultFilesModel();
         model.addTab();
         model.setCurrentDirectory(tempFolder.toString());
         model.goBackwardInDirectoryHistory();
         model.goForwardInDirectoryHistory();
-        Assertions.assertEquals(tempFolder.toString(), model.getCurrentDirectory());
+        Assertions.assertEquals(tempFolder.toString(),
+                model.getCurrentDirectory());
     }
 
     @Test

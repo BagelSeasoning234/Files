@@ -6,31 +6,38 @@ public interface FileItem {
 
     /**
      * Moves the given file/folder to the target destination.
+     *
      * @param targetPath The absolute path to the destination folder.
      */
     void moveTo(String targetPath);
 
     /**
      * Copies the given file/folder to the target destination.
+     *
      * @param targetPath The absolute path to the destination folder.
      */
     void copyTo(String targetPath);
 
     /**
-     * Creates a new file/folder at the path specified when the item was first created.
+     * Creates a new file/folder at the path specified when the item was
+     * first created.
+     *
      * @return Whether the operation was successful.
      */
     boolean writeToDisk();
 
     /**
-     * Renames the existing file/folder at the specified when the item was first created.
+     * Renames the existing file/folder at the specified when the item was
+     * first created.
+     *
      * @param name The new name of the file/folder.
      * @return Whether the operation was successful.
      */
     boolean rename(String name);
 
     /**
-     * Sends the file/folder at the path specified when the item was first created to the recycle bin.
+     * Sends the file/folder at the path specified when the item was first
+     * created to the recycle bin.
      */
     boolean sendToTrash();
 
@@ -58,9 +65,4 @@ public interface FileItem {
      * Gets the time at which this item was last modified.
      */
     long getLastModifiedTime();
-
-    /**
-     * Gets the file object for this class.
-     */
-    File getFile();
 }

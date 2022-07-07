@@ -32,7 +32,8 @@ public class RenameViewModel {
     //region Constructors
 
     /**
-     * Constructs a new instance of the class with the given reference to the data model.
+     * Constructs a new instance of the class with the given reference to the
+     * data model.
      */
     public RenameViewModel(FilesModel dataModel) {
         this.dataModel = dataModel;
@@ -64,7 +65,8 @@ public class RenameViewModel {
     }
 
     /**
-     * Tells the data model to rename the given file/folder at the specified location.
+     * Tells the data model to rename the given file/folder at the specified
+     * location.
      */
     public void renameItem() {
         if (canRenameItem()) {

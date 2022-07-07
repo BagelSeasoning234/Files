@@ -32,12 +32,15 @@ public class DirectoryButtonController extends Button {
     //region Constructor
 
     /**
-     * Creates a new "quick access" button, given a specified file item and image.
+     * Creates a new "quick access" button, given a specified file item and
+     * image.
      *
-     * @param viewModel The view model that allows this button to interface with the backend data.
+     * @param viewModel The view model that allows this button to interface
+     *                  with the backend data.
      * @param image     The image thumbnail that will be used for this button.
      */
-    public DirectoryButtonController(DirectoryButtonViewModel viewModel, Image image) {
+    public DirectoryButtonController(DirectoryButtonViewModel viewModel,
+                                     Image image) {
         super(viewModel.getDirectoryName(), new ImageView(image));
 
         this.viewModel = viewModel;
@@ -49,13 +52,12 @@ public class DirectoryButtonController extends Button {
     //region Private Methods
 
     /**
-     * When clicked, the button will take the user to the directory for this file item.
+     * When clicked, the button will take the user to the directory for this
+     * file item.
      */
     private void goToDirectory(ActionEvent actionEvent) {
         viewModel.goToDirectory();
     }
-
-    // TODO: Look into adding the context menu items.
 
     //endregion
 }

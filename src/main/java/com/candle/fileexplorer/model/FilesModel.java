@@ -17,8 +17,10 @@ public interface FilesModel {
      * Gets the index of the currently viewed tab.
      */
     int getTabIndex();
+
     /**
-     * Sets the index representing the currently viewed tab to the specified value.
+     * Sets the index representing the currently viewed tab to the specified
+     * value.
      */
     void setTabIndex(int newIndex);
 
@@ -34,6 +36,7 @@ public interface FilesModel {
 
     /**
      * Sets the current directory at the given index to the given value.
+     *
      * @param path The new directory to go to.
      */
     void setCurrentDirectory(String path);
@@ -53,29 +56,35 @@ public interface FilesModel {
     //region Public Methods
 
     /**
-     * Subscribes the specified object to be notified whenever changes are made to the data model.
+     * Subscribes the specified object to be notified whenever changes are
+     * made to the data model.
      */
     void addListener(DataListener newListener);
 
     /**
-     * Tells the model to set up additional values in the array lists for the new tab.
+     * Tells the model to set up additional values in the array lists for the
+     * new tab.
      */
     void addTab();
 
     /**
-     * Tells the model to discard the values in the array lists associated with the given tab.
+     * Tells the model to discard the values in the array lists associated
+     * with the given tab.
      */
     void removeTab(int tabLocationIndex);
 
     /**
      * Creates a new file/folder at the current directory.
+     *
      * @param type Lets the model know to create a file or folder
-     * @param name The name of the file with its extension (i.e. Image.png) or folder.
+     * @param name The name of the file with its extension (i.e. Image.png)
+     *             or folder.
      */
     void createItem(FileType type, String name);
 
     /**
      * Renames the file/folder at the given directory.
+     *
      * @param path The absolute path to the file/folder.
      * @param name The new name for the file/folder.
      */
@@ -85,20 +94,25 @@ public interface FilesModel {
      * Deletes the item at the given file/folder path.
      */
     void trashItem(String path);
+
     /**
-     * Sets the current directory to the location in history that was last selected before going back.
+     * Sets the current directory to the location in history that was last
+     * selected before going back.
      * (Similar to going "forward" on a web browser).
      */
     void goForwardInDirectoryHistory();
 
     /**
-     * Sets the current directory to the location in history that was last selected.
+     * Sets the current directory to the location in history that was last
+     * selected.
      * (Similar to going "backward" on a web browser).
      */
     void goBackwardInDirectoryHistory();
 
     /**
-     * Pastes a given file/folder to the current directory based on the current clipboard mode.
+     * Pastes a given file/folder to the current directory based on the
+     * current clipboard mode.
+     *
      * @param sourcePath The original path of the file/folder.
      */
     void paste(String sourcePath);

@@ -18,19 +18,24 @@ public class DirectoryStructureTests {
 
     @Test
     public void getDrives_shouldReturnDrives_whenCalled() {
-        // TODO: Make this test work on various computers. I have no clue how to do this right now other than by hardcoding drives.
+        // TODO: Make this test work on various computers. I have no clue how
+        //  to do this right now other than by hardcoding drives.
         //FileItem drive1 = new DefaultFileItem(FileType.Drive, "/");
-        //FileItem drive2 = new DefaultFileItem(FileType.Drive, "/run/media/cachandler/SSD 500GB");
+        //FileItem drive2 = new DefaultFileItem(FileType.Drive,
+        // "/run/media/cachandler/SSD 500GB");
         FileItem drive1 = new DefaultFileItem(FileType.Drive, "/");
-        FileItem drive2 = new DefaultFileItem(FileType.Drive, "/run/media/cachandler/7cbdceb7-59b5-45b1-82e3-d54ba374c457/");
-        FileItem drive3 = new DefaultFileItem(FileType.Drive, "/run/media/cachandler/1CB63A0CB639E744/");
+        FileItem drive2 = new DefaultFileItem(FileType.Drive, "/run/media" +
+                "/cachandler/7cbdceb7-59b5-45b1-82e3-d54ba374c457/");
+        FileItem drive3 = new DefaultFileItem(FileType.Drive, "/run/media" +
+                "/cachandler/1CB63A0CB639E744/");
 
         ArrayList<FileItem> expectedDrives = new ArrayList<>();
         expectedDrives.add(drive1);
         expectedDrives.add(drive2);
         expectedDrives.add(drive3);
 
-        Assertions.assertArrayEquals(expectedDrives.toArray(), DirectoryStructure.getDrives().toArray());
+        Assertions.assertArrayEquals(expectedDrives.toArray(),
+                DirectoryStructure.getDrives().toArray());
     }
 
     @Test
@@ -48,19 +53,25 @@ public class DirectoryStructureTests {
         }
 
         ArrayList<FileItem> expectedContents = new ArrayList<>();
-        expectedContents.add(new DefaultFileItem(FileType.File, subFile.getAbsolutePath()));
-        expectedContents.add(new DefaultFileItem(FileType.Folder, subFolder.getAbsolutePath()));
+        expectedContents.add(new DefaultFileItem(FileType.File,
+                subFile.getAbsolutePath()));
+        expectedContents.add(new DefaultFileItem(FileType.Folder,
+                subFolder.getAbsolutePath()));
 
-        ArrayList<FileItem> actualContents = DirectoryStructure.getDirectoryContents(tempFolderPath.toAbsolutePath().toString(), true);
-        Assertions.assertArrayEquals(expectedContents.toArray(), actualContents.toArray());
+        ArrayList<FileItem> actualContents =
+                DirectoryStructure.getDirectoryContents(tempFolderPath.toAbsolutePath().toString(), true);
+        Assertions.assertArrayEquals(expectedContents.toArray(),
+                actualContents.toArray());
     }
 
     @Test
     public void getContents_shouldReturnNothing_whenFolderHasNoContents() {
         ArrayList<FileItem> expectedContents = new ArrayList<>();
 
-        ArrayList<FileItem> actualContents = DirectoryStructure.getDirectoryContents(tempFolderPath.toAbsolutePath().toString(), true);
-        Assertions.assertArrayEquals(expectedContents.toArray(), actualContents.toArray());
+        ArrayList<FileItem> actualContents =
+                DirectoryStructure.getDirectoryContents(tempFolderPath.toAbsolutePath().toString(), true);
+        Assertions.assertArrayEquals(expectedContents.toArray(),
+                actualContents.toArray());
     }
 
     @Test
@@ -74,8 +85,10 @@ public class DirectoryStructureTests {
         }
         ArrayList<FileItem> expectedResult = new ArrayList<>();
 
-        ArrayList<FileItem> actualContents = DirectoryStructure.getDirectoryContents(subFile.getAbsolutePath(), true);
-        Assertions.assertArrayEquals(expectedResult.toArray(), actualContents.toArray());
+        ArrayList<FileItem> actualContents =
+                DirectoryStructure.getDirectoryContents(subFile.getAbsolutePath(), true);
+        Assertions.assertArrayEquals(expectedResult.toArray(),
+                actualContents.toArray());
     }
 
 }

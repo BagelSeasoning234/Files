@@ -33,8 +33,10 @@ public class FileItemTests {
     @Test
     public void moveTo_shouldThrowException_whenPathsAreSame() {
         FileItem item = new DefaultFileItem(tempFolder);
-        String samePath = tempFolderPath.getParent().toAbsolutePath().toString();
-        Assertions.assertThrows(IllegalStateException.class, () -> item.moveTo(samePath));
+        String samePath =
+                tempFolderPath.getParent().toAbsolutePath().toString();
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> item.moveTo(samePath));
     }
 
     @Test
@@ -79,8 +81,10 @@ public class FileItemTests {
     @Test
     public void copyTo_shouldThrowException_whenPathsAreSame() {
         FileItem item = new DefaultFileItem(tempFolder);
-        String samePath = tempFolderPath.getParent().toAbsolutePath().toString();
-        Assertions.assertThrows(IllegalStateException.class, () -> item.copyTo(samePath));
+        String samePath =
+                tempFolderPath.getParent().toAbsolutePath().toString();
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> item.copyTo(samePath));
     }
 
     @Test
@@ -116,7 +120,8 @@ public class FileItemTests {
         FileItem item = new DefaultFileItem(imaginaryPath);
         item.copyTo(targetFolderPath);
 
-        File imaginaryResult = new File(imaginaryPath + "/" + imaginarySource.getName());
+        File imaginaryResult =
+                new File(imaginaryPath + "/" + imaginarySource.getName());
         Assertions.assertFalse(imaginaryResult.exists());
     }
 
@@ -141,7 +146,8 @@ public class FileItemTests {
     @Test
     public void writeToDisk_shouldCreateFile_givenFileType() {
         String newFile = "file.txt";
-        String filePath = tempFolderPath.resolve(newFile).toAbsolutePath().toString();
+        String filePath =
+                tempFolderPath.resolve(newFile).toAbsolutePath().toString();
         FileItem fileItem = new DefaultFileItem(filePath);
         fileItem.writeToDisk();
 
@@ -154,7 +160,8 @@ public class FileItemTests {
         String newFolder = "folder";
         String folderLocation = tempFolder + "/" + newFolder;
 
-        FileItem folderItem = new DefaultFileItem(FileType.Folder, folderLocation);
+        FileItem folderItem = new DefaultFileItem(FileType.Folder,
+                folderLocation);
         folderItem.writeToDisk();
 
         File testObject = new File(folderLocation);
@@ -166,7 +173,8 @@ public class FileItemTests {
         String newDrive = "drive";
         String driveLocation = tempFolder + "/" + newDrive;
 
-        FileItem folderItem = new DefaultFileItem(FileType.Drive, driveLocation);
+        FileItem folderItem = new DefaultFileItem(FileType.Drive,
+                driveLocation);
         folderItem.writeToDisk();
 
         File testObject = new File(driveLocation);
@@ -176,19 +184,22 @@ public class FileItemTests {
     @Test
     public void getFileName_shouldReturnFolderName_whenSetToFolder() {
         FileItem folder = new DefaultFileItem(tempFolder);
-        Assertions.assertEquals(folder.getFileName(), tempFolderPath.getFileName().toString());
+        Assertions.assertEquals(folder.getFileName(),
+                tempFolderPath.getFileName().toString());
     }
 
     @Test
     public void getFileName_shouldReturnFileName_whenSetToFile() {
         FileItem file = new DefaultFileItem(tempFile);
-        Assertions.assertEquals(file.getFileName(), tempFilePath.getFileName().toString());
+        Assertions.assertEquals(file.getFileName(),
+                tempFilePath.getFileName().toString());
     }
 
     @Test
     public void getItemDirectory_shouldReturnHome_whenSetToTilda() {
         FileItem folder = new DefaultFileItem("~");
-        Assertions.assertEquals(folder.getItemDirectory(), System.getProperty("user.home"));
+        Assertions.assertEquals(folder.getItemDirectory(),
+                System.getProperty("user.home"));
     }
 
     @Test
@@ -223,14 +234,16 @@ public class FileItemTests {
 
     @Test
     public void isHiddenFile_shouldReturnTrue_onHiddenFolder() {
-        String hidddenFilePath = tempFolderPath.resolve(".hiddenTestFolder").toAbsolutePath().toString();
+        String hidddenFilePath =
+                tempFolderPath.resolve(".hiddenTestFolder").toAbsolutePath().toString();
         FileItem hiddenFolder = new DefaultFileItem(hidddenFilePath);
         Assertions.assertTrue(hiddenFolder.getIsHiddenFile());
     }
 
     @Test
     public void isHiddenFile_shouldReturnTrue_onHiddenFile() {
-        String hidddenFilePath = tempFolderPath.resolve(".hiddenTestFile.txt").toAbsolutePath().toString();
+        String hidddenFilePath =
+                tempFolderPath.resolve(".hiddenTestFile.txt").toAbsolutePath().toString();
         FileItem hiddenFile = new DefaultFileItem(hidddenFilePath);
         Assertions.assertTrue(hiddenFile.getIsHiddenFile());
     }
@@ -250,12 +263,14 @@ public class FileItemTests {
     @Test
     public void getLastModified_shouldReturnTime_whenCalledOnFolder() {
         FileItem folder = new DefaultFileItem(tempFolder);
-        Assertions.assertEquals(folder.getLastModifiedTime(), new File(tempFolder).lastModified());
+        Assertions.assertEquals(folder.getLastModifiedTime(),
+                new File(tempFolder).lastModified());
     }
 
     @Test
     public void getLastModified_shouldReturnTime_whenCalledOnFile() {
         FileItem file = new DefaultFileItem(tempFile);
-        Assertions.assertEquals(file.getLastModifiedTime(), new File(tempFile).lastModified());
+        Assertions.assertEquals(file.getLastModifiedTime(),
+                new File(tempFile).lastModified());
     }
 }

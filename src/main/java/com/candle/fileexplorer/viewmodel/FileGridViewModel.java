@@ -11,9 +11,10 @@ public class FileGridViewModel implements DataListener {
     //region Private Members
 
     /**
-     * The data model containing information about the explorer's current directory.
+     * The data model containing information about the explorer's current
+     * directory.
      */
-    FilesModel dataModel;
+    private final FilesModel dataModel;
 
     /**
      * A list of file item view models to be exposed to the UI.
@@ -21,7 +22,8 @@ public class FileGridViewModel implements DataListener {
     private final ObservableList<FileItem> items;
 
     /**
-     * A boolean variable that is used to determine whether hidden files/folders should be displayed.
+     * A boolean variable that is used to determine whether hidden
+     * files/folders should be displayed.
      */
     private boolean showHiddenItems = false;
 
@@ -30,13 +32,13 @@ public class FileGridViewModel implements DataListener {
     //region Constructors
 
     /**
-     * Initializes the view model and sets the current directory to the user's home folder.
+     * Initializes the view model and sets the current directory to the
+     * user's home folder.
      */
     public FileGridViewModel(FilesModel dataModel) {
         items = FXCollections.observableArrayList();
         this.dataModel = dataModel;
         dataModel.addListener(this);
-        //updateContents();
     }
 
     //endregion
@@ -45,6 +47,10 @@ public class FileGridViewModel implements DataListener {
 
     public ObservableList<FileItem> getItems() {
         return items;
+    }
+
+    public FilesModel getFilesModel() {
+        return dataModel;
     }
 
     public String getCurrentDirectory() {
@@ -68,14 +74,16 @@ public class FileGridViewModel implements DataListener {
     //region Public Methods
 
     /**
-     * Updates the file items in the view model using the new current directory value.
+     * Updates the file items in the view model using the new current
+     * directory value.
      */
     public void updateContents() {
         if (items.size() > 0)
             items.clear();
 
         // Get the files/folders.
-        items.addAll(DirectoryStructure.getDirectoryContents(dataModel.getCurrentDirectory(), showHiddenItems));
+        items.addAll(DirectoryStructure.getDirectoryContents(
+                dataModel.getCurrentDirectory(), showHiddenItems));
     }
 
     @Override

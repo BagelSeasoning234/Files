@@ -29,8 +29,10 @@ public class RenameController {
 
     /**
      * Initializes the "rename view" with the given view model and item path.
+     *
      * @param renameViewModel The view model that this class will bind to.
-     * @param path The absolute path to the file/folder to be renamed.
+     * @param path            The absolute path to the file/folder to be
+     *                        renamed.
      */
     public void init(RenameViewModel renameViewModel, String path) {
         this.viewModel = renameViewModel;

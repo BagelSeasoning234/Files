@@ -23,7 +23,8 @@ public class DefaultFilesModel implements FilesModel {
     private final List<DataListener> listeners;
 
     /**
-     * A two-dimensional array that represents the directory histories for each tab.
+     * A two-dimensional array that represents the directory histories for
+     * each tab.
      */
     private final ArrayList<ArrayList<String>> directoryHistories;
 
@@ -33,7 +34,8 @@ public class DefaultFilesModel implements FilesModel {
     private final ArrayList<String> currentDirectories;
 
     /**
-     * An array of indices for the currently viewed directory in history for each tab.
+     * An array of indices for the currently viewed directory in history for
+     * each tab.
      */
     private final ArrayList<Integer> historyIndices;
 
@@ -94,8 +96,7 @@ public class DefaultFilesModel implements FilesModel {
             currentDirectories.set(tabIndex, cleanPath);
             notifyDirectoryChange();
             addDirectoryToHistory();
-        }
-        else {
+        } else {
             FileOperations.openFileInDefaultApp(newDirectory);
         }
     }
@@ -121,7 +122,8 @@ public class DefaultFilesModel implements FilesModel {
 
     @Override
     public void addTab() {
-        int tabLocationIndex = (currentDirectories.size() == 0) ? 0 : currentDirectories.size();
+        int tabLocationIndex = (currentDirectories.size() == 0) ? 0 :
+                currentDirectories.size();
         String defaultLocation = System.getProperty("user.home");
 
         directoryHistories.add(tabLocationIndex, new ArrayList<>(10));
@@ -149,7 +151,8 @@ public class DefaultFilesModel implements FilesModel {
 
     @Override
     public void createItem(FileType type, String name) {
-        FileItem item = new DefaultFileItem(type, getCurrentDirectory() + "/" + name);
+        FileItem item = new DefaultFileItem(type,
+                getCurrentDirectory() + "/" + name);
         if (item.writeToDisk())
             notifyDirectoryChange();
     }
@@ -237,20 +240,23 @@ public class DefaultFilesModel implements FilesModel {
             return;
         }
 
-        // If we're here, then both are at the max, so we'll overwrite the earliest directory.
+        // If we're here, then both are at the max, so we'll overwrite the
+        // earliest directory.
         Collections.rotate(getHistory(), -1);
         getHistory().set(getHistoryIndex(), currentDirectories.get(tabIndex));
     }
 
     /**
-     * A helper method that returns the directory history for the currently viewed tab.
+     * A helper method that returns the directory history for the currently
+     * viewed tab.
      */
     private ArrayList<String> getHistory() {
         return directoryHistories.get(tabIndex);
     }
 
     /**
-     * A helper method that returns the history index for the currently viewed tab.
+     * A helper method that returns the history index for the currently
+     * viewed tab.
      */
     private int getHistoryIndex() {
         return historyIndices.get(tabIndex);

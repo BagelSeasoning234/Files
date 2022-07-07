@@ -6,33 +6,33 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.ToggleGroup?>
 <fx:root type="ScrollPane" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml">
     <fx:define>
+        <ToggleGroup fx:id="sortByGroup"/>
+
         <ContextMenu fx:id="contextMenu">
             <items>
                 <MenuItem text="Create New Item..." onAction="#createNewItem"/>
+                <MenuItem text="Rename..." onAction="#renameItem"/>
+                <MenuItem text="Trash" onAction="#trashItem"/>
                 <SeparatorMenuItem/>
-                <MenuItem text="Cut Item" />
-                <MenuItem text="Copy Item" />
-                <MenuItem text="Paste Item" />
+                <MenuItem text="Cut Item" onAction="#cutItem"/>
+                <MenuItem text="Copy Item" onAction="#copyItem"/>
+                <MenuItem text="Copy Location" onAction="#copyItemLocation"/>
+                <MenuItem text="Paste Item" onAction="#pasteItem"/>
                 <SeparatorMenuItem/>
-                <MenuItem text="Rename..." />
-                <MenuItem text="Trash" />
-                <Menu text="Sort By">
-                    <MenuItem text="Name" />
-                    <MenuItem text="Modified" />
-                </Menu>
-                <SeparatorMenuItem/>
-                <MenuItem text="Open in Default App" />
+                <MenuItem text="Open in Default App"
+                          onAction="#openItemInDefaultApp"/>
             </items>
         </ContextMenu>
     </fx:define>
 
-    <GridPane fx:id="gridPane" hgap="10" vgap="10" onMouseClicked="#handleMouseClick">
+    <GridPane fx:id="gridPane" hgap="10" vgap="10"
+              onMouseClicked="#handleMouseClick">
         <padding>
-            <Insets top="10" bottom="10" left="10" />
+            <Insets top="10" bottom="10" left="10"/>
         </padding>
     </GridPane>
 </fx:root>

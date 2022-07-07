@@ -92,6 +92,7 @@ public class AboutController {
 
     /**
      * Opens an url to the given website.
+     *
      * @param url The link to the website.
      */
     private void openUrl(String url) {
@@ -103,8 +104,7 @@ public class AboutController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-        else {
+        } else {
             try {
                 java.awt.Desktop.getDesktop().browse(new URI(url));
             } catch (IOException | URISyntaxException e) {
