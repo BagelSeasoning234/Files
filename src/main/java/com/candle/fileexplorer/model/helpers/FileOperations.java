@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
  * A helper class that contains static methods for various file utilities,
  * such as sanitizing directory paths, opening files, and moving them to the recycle bin.
  */
-public class FileUtilities {
+public class FileOperations {
 
     //region Private Members
 
@@ -143,6 +143,8 @@ public class FileUtilities {
                     success = true;
                     break;
                 }
+                // For some reason, this works if the "if" statement is checked inside the while loop,
+                // but not if it's checked after the loop finishes.
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -14,6 +14,14 @@
     -fx-border-radius: 5;
 }
 
+/** For some reason, -fx-faint-focus-color and -fx-focus-color aren't working,
+ so I have to use this black magic instead.*/
+.scroll-pane:focused {
+    -fx-background-color: -light-gray, -light-gray, -light-gray;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5, 4, 3;
+}
+
 .button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;

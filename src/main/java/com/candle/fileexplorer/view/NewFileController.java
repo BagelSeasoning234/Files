@@ -2,6 +2,7 @@ package com.candle.fileexplorer.view;
 
 import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.viewmodel.NewFileViewModel;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -40,6 +41,7 @@ public class NewFileController {
         this.viewModel = viewModel;
 
         itemNameField.textProperty().bindBidirectional(viewModel.itemNameProperty());
+        Platform.runLater(() -> itemNameField.requestFocus());
     }
 
     //endregion

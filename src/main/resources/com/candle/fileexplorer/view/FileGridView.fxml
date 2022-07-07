@@ -3,8 +3,33 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Menu?>
 <fx:root type="ScrollPane" xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml">
+         xmlns:fx="http://javafx.com/fxml">
+    <fx:define>
+        <ContextMenu fx:id="contextMenu">
+            <items>
+                <MenuItem text="Create New Item..." onAction="#createNewItem"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Cut Item" />
+                <MenuItem text="Copy Item" />
+                <MenuItem text="Paste Item" />
+                <SeparatorMenuItem/>
+                <MenuItem text="Rename..." />
+                <MenuItem text="Trash" />
+                <Menu text="Sort By">
+                    <MenuItem text="Name" />
+                    <MenuItem text="Modified" />
+                </Menu>
+                <SeparatorMenuItem/>
+                <MenuItem text="Open in Default App" />
+            </items>
+        </ContextMenu>
+    </fx:define>
+
     <GridPane fx:id="gridPane" hgap="10" vgap="10" onMouseClicked="#handleMouseClick">
         <padding>
             <Insets top="10" bottom="10" left="10" />

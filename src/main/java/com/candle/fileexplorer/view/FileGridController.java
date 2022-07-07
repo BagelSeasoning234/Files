@@ -1,20 +1,25 @@
 package com.candle.fileexplorer.view;
 
+import com.candle.fileexplorer.core.ViewHandler;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.FileType;
+import com.candle.fileexplorer.model.helpers.FileOperations;
 import com.candle.fileexplorer.view.enums.GridSortOrder;
 import com.candle.fileexplorer.viewmodel.FileGridViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 
@@ -26,6 +31,9 @@ public class FileGridController extends ScrollPane {
     //region Private Members
 
     //region GUI Elements
+
+    @FXML
+    private ContextMenu contextMenu;
 
     /**
      * The grid of items for this view.
@@ -90,7 +98,6 @@ public class FileGridController extends ScrollPane {
 
     /**
      * Initializes the view by binding the view model data to the grid.
-     *
      * @param viewModel A reference to the file structure view model.
      */
     public void init(FileGridViewModel viewModel) {
@@ -100,6 +107,9 @@ public class FileGridController extends ScrollPane {
         setWidthEventHandlers();
         viewModel.getItems().addListener(this::listListener);
         updateGridContents();
+
+        // Create context menu
+        this.setContextMenu(contextMenu);
     }
 
     public FileItemController getSelectedFileItem() {
@@ -123,6 +133,32 @@ public class FileGridController extends ScrollPane {
     //region Private Helper Methods
 
     //region On Clicked Methods
+
+    //region Context Menu
+
+    // TODO: Add the other context menu functions.
+
+    /**
+     * Opens up the "create new item" dialog window.
+     */
+    @FXML
+    private void createNewItem(ActionEvent event) {
+        if (canModifyItem(viewModel.getCurrentDirectory())) {
+            try {
+                ViewHandler.getInstance().openSubView("NewFile", "");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                ViewHandler.getInstance().openSubView("Error", "A file/folder cannot be created in this directory. It may be read-only.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //endregion
 
     /**
      * Handles mouse clicks on nodes in the grid.
@@ -148,6 +184,13 @@ public class FileGridController extends ScrollPane {
     }
 
     //endregion
+
+    //region Private Helper Methods
+
+    private boolean canModifyItem(String path) {
+        File item = new File(path);
+        return item.canWrite();
+    }
 
     /**
      * The function that runs whenever items in the view model get updated.

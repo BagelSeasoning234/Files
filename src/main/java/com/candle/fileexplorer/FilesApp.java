@@ -15,7 +15,10 @@ public class FilesApp extends Application {
         // Create the management classes
         ModelFactory modelFactory = new ModelFactory();
         ViewModelFactory viewModelFactory = new ViewModelFactory(modelFactory);
-        ViewHandler viewHandler = new ViewHandler(primaryStage, viewModelFactory);
+
+        ViewHandler viewHandler = ViewHandler.getInstance();
+        viewHandler.init(primaryStage, viewModelFactory);
+
         // Get things started.
         viewHandler.start();
     }

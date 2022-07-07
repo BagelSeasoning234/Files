@@ -4,6 +4,7 @@ import com.candle.fileexplorer.viewmodel.DirectoryButtonViewModel;
 import com.candle.fileexplorer.viewmodel.QuickAccessViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -18,6 +19,9 @@ import java.io.IOException;
  */
 public class QuickAccessController extends ScrollPane {
     //region Private Members
+
+    @FXML
+    private ContextMenu contextMenu;
 
     /**
      * A vertical list of Directory Button items.

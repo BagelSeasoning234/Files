@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
@@ -27,6 +28,114 @@ public class FileItemTests {
 
         tempFile = tempFilePath.toAbsolutePath().toString();
         tempFolder = tempFolderPath.toAbsolutePath().toString();
+    }
+
+    @Test
+    public void moveTo_shouldThrowException_whenPathsAreSame() {
+        FileItem item = new DefaultFileItem(tempFolder);
+        String samePath = tempFolderPath.getParent().toAbsolutePath().toString();
+        Assertions.assertThrows(IllegalStateException.class, () -> item.moveTo(samePath));
+    }
+
+    @Test
+    public void moveTo_shouldMoveFile_whenGivenFile() {
+        File sourceObject = new File(tempFile);
+        String subFolderPath = tempFolder + "/" + "newFolder";
+        File subFolder = new File(subFolderPath);
+        try {
+            sourceObject.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        subFolder.mkdir();
+
+        String targetPath = subFolderPath + "/" + sourceObject.getName();
+
+        FileItem item = new DefaultFileItem(tempFile);
+        item.moveTo(targetPath);
+
+        File expectedObject = new File(targetPath);
+        Assertions.assertTrue(expectedObject.exists());
+    }
+
+    @Test
+    public void moveTo_shouldCallMoveDirectory_whenGivenFolder() {
+        String sourceFolderPath = tempFolder + "/" + "sourceFolder";
+        File sourceObject = new File(sourceFolderPath);
+        sourceObject.mkdir();
+
+        String targetFolderPath = tempFolder + "/" + "targetFolder";
+        File subFolder = new File(targetFolderPath);
+        subFolder.mkdir();
+
+        FileItem item = new DefaultFileItem(sourceFolderPath);
+        item.moveTo(targetFolderPath);
+
+        String expectedPath = targetFolderPath + "/" + sourceObject.getName();
+        File expectedObject = new File(expectedPath);
+        Assertions.assertTrue(expectedObject.exists());
+    }
+
+    @Test
+    public void copyTo_shouldThrowException_whenPathsAreSame() {
+        FileItem item = new DefaultFileItem(tempFolder);
+        String samePath = tempFolderPath.getParent().toAbsolutePath().toString();
+        Assertions.assertThrows(IllegalStateException.class, () -> item.copyTo(samePath));
+    }
+
+    @Test
+    public void copyTo_shouldCallCopyFile_whenGivenFile() {
+        File sourceObject = new File(tempFile);
+        try {
+            sourceObject.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String subFolderPath = tempFolder + "/" + "newFolder";
+        File subFolder = new File(subFolderPath);
+        subFolder.mkdir();
+
+        String targetPath = subFolderPath + "/" + sourceObject.getName();
+
+        FileItem item = new DefaultFileItem(tempFile);
+        item.copyTo(targetPath);
+
+        File expectedObject = new File(targetPath);
+        Assertions.assertTrue(expectedObject.exists());
+    }
+
+    @Test
+    public void copyTo_shouldDoNothing_ifSourceItemDoesNotExist() {
+        String imaginaryPath = tempFolder + "/" + "imaginaryFolder";
+        File imaginarySource = new File(imaginaryPath);
+
+        String targetFolderPath = tempFolder + "/" + "targetFolder";
+        File targetFolder = new File(targetFolderPath);
+        targetFolder.mkdir();
+
+        FileItem item = new DefaultFileItem(imaginaryPath);
+        item.copyTo(targetFolderPath);
+
+        File imaginaryResult = new File(imaginaryPath + "/" + imaginarySource.getName());
+        Assertions.assertFalse(imaginaryResult.exists());
+    }
+
+    @Test
+    public void copyTo_shouldCallCopyDirectory_whenGivenFolder() {
+        String sourceFolderPath = tempFolder + "/" + "sourceFolder";
+        File sourceObject = new File(sourceFolderPath);
+        sourceObject.mkdir();
+
+        String targetFolderPath = tempFolder + "/" + "targetFolder";
+        File subFolder = new File(targetFolderPath);
+        subFolder.mkdir();
+
+        FileItem item = new DefaultFileItem(sourceFolderPath);
+        item.copyTo(targetFolderPath);
+
+        String expectedPath = targetFolderPath + "/" + sourceObject.getName();
+        File expectedObject = new File(expectedPath);
+        Assertions.assertTrue(expectedObject.exists());
     }
 
     @Test

@@ -3,7 +3,7 @@ package com.candle.fileexplorer.model;
 import com.candle.fileexplorer.model.data.ClipboardMode;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
-import com.candle.fileexplorer.model.helpers.FileUtilities;
+import com.candle.fileexplorer.model.helpers.FileOperations;
 import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileType;
@@ -45,7 +45,7 @@ public class DefaultFilesModel implements FilesModel {
     /**
      * Determines whether pasted items should be moved or duplicated.
      */
-    private ClipboardMode clipboardMode = ClipboardMode.Copy;
+    private ClipboardMode clipboardMode;
 
     //endregion
 
@@ -56,6 +56,7 @@ public class DefaultFilesModel implements FilesModel {
         historyIndices = new ArrayList<>();
         currentDirectories = new ArrayList<>();
         directoryHistories = new ArrayList<>();
+        clipboardMode = ClipboardMode.Copy;
     }
 
     //endregion
@@ -88,14 +89,14 @@ public class DefaultFilesModel implements FilesModel {
         if (Objects.equals(newDirectory, getCurrentDirectory()))
             return;
 
-        String cleanPath = FileUtilities.sanitizePath(newDirectory);
-        if (FileUtilities.determineType(cleanPath) != FileType.File) {
+        String cleanPath = FileOperations.sanitizePath(newDirectory);
+        if (FileOperations.determineType(cleanPath) != FileType.File) {
             currentDirectories.set(tabIndex, cleanPath);
             notifyDirectoryChange();
             addDirectoryToHistory();
         }
         else {
-            FileUtilities.openFileInDefaultApp(newDirectory);
+            FileOperations.openFileInDefaultApp(newDirectory);
         }
     }
 
@@ -140,8 +141,10 @@ public class DefaultFilesModel implements FilesModel {
 
         if (getTabIndex() == tabLocationIndex)
             setTabIndex(0);
-        else
-            setTabIndex(getTabIndex() - 1);
+        else {
+            if (tabIndex > 0)
+                setTabIndex(tabIndex - 1);
+        }
     }
 
     @Override
@@ -181,11 +184,6 @@ public class DefaultFilesModel implements FilesModel {
             currentDirectories.set(tabIndex, getHistory().get(getHistoryIndex()));
             notifyDirectoryChange();
         }
-    }
-
-    @Override
-    public void forceUpdate() {
-        notifyDirectoryChange();
     }
 
     @Override

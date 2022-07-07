@@ -18,7 +18,6 @@
     <ImageView fx:id="filePreview" StackPane.alignment="CENTER" mouseTransparent="true"
                cache="true" cacheHint="SPEED">
     </ImageView>
-    <Label fx:id="fileName" text="File.png" StackPane.alignment="BOTTOM_CENTER" mouseTransparent="true"
-           wrapText="true"/>
+    <Label fx:id="fileName" text="File.png" StackPane.alignment="BOTTOM_CENTER" mouseTransparent="true" wrapText="true"/>
 
 </fx:root>

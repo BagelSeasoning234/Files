@@ -85,7 +85,6 @@ public interface FilesModel {
      * Deletes the item at the given file/folder path.
      */
     void trashItem(String path);
-
     /**
      * Sets the current directory to the location in history that was last selected before going back.
      * (Similar to going "forward" on a web browser).
@@ -97,11 +96,6 @@ public interface FilesModel {
      * (Similar to going "backward" on a web browser).
      */
     void goBackwardInDirectoryHistory();
-
-    /**
-     * Forces all listeners to update the currently viewed directory.
-     */
-    void forceUpdate();
 
     /**
      * Pastes a given file/folder to the current directory based on the current clipboard mode.

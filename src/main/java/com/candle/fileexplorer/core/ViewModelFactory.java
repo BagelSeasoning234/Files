@@ -13,12 +13,12 @@ public class ViewModelFactory {
     private final RenameViewModel renameViewModel;
     private AboutViewModel aboutViewModel;
 
-
     //endregion
+
+    //region Constructors
 
     /**
      * Instantiates the view models.
-     *
      * @param modelFactory A reference to the model factory.
      */
     public ViewModelFactory(ModelFactory modelFactory) {
@@ -29,6 +29,8 @@ public class ViewModelFactory {
         newFileViewModel = new NewFileViewModel(modelFactory.getFilesModel());
         renameViewModel = new RenameViewModel(modelFactory.getFilesModel());
     }
+
+    //endregion
 
     //region Public Methods
 

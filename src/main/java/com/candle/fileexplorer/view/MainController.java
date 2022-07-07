@@ -8,13 +8,12 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.Clipboard;
+import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -42,9 +41,6 @@ public class MainController {
     @FXML
     private QuickAccessController quickAccessView;
 
-    /**
-     * The text field containing the current directory.
-     */
     @FXML
     private TextField locationBar;
 
@@ -55,11 +51,6 @@ public class MainController {
      */
     private MainViewModel viewModel;
 
-    /**
-     * A reference to the management class for view objects.
-     */
-    private ViewHandler viewHandler;
-
     //endregion
 
     //region Public Methods
@@ -69,22 +60,50 @@ public class MainController {
      *
      * @param viewModel A reference to the main view model.
      */
-    public void init(MainViewModel viewModel, ViewHandler viewHandler) {
+    public void init(MainViewModel viewModel) {
         this.viewModel = viewModel;
-        this.viewHandler = viewHandler;
         gridViews = new ArrayList<>();
 
         // Bind data here
         quickAccessView.init(viewModel.getQuickAccessViewModel());
         locationBar.textProperty().bindBidirectional(viewModel.currentDirectoryProperty());
 
+        // Setup tabs
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> tabChanged());
         addTab(new ActionEvent());
+    }
+
+    /**
+     * The global shortcut key filter.
+     * This gets called whenever the user presses a key on the main window.
+     */
+    public void onKeyPressed(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.TAB)) {
+            locationBar.requestFocus();
+            event.consume();
+        }
     }
 
     //endregion
 
     //region On Clicked Methods
+
+    /**
+     * Handles the back and forward navigational buttons on the mouse.
+     */
+    @FXML
+    private void handleNavButtons(MouseEvent event) {
+        switch (event.getButton()) {
+            case FORWARD -> {
+                goForwardDirectory(new ActionEvent());
+                event.consume();
+            }
+            case BACK -> {
+                goBackDirectory(new ActionEvent());
+                event.consume();
+            }
+        }
+    }
 
     //region Toolbar
 
@@ -135,13 +154,13 @@ public class MainController {
     private void createNewItem(ActionEvent event) {
         if (viewModel.canModifyItem(viewModel.currentDirectoryProperty().getValue())) {
             try {
-                viewHandler.openSubView("NewFile", "");
+                ViewHandler.getInstance().openSubView("NewFile", "");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                viewHandler.openSubView("Error", "A file/folder cannot be created in this directory. It may be read-only.");
+                ViewHandler.getInstance().openSubView("Error", "A file/folder cannot be created in this directory. It may be read-only.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -182,9 +201,9 @@ public class MainController {
 
         try {
             if (viewModel.canModifyItem(fileItemView.getItemDirectory()))
-                viewHandler.openSubView("Rename", fileItemView.getItemDirectory());
+                ViewHandler.getInstance().openSubView("Rename", fileItemView.getItemDirectory());
             else
-                viewHandler.openSubView("Error", "The selected file/folder could not be renamed. It may be read-only.");
+                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be renamed. It may be read-only.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -206,9 +225,9 @@ public class MainController {
 
                             Since you are using a Linux-based operating system, this package is necessary in order to perform operations involving the Trash Bin.
                             
-                            The dependency should be installable via your package manager's repositories, or at 'https://github.com/andreafrancia/trash-cli'.
+                            The dependency should be installable via your package manager's repositories. Alternatively, there is a link to the GitHub page in the Help -> About Files -> Components section.
                             """;
-                    viewHandler.openSubView("Error", dependencyError);
+                    ViewHandler.getInstance().openSubView("Error", dependencyError);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -216,7 +235,7 @@ public class MainController {
         }
         else {
             try {
-                viewHandler.openSubView("Error", "The selected file/folder could not be deleted. It may be read-only.");
+                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be deleted. It may be read-only.");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -252,7 +271,7 @@ public class MainController {
             viewModel.cut(file);
         else {
             try {
-                viewHandler.openSubView("Error", "The selected file/folder could not be cut. It may be read-only.");
+                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be cut. It may be read-only.");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -293,7 +312,7 @@ public class MainController {
             } catch (IllegalStateException e) {
                 try {
                     String dependencyError = "There is a file/folder with an identical name in this directory.";
-                    viewHandler.openSubView("Error", dependencyError);
+                    ViewHandler.getInstance().openSubView("Error", dependencyError);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -301,7 +320,7 @@ public class MainController {
         }
         else {
             try {
-                viewHandler.openSubView("Error", "The selected file/folder could not be pasted into this directory. It may be read-only.");
+                ViewHandler.getInstance().openSubView("Error", "The selected file/folder could not be pasted into this directory. It may be read-only.");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -351,7 +370,7 @@ public class MainController {
     @FXML
     private void aboutFilesApp(ActionEvent event) {
         try {
-            viewHandler.openSubView("About", "");
+            ViewHandler.getInstance().openSubView("About", "");
         } catch (IOException e) {
             e.printStackTrace();
         }

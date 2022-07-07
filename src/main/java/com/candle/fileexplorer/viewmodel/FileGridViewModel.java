@@ -47,9 +47,10 @@ public class FileGridViewModel implements DataListener {
         return items;
     }
 
-    /**
-     * Updates the data model's current directory with the new path.
-     */
+    public String getCurrentDirectory() {
+        return dataModel.getCurrentDirectory();
+    }
+
     public void setCurrentDirectory(String newDirectory) {
         dataModel.setCurrentDirectory(newDirectory);
     }

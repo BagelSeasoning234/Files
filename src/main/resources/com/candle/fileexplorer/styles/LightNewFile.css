@@ -53,3 +53,55 @@
 .text-field:focused {
     -fx-border-color: -text-dark-gray;
 }
+
+/* Menus */
+
+.menu-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 10 0;
+}
+
+.menu {
+    -fx-background-radius: 5;
+}
+
+.menu .label {
+    -fx-padding: 2;
+    -fx-font-size: 14;
+    -fx-text-fill: -text-dark-gray;
+}
+
+.menu:hover {
+    -fx-background-color: -light-gray;
+}
+
+.menu:showing {
+    -fx-background-color: -light-gray;
+}
+
+.menu-item {
+    -fx-mark-color: -text-dark-gray;
+}
+
+.menu-item .label {
+    -fx-font-size: 14;
+    -fx-text-fill: -text-dark-gray;
+}
+
+.context-menu {
+    -fx-font-size: 14;
+    -fx-text-fill: -text-dark-gray;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+
+.menu-item:hover {
+    -fx-background-radius: 5;
+    -fx-background-color: -light-gray;
+}
+
+.menu-item:focused {
+    -fx-background-radius: 5;
+    -fx-background-color: -light-gray;
+    -fx-focused-mark-color: -text-dark-gray;
+}

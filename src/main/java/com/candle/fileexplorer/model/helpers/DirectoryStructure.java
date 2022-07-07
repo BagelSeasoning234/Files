@@ -40,7 +40,7 @@ public class DirectoryStructure {
      * Get the top level contents of a given directory.
      */
     public static ArrayList<FileItem> getDirectoryContents(String path, boolean showHiddenItems) {
-        File currentDirectory = new File(FileUtilities.sanitizePath(path));
+        File currentDirectory = new File(FileOperations.sanitizePath(path));
         if (!currentDirectory.isDirectory())
             return new ArrayList<>();
 
@@ -124,7 +124,7 @@ public class DirectoryStructure {
                 return null;
 
         // If everything worked, sanitize the string and return it.
-        return FileUtilities.sanitizePath(drive);
+        return FileOperations.sanitizePath(drive);
     }
 
 

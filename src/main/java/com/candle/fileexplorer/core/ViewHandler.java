@@ -4,6 +4,7 @@ import com.candle.fileexplorer.view.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -15,26 +16,35 @@ import java.io.IOException;
 public class ViewHandler {
     //region Private Members
 
+    private static ViewHandler instance;
+
     /**
      * A reference to the application window.
      */
-    private final Stage stage;
+    private Stage stage;
     /**
      * A reference to the view model factory.
      */
-    private final ViewModelFactory viewModelFactory;
+    private ViewModelFactory viewModelFactory;
 
     //endregion
+
+    //region Constructor
+
+    private ViewHandler() {
+    }
+
+    //endregion
+
+    //region Public Methods
 
     /**
      * Initializes the stage and view model factory variables.
      */
-    public ViewHandler(Stage stage, ViewModelFactory viewModelFactory) {
+    public void init(Stage stage, ViewModelFactory viewModelFactory) {
         this.stage = stage;
         this.viewModelFactory = viewModelFactory;
     }
-
-    //region Public Methods
 
     /**
      * Starts the application by opening up the main view.
@@ -46,30 +56,42 @@ public class ViewHandler {
     }
 
     /**
+     * Returns the static instance of the view handler.
+     */
+    public static ViewHandler getInstance() {
+        if (instance == null)
+            instance = new ViewHandler();
+
+        return instance;
+    }
+
+    /**
      * Opens a specified view in the main application.
      *
      * @param viewToOpen The name of the view to open, WITHOUT the "View.fxml" part.
      * @throws IOException If the view could not be found.
      */
     public void openPrimaryView(String viewToOpen) throws IOException {
-        Scene scene;
+        Scene scene = null;
         FXMLLoader loader = new FXMLLoader();
-        Parent root = null;
+        Parent root;
 
         if ("Main".equals(viewToOpen)) {
             String location = "/com/candle/fileexplorer/view/MainView.fxml";
-            loader.setLocation(getClass().getResource(location));
+            loader.setLocation(ViewHandler.class.getResource(location));
             root = loader.load();
+            scene = new Scene(root);
 
             MainController view = loader.getController();
-            view.init(viewModelFactory.getMainViewModel(), this);
+            view.init(viewModelFactory.getMainViewModel());
             stage.setTitle("Files");
 
             stage.setMinHeight(350);
             stage.setMinWidth(550);
+
+            scene.addEventFilter(KeyEvent.KEY_PRESSED, view::onKeyPressed);
         }
 
-        scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
@@ -88,7 +110,7 @@ public class ViewHandler {
 
         if ("About".equals(viewToOpen)) {
             String location = "/com/candle/fileexplorer/view/AboutView.fxml";
-            loader.setLocation(getClass().getResource(location));
+            loader.setLocation(ViewHandler.class.getResource(location));
             root = loader.load();
 
             AboutController view = loader.getController();
@@ -98,7 +120,7 @@ public class ViewHandler {
 
         if ("NewFile".equals(viewToOpen)) {
             String location = "/com/candle/fileexplorer/view/NewFileView.fxml";
-            loader.setLocation(getClass().getResource(location));
+            loader.setLocation(ViewHandler.class.getResource(location));
             root = loader.load();
 
             NewFileController view = loader.getController();
@@ -108,7 +130,7 @@ public class ViewHandler {
 
         if ("Rename".equals(viewToOpen)) {
             String location = "/com/candle/fileexplorer/view/RenameView.fxml";
-            loader.setLocation(getClass().getResource(location));
+            loader.setLocation(ViewHandler.class.getResource(location));
             root = loader.load();
 
             RenameController view = loader.getController();
@@ -118,7 +140,7 @@ public class ViewHandler {
 
         if ("Error".equals(viewToOpen)) {
             String location = "/com/candle/fileexplorer/view/ErrorView.fxml";
-            loader.setLocation(getClass().getResource(location));
+            loader.setLocation(ViewHandler.class.getResource(location));
             root = loader.load();
 
             ErrorController view = loader.getController();

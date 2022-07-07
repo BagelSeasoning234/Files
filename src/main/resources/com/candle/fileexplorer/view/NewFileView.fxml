@@ -28,7 +28,7 @@
         <RadioButton text="File" onAction="#setFile" toggleGroup="$itemTypeGroup" selected="true"/>
         <RadioButton text="Folder" onAction="#setFolder" toggleGroup="$itemTypeGroup"/>
     </HBox>
-    <TextField fx:id="itemNameField" promptText="File.txt, Folder" />
+    <TextField fx:id="itemNameField" promptText="File.txt, Folder"/>
     <HBox alignment="CENTER" spacing="10">
         <Button text="OK" onAction="#createItem"/>
         <Button text="Cancel" onAction="#cancel"/>

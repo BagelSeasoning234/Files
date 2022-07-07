@@ -1,6 +1,7 @@
 package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.FilesModel;
+import com.candle.fileexplorer.model.helpers.FileOperations;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -54,6 +55,13 @@ public class RenameViewModel {
     //endregion
 
     //region Public Methods
+
+    /**
+     * Returns the original name of the file/folder.
+     */
+    public String getOriginalName() {
+        return FileOperations.getPathName(itemPath);
+    }
 
     /**
      * Tells the data model to rename the given file/folder at the specified location.

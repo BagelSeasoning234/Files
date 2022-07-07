@@ -3,7 +3,7 @@ package com.candle.fileexplorer.viewmodel;
 import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
-import com.candle.fileexplorer.model.helpers.FileUtilities;
+import com.candle.fileexplorer.model.helpers.FileOperations;
 
 import java.util.ArrayList;
 
@@ -56,7 +56,7 @@ public class QuickAccessViewModel {
         if (directory.equals("Home"))
             directoryPath = System.getProperty("user.home");
         else if (directory.equals("Trash"))
-            directoryPath = FileUtilities.getTrashDirectory();
+            directoryPath = FileOperations.getTrashDirectory();
         else
             directoryPath = System.getProperty("user.home") + "/" + directory;
 

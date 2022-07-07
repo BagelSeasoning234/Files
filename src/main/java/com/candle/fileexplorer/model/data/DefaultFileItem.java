@@ -1,7 +1,6 @@
 package com.candle.fileexplorer.model.data;
 
-import com.candle.fileexplorer.model.helpers.FileUtilities;
-import org.apache.commons.io.FileExistsException;
+import com.candle.fileexplorer.model.helpers.FileOperations;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -37,7 +36,7 @@ public class DefaultFileItem implements FileItem {
      * @param path     The path to the file.
      */
     public DefaultFileItem(FileType fileType, String path) {
-        file = new File(FileUtilities.sanitizePath(path));
+        file = new File(FileOperations.sanitizePath(path));
         this.fileType = fileType;
     }
 
@@ -49,9 +48,9 @@ public class DefaultFileItem implements FileItem {
      * @param path The path to the file.
      */
     public DefaultFileItem(String path) {
-        String cleanPath = FileUtilities.sanitizePath(path);
+        String cleanPath = FileOperations.sanitizePath(path);
         file = new File(cleanPath);
-        fileType = FileUtilities.determineType(path);
+        fileType = FileOperations.determineType(path);
     }
 
     //endregion
@@ -100,7 +99,9 @@ public class DefaultFileItem implements FileItem {
                 try {
                     FileUtils.copyFile(file, targetDestination);
                 } catch (FileNotFoundException e) {
-                    // If the user tries to copy a file from the clipboard that has been deleted, do nothing.
+                    // Gets called if the user tries to copy a file from the clipboard that has been deleted
+                    // (i.e. file was deleted, but it's still sitting on the clipboard).
+                    // It doesn't exist anymore, so there's no point in doing anything.
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -152,7 +153,7 @@ public class DefaultFileItem implements FileItem {
     @Override
     public boolean sendToTrash() {
         if (fileType != FileType.Drive) {
-            return FileUtilities.sendItemToTrash(file.getAbsolutePath());
+            return FileOperations.sendItemToTrash(file.getAbsolutePath());
         }
         else
             return false;

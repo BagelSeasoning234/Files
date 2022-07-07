@@ -3,8 +3,13 @@ package com.candle.fileexplorer.view;
 import com.candle.fileexplorer.viewmodel.DirectoryButtonViewModel;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * The button class for "quick access" directories like Pictures, Desktop, etc.
@@ -12,8 +17,13 @@ import javafx.scene.image.ImageView;
 public class DirectoryButtonController extends Button {
     //region Private Members
 
+    //region GUI Elements
+
+    //endregion
+
     /**
-     * A reference to the view model class that allows this object to set the data model's current directory.
+     * A reference to the view model class that allows this object
+     * to set the data model's current directory.
      */
     private final DirectoryButtonViewModel viewModel;
 
@@ -44,6 +54,8 @@ public class DirectoryButtonController extends Button {
     private void goToDirectory(ActionEvent actionEvent) {
         viewModel.goToDirectory();
     }
+
+    // TODO: Look into adding the context menu items.
 
     //endregion
 }

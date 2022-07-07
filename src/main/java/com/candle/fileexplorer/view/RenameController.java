@@ -1,6 +1,7 @@
 package com.candle.fileexplorer.view;
 
 import com.candle.fileexplorer.viewmodel.RenameViewModel;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -36,6 +37,9 @@ public class RenameController {
 
         viewModel.setItemPath(path);
         itemNameField.textProperty().bindBidirectional(viewModel.itemNameProperty());
+        itemNameField.textProperty().setValue(viewModel.getOriginalName());
+
+        Platform.runLater(() -> itemNameField.requestFocus());
     }
 
     //endregion

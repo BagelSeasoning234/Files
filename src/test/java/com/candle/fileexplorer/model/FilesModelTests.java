@@ -1,5 +1,6 @@
 package com.candle.fileexplorer.model;
 
+import com.candle.fileexplorer.model.data.ClipboardMode;
 import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.observer.DataListener;
 import org.junit.jupiter.api.Assertions;
@@ -30,6 +31,7 @@ public class FilesModelTests {
     @Test
     public void createItem_shouldCreateFile_whenTypeIsFile() {
         FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addTab();
         String fileName = "file.txt";
 
         dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
@@ -42,6 +44,7 @@ public class FilesModelTests {
     @Test
     public void createItem_shouldCreateFolder_whenTypeIsFolder() {
         FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addTab();
         String folderName = "folder";
 
         dataModel.setCurrentDirectory(tempFolder.toAbsolutePath().toString());
@@ -55,6 +58,7 @@ public class FilesModelTests {
     public void createItem_shouldNotifyListeners_afterWritingToDisk() {
         DataListener listener = mock(DataListener.class);
         FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addTab();
         dataModel.addListener(listener);
 
         String fileName = "file.png";
@@ -68,6 +72,7 @@ public class FilesModelTests {
     public void createItem_shouldNotNotifyListeners_IfTypeIsDrive() {
         DataListener listener = mock(DataListener.class);
         FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addTab();
         dataModel.addListener(listener);
 
         String fileName = "driveObject";
@@ -80,6 +85,7 @@ public class FilesModelTests {
     @Test
     public void addTab_shouldUpdateTabIndex_afterCreatingNewTab() {
         FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addTab();
         int expectedIndex = dataModel.getTabIndex() + 1;
         dataModel.addTab();
         Assertions.assertEquals(expectedIndex, dataModel.getTabIndex());
@@ -88,6 +94,7 @@ public class FilesModelTests {
     @Test
     public void removeTab_shouldSetTabIndexToZero_ifTabWasDeleted() {
         FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addTab();
         int firstIndex = dataModel.getTabIndex();
         dataModel.addTab();
         dataModel.removeTab(firstIndex + 1);
@@ -97,23 +104,26 @@ public class FilesModelTests {
     @Test
     public void removeTab_shouldNotSetTabIndexToZero_ifTabWasDifferent() {
         FilesModel dataModel = new DefaultFilesModel();
+        dataModel.addTab();
         int firstIndex = dataModel.getTabIndex();
         dataModel.addTab();
         dataModel.addTab();
 
         dataModel.removeTab(firstIndex + 1);
-        Assertions.assertEquals(firstIndex + 2, dataModel.getTabIndex());
+        Assertions.assertEquals(firstIndex + 1, dataModel.getTabIndex());
     }
 
     @Test
     public void currentDirectory_shouldReturnUserHomeDirectory_byDefault() {
         FilesModel model = new DefaultFilesModel();
+        model.addTab();
         Assertions.assertEquals(System.getProperty("user.home"), model.getCurrentDirectory());
     }
 
     @Test
     public void currentDirectory_shouldReturnFolder_whenSetToFolder() {
         FilesModel model = new DefaultFilesModel();
+        model.addTab();
         model.setCurrentDirectory(tempFolder.toString());
         Assertions.assertEquals(tempFolder.toString(), model.getCurrentDirectory());
     }
@@ -121,6 +131,7 @@ public class FilesModelTests {
     @Test
     public void currentDirectory_shouldNotBeSet_whenSetToFile() {
         FilesModel model = new DefaultFilesModel();
+        model.addTab();
         model.setCurrentDirectory(tempFile.toString());
         Assertions.assertEquals(System.getProperty("user.home"), model.getCurrentDirectory());
     }
@@ -128,6 +139,7 @@ public class FilesModelTests {
     @Test
     public void addListener_shouldNotifyObject_whenDirectoryChanged() {
         FilesModel model = new DefaultFilesModel();
+        model.addTab();
         DataListener mockListener = mock(DataListener.class);
         model.addListener(mockListener);
 
@@ -139,18 +151,26 @@ public class FilesModelTests {
     public void goBackward_shouldReturnToPreviousDir_afterDirChanged()
     {
         FilesModel model = new DefaultFilesModel();
+        model.addTab();
         model.setCurrentDirectory(tempFolder.toString());
         model.goBackwardInDirectoryHistory();
-        Assertions.assertEquals(model.getCurrentDirectory(), System.getProperty("user.home"));
+        Assertions.assertEquals(System.getProperty("user.home"), model.getCurrentDirectory());
     }
 
     @Test
     public void goForward_shouldReturnToNextDir_afterGoingBack()
     {
         FilesModel model = new DefaultFilesModel();
+        model.addTab();
         model.setCurrentDirectory(tempFolder.toString());
         model.goBackwardInDirectoryHistory();
         model.goForwardInDirectoryHistory();
-        Assertions.assertEquals(model.getCurrentDirectory(), tempFolder.toString());
+        Assertions.assertEquals(tempFolder.toString(), model.getCurrentDirectory());
+    }
+
+    @Test
+    public void clipboardMode_shouldBeCopy_byDefault() {
+        FilesModel model = new DefaultFilesModel();
+        Assertions.assertEquals(ClipboardMode.Copy, model.getClipboardMode());
     }
 }

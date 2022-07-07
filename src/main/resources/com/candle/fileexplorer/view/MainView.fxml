@@ -21,8 +21,7 @@
 <?import com.candle.fileexplorer.view.QuickAccessController?>
 <?import javafx.scene.control.ToggleGroup?>
 <BorderPane prefWidth="1075" prefHeight="700" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.candle.fileexplorer.view.MainController" fx:id="root"
-            focusTraversable="true">
+            fx:controller="com.candle.fileexplorer.view.MainController" fx:id="root">
 
     <stylesheets>
         <URL value="@/com/candle/fileexplorer/styles/Light.css"/>
@@ -55,10 +54,11 @@
                 </Menu>
 
                 <Menu text="Edit">
-                    <MenuItem text="Cut" onAction="#cut" accelerator="Shortcut+X"/>
-                    <MenuItem text="Copy" onAction="#copy" accelerator="Shortcut+C"/>
+                    <MenuItem text="Cut Item" onAction="#cut" accelerator="Shortcut+X"/>
+                    <MenuItem text="Copy Item" onAction="#copy" accelerator="Shortcut+C"/>
+                    <MenuItem text="Paste Item" onAction="#paste" accelerator="Shortcut+V"/>
+                    <SeparatorMenuItem/>
                     <MenuItem text="Copy Location" onAction="#copyLocation"/>
-                    <MenuItem text="Paste" onAction="#paste" accelerator="Shortcut+V"/>
                 </Menu>
 
                 <Menu text="View">
@@ -160,7 +160,7 @@
 
     <!-- Folders and Files -->
     <center>
-        <TabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS">
+        <TabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS" onMouseClicked="#handleNavButtons">
             <padding>
                 <Insets left="10.0"/>
             </padding>

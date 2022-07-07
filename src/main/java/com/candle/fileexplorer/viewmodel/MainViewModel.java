@@ -2,7 +2,7 @@ package com.candle.fileexplorer.viewmodel;
 
 import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.ClipboardMode;
-import com.candle.fileexplorer.model.helpers.FileUtilities;
+import com.candle.fileexplorer.model.helpers.FileOperations;
 import com.candle.fileexplorer.model.observer.DataListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -208,7 +208,7 @@ public class MainViewModel implements DataListener {
     //region Private Helper Methods
 
     private void updateTabNameProperties() {
-        String tabName = FileUtilities.getPathName(currentDirectoryProperty.getValue());
+        String tabName = FileOperations.getPathName(currentDirectoryProperty.getValue());
 
         StringProperty tabNameProperty;
         try {
