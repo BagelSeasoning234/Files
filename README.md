@@ -2,6 +2,17 @@
 
 A file explorer app written using JavaFX.
 
+## Features
+
+- Creating files.
+- Renaming files.
+- Moving files.
+- Sending files to the trash.
+- File navigation.
+- Tabs.
+
+## Screenshots
+
 ![Files Screenshot](https://user-images.githubusercontent.com/70250943/176327908-a73b65bb-cd8e-49e4-96b8-d002911511d3.png)
 
 ## Note for Linux Devices
