@@ -4,6 +4,7 @@ import com.candle.fileexplorer.view.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -92,6 +93,10 @@ public class ViewHandler {
 
             scene.addEventFilter(KeyEvent.KEY_PRESSED, view::onKeyPressed);
         }
+
+        Image filesIcon = new Image(ViewHandler.class.getResourceAsStream(
+                "/com/candle/fileexplorer/images/32/Folder.png"));
+        stage.getIcons().add(filesIcon);
 
         stage.setScene(scene);
         stage.show();
