@@ -13,7 +13,7 @@ A file explorer app written using JavaFX.
 
 ## Screenshots
 
-![Files Screenshot](https://user-images.githubusercontent.com/70250943/176327908-a73b65bb-cd8e-49e4-96b8-d002911511d3.png)
+![image](https://user-images.githubusercontent.com/70250943/178124218-80de8500-c799-4e67-9457-a9da4b8a0f99.png)
 
 ## Supported Platforms
 
