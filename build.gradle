@@ -52,6 +52,17 @@ jlink {
     launcher {
         name = 'Files'
     }
+
+    jpackage {
+        if (org.gradle.internal.os.OperatingSystem.current().linux) {
+            imageOptions = ["--icon", "src/main/resources/icons/Files.png"]
+            installerOptions += ["--resource-dir", "src/main/resources/icons"]
+        }
+        if (org.gradle.internal.os.OperatingSystem.current().windows) {
+            imageOptions = ["--icon", "src/main/resources/icons/Files.ico"]
+            installerOptions += ["--resource-dir", "src/main/resources/icons"]
+        }
+    }
 }
 
 jlinkZip {

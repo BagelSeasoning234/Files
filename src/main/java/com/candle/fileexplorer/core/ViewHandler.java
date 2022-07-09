@@ -95,7 +95,7 @@ public class ViewHandler {
         }
 
         Image filesIcon = new Image(ViewHandler.class.getResourceAsStream(
-                "/com/candle/fileexplorer/images/32/Folder.png"));
+                "/icons/Files.png"));
         stage.getIcons().add(filesIcon);
 
         stage.setScene(scene);
