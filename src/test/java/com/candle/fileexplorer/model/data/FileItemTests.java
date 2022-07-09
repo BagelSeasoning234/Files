@@ -7,6 +7,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
@@ -54,7 +55,11 @@ public class FileItemTests {
         String targetPath = subFolderPath + "/" + sourceObject.getName();
 
         FileItem item = new DefaultFileItem(tempFile);
-        item.moveTo(targetPath);
+        try {
+            item.moveTo(targetPath);
+        } catch (FileSystemException e) {
+            throw new RuntimeException(e);
+        }
 
         File expectedObject = new File(targetPath);
         Assertions.assertTrue(expectedObject.exists());
@@ -71,7 +76,11 @@ public class FileItemTests {
         subFolder.mkdir();
 
         FileItem item = new DefaultFileItem(sourceFolderPath);
-        item.moveTo(targetFolderPath);
+        try {
+            item.moveTo(targetFolderPath);
+        } catch (FileSystemException e) {
+            throw new RuntimeException(e);
+        }
 
         String expectedPath = targetFolderPath + "/" + sourceObject.getName();
         File expectedObject = new File(expectedPath);
@@ -102,7 +111,11 @@ public class FileItemTests {
         String targetPath = subFolderPath + "/" + sourceObject.getName();
 
         FileItem item = new DefaultFileItem(tempFile);
-        item.copyTo(targetPath);
+        try {
+            item.copyTo(targetPath);
+        } catch (FileSystemException e) {
+            throw new RuntimeException(e);
+        }
 
         File expectedObject = new File(targetPath);
         Assertions.assertTrue(expectedObject.exists());
@@ -118,7 +131,11 @@ public class FileItemTests {
         targetFolder.mkdir();
 
         FileItem item = new DefaultFileItem(imaginaryPath);
-        item.copyTo(targetFolderPath);
+        try {
+            item.copyTo(targetFolderPath);
+        } catch (FileSystemException e) {
+            throw new RuntimeException(e);
+        }
 
         File imaginaryResult =
                 new File(imaginaryPath + "/" + imaginarySource.getName());
@@ -136,7 +153,11 @@ public class FileItemTests {
         subFolder.mkdir();
 
         FileItem item = new DefaultFileItem(sourceFolderPath);
-        item.copyTo(targetFolderPath);
+        try {
+            item.copyTo(targetFolderPath);
+        } catch (FileSystemException e) {
+            throw new RuntimeException(e);
+        }
 
         String expectedPath = targetFolderPath + "/" + sourceObject.getName();
         File expectedObject = new File(expectedPath);
@@ -196,10 +217,11 @@ public class FileItemTests {
     }
 
     @Test
-    public void getItemDirectory_shouldReturnHome_whenSetToTilda() {
+    public void getItemDirectory_shouldReturnHome_whenSetToTildaOnLinux() {
         FileItem folder = new DefaultFileItem("~");
-        Assertions.assertEquals(folder.getItemDirectory(),
-                System.getProperty("user.home"));
+        if (System.getProperty("os.name").equals("Linux")) {
+            Assertions.assertEquals(folder.getItemDirectory(), System.getProperty("user.home"));
+        }
     }
 
     @Test
@@ -233,19 +255,23 @@ public class FileItemTests {
     }
 
     @Test
-    public void isHiddenFile_shouldReturnTrue_onHiddenFolder() {
+    public void isHiddenFile_shouldReturnTrue_onHiddenFolderOnLinux() {
         String hidddenFilePath =
                 tempFolderPath.resolve(".hiddenTestFolder").toAbsolutePath().toString();
         FileItem hiddenFolder = new DefaultFileItem(hidddenFilePath);
-        Assertions.assertTrue(hiddenFolder.getIsHiddenFile());
+        if (System.getProperty("os.name").equals("Linux")) {
+            Assertions.assertTrue(hiddenFolder.getIsHiddenFile());
+        }
     }
 
     @Test
-    public void isHiddenFile_shouldReturnTrue_onHiddenFile() {
+    public void isHiddenFile_shouldReturnTrue_onHiddenFileOnLinux() {
         String hidddenFilePath =
                 tempFolderPath.resolve(".hiddenTestFile.txt").toAbsolutePath().toString();
         FileItem hiddenFile = new DefaultFileItem(hidddenFilePath);
-        Assertions.assertTrue(hiddenFile.getIsHiddenFile());
+        if (System.getProperty("os.name").equals("Linux")) {
+            Assertions.assertTrue(hiddenFile.getIsHiddenFile());
+        }
     }
 
     @Test

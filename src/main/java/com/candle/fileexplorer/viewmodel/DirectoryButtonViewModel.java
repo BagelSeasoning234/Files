@@ -3,6 +3,7 @@ package com.candle.fileexplorer.viewmodel;
 import com.candle.fileexplorer.model.FilesModel;
 import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.helpers.DirectoryStructure;
+import com.candle.fileexplorer.model.helpers.FileOperations;
 
 /**
  * The view model for the directory button class.
@@ -42,10 +43,11 @@ public class DirectoryButtonViewModel {
      */
     public String getDirectoryName() {
         String name = fileItem.getFileName();
-        if (name.equals(DirectoryStructure.getHomeDirectoryName()))
+        if (name.equals(DirectoryStructure.getHomeDirectoryName())) {
             return "Home";
-        else
+        } else {
             return fileItem.getFileName();
+        }
     }
 
     /**

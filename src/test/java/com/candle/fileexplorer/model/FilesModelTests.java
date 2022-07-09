@@ -128,7 +128,7 @@ public class FilesModelTests {
         FilesModel model = new DefaultFilesModel();
         model.addTab();
         model.setCurrentDirectory(tempFolder.toString());
-        Assertions.assertEquals(tempFolder.toString(),
+        Assertions.assertEquals(replaceWindowsBackslashes(tempFolder.toString()),
                 model.getCurrentDirectory());
     }
 
@@ -169,7 +169,7 @@ public class FilesModelTests {
         model.setCurrentDirectory(tempFolder.toString());
         model.goBackwardInDirectoryHistory();
         model.goForwardInDirectoryHistory();
-        Assertions.assertEquals(tempFolder.toString(),
+        Assertions.assertEquals(replaceWindowsBackslashes(tempFolder.toString()),
                 model.getCurrentDirectory());
     }
 
@@ -177,5 +177,9 @@ public class FilesModelTests {
     public void clipboardMode_shouldBeCopy_byDefault() {
         FilesModel model = new DefaultFilesModel();
         Assertions.assertEquals(ClipboardMode.Copy, model.getClipboardMode());
+    }
+
+    private String replaceWindowsBackslashes(String path) {
+        return path.replace("\\", "/");
     }
 }

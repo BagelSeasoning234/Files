@@ -12,7 +12,7 @@
       prefHeight="200" prefWidth="400" onKeyPressed="#onKeyPressed">
 
     <stylesheets>
-        <URL value="@/com/candle/fileexplorer/styles/LightNewFile.css"/>
+        <URL value="@../styles/LightNewFile.css"/>
     </stylesheets>
 
     <padding>

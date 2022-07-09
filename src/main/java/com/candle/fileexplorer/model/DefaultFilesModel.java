@@ -8,6 +8,7 @@ import com.candle.fileexplorer.model.observer.DataListener;
 import com.candle.fileexplorer.model.data.DefaultFileItem;
 import com.candle.fileexplorer.model.data.FileType;
 
+import java.nio.file.FileSystemException;
 import java.util.*;
 import java.util.List;
 
@@ -190,7 +191,7 @@ public class DefaultFilesModel implements FilesModel {
     }
 
     @Override
-    public void paste(String sourcePath) {
+    public void paste(String sourcePath) throws FileSystemException {
         switch (clipboardMode) {
             case Cut -> {
                 FileItem cutItem = new DefaultFileItem(sourcePath);

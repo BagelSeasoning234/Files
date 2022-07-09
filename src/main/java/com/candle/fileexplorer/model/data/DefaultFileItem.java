@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 
 /**
@@ -52,7 +53,7 @@ public class DefaultFileItem implements FileItem {
     public DefaultFileItem(String path) {
         String cleanPath = FileOperations.sanitizePath(path);
         file = new File(cleanPath);
-        fileType = FileOperations.determineType(path);
+        fileType = FileOperations.determineType(cleanPath);
     }
 
     //endregion
@@ -60,7 +61,7 @@ public class DefaultFileItem implements FileItem {
     //region Public Methods
 
     @Override
-    public void moveTo(String targetPath) {
+    public void moveTo(String targetPath) throws FileSystemException {
         File targetDestination = new File(targetPath + "/" + file.getName());
         if (file.getAbsolutePath().equals(targetDestination.getAbsolutePath())) {
             throw new IllegalStateException();
@@ -70,22 +71,26 @@ public class DefaultFileItem implements FileItem {
             case File -> {
                 try {
                     FileUtils.moveFile(file, targetDestination);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                }catch (FileSystemException e) {
+                    throw e;
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
             case Folder -> {
                 try {
                     FileUtils.moveDirectory(file, targetDestination);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                }catch (FileSystemException e) {
+                    throw e;
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         }
     }
 
     @Override
-    public void copyTo(String targetPath) {
+    public void copyTo(String targetPath) throws FileSystemException {
         File targetDestination = new File(targetPath + "/" + file.getName());
         if (file.getAbsolutePath().equals(targetDestination.getAbsolutePath())) {
             throw new IllegalStateException();
@@ -95,22 +100,26 @@ public class DefaultFileItem implements FileItem {
             case File -> {
                 try {
                     FileUtils.copyFile(file, targetDestination);
-                } catch (FileNotFoundException e) {
+                } catch (FileSystemException e) {
+                    throw e;
+                } catch (FileNotFoundException ex) {
                     // Gets called if the user tries to copy a file from the
                     // clipboard that has been deleted
                     // (i.e. file was deleted, but it's still sitting on the
                     // clipboard).
                     // It doesn't exist anymore, so there's no point in doing
                     // anything.
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (IOException exc) {
+                    throw new RuntimeException(exc);
                 }
             }
             case Folder -> {
                 try {
                     FileUtils.copyDirectory(file, targetDestination);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (FileSystemException e) {
+                    throw e;
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         }
@@ -159,10 +168,11 @@ public class DefaultFileItem implements FileItem {
 
     @Override
     public String getFileName() {
-        // File.getName doesn't work for "/", so I have to manually return
-        // the name.
-        if (file.equals(new File("/")))
-            return "/";
+        // File.getName() doesn't work for drives.
+        if (fileType.equals(FileType.Drive)) {
+            return file.getPath();
+        }
+
         return file.getName();
     }
 

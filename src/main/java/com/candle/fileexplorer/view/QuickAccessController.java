@@ -103,13 +103,12 @@ public class QuickAccessController extends ScrollPane {
         Image folderImage = new Image(folderPath);
 
         String[] quickAccessItems = {"Home", "Desktop", "Downloads",
-                "Documents", "Pictures", "Music", "Trash"};
+                "Documents", "Pictures", "Music"};
 
         for (String item : quickAccessItems) {
-            DirectoryButtonViewModel directoryButtonVM =
-                    viewModel.getQuickAccessButtonViewModel(item);
-            DirectoryButtonController button =
-                    new DirectoryButtonController(directoryButtonVM,
+            DirectoryButtonViewModel directoryButtonVM = viewModel.getQuickAccessButtonViewModel(
+                    item);
+            DirectoryButtonController button = new DirectoryButtonController(directoryButtonVM,
                             folderImage);
             quickAccessList.getChildren().add(button);
         }

@@ -14,7 +14,7 @@
       prefHeight="300" prefWidth="400">
 
     <stylesheets>
-        <URL value="@/com/candle/fileexplorer/styles/LightError.css"/>
+        <URL value="@../styles/LightError.css"/>
     </stylesheets>
 
     <padding>

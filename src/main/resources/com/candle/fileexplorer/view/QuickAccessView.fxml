@@ -10,7 +10,7 @@
          prefWidth="175.0">
 
     <stylesheets>
-        <URL value="@/com/candle/fileexplorer/styles/LightQuickAccess.css"/>
+        <URL value="@../styles/LightQuickAccess.css"/>
     </stylesheets>
 
     <VBox fx:id="quickAccessList"/>

@@ -1,6 +1,7 @@
 package com.candle.fileexplorer.model.data;
 
 import java.io.File;
+import java.nio.file.FileSystemException;
 
 public interface FileItem {
 
@@ -9,14 +10,14 @@ public interface FileItem {
      *
      * @param targetPath The absolute path to the destination folder.
      */
-    void moveTo(String targetPath);
+    void moveTo(String targetPath) throws FileSystemException;
 
     /**
      * Copies the given file/folder to the target destination.
      *
      * @param targetPath The absolute path to the destination folder.
      */
-    void copyTo(String targetPath);
+    void copyTo(String targetPath) throws FileSystemException;
 
     /**
      * Creates a new file/folder at the path specified when the item was

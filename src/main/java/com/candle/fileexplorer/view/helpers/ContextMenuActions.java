@@ -11,6 +11,7 @@ import javafx.scene.input.ClipboardContent;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 
 /**
@@ -263,8 +264,23 @@ public class ContextMenuActions {
      */
     private void pasteContentsList(ArrayList<File> itemList,
                                    FilesModel dataModel) {
-        for (File item : itemList)
-            dataModel.paste(item.getAbsolutePath());
+        for (File item : itemList) {
+            try {
+                dataModel.paste(item.getAbsolutePath());
+            } catch (FileSystemException e) {
+                try {
+                    ViewHandler.getInstance().openSubView("Error",
+                            "The file/folder you are trying to paste is " +
+                                    "currently in use by another application. " +
+                                    "This may result in the copy process completing " +
+                                    "incorrectly.\n\n" +
+                                    "In order to ensure that the files are pasted properly, " +
+                                    "please close the other app and try again.");
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
     }
 
     //endregion

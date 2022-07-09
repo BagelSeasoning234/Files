@@ -18,7 +18,7 @@
       prefHeight="280" prefWidth="400" onKeyPressed="#onKeyPressed">
 
     <stylesheets>
-        <URL value="@/com/candle/fileexplorer/styles/LightAbout.css"/>
+        <URL value="@../styles/LightAbout.css"/>
     </stylesheets>
     <padding>
         <Insets topRightBottomLeft="10"/>

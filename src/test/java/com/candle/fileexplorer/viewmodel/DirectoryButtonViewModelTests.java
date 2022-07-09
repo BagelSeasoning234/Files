@@ -24,23 +24,6 @@ public class DirectoryButtonViewModelTests {
     }
 
     @Test
-    public void getDirectoryName_shouldReturnTrash_InTrashFolder() {
-        FilesModel mockModel = mock(FilesModel.class);
-        FileItem mockItem = mock(FileItem.class);
-        File file = null;
-        switch (System.getProperty("os.name")) {
-            case "Linux" -> file = new File(System.getProperty("user.home") + "/" +
-                    ".local/share/Trash");
-            case "Windows" -> file = new File("C:\\$Recycle.Bin");
-        }
-        when(mockItem.getFileName()).thenReturn(file.getName());
-
-        DirectoryButtonViewModel vm = new DirectoryButtonViewModel(mockModel,
-                mockItem);
-        Assertions.assertEquals("Trash", vm.getDirectoryName());
-    }
-
-    @Test
     public void getDirectoryName_shouldReturnName_InFolder() {
         String folderName = "testFolder";
 

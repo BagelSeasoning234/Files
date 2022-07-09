@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * A helper class that contains static methods for various file utilities,
@@ -20,7 +22,7 @@ public class FileOperations {
 
     private static final String linuxTrashLocation = System.getProperty("user" +
             ".home") + "/.local/share/Trash";
-    private static final String windowsTrashLocation = "C:\\$Recycle.Bin";
+    private static final String windowsTrashLocation = "C:/$Recycle.Bin/Recycle Bin";
 
     //endregion
 
@@ -43,7 +45,9 @@ public class FileOperations {
      */
     public static String sanitizePath(String path) {
         path = path.replace("\\040", " ");
-        path = path.replace("~", System.getProperty("user.home"));
+        if (System.getProperty("os.name").equals("Linux")) {
+            path = path.replace("~", System.getProperty("user.home"));
+        }
         path = path.replace("\\", "/");
         return path;
     }
@@ -58,9 +62,9 @@ public class FileOperations {
      * @return The filetype that was determined.
      */
     public static FileType determineType(String path) {
-        File item = new File(path);
-        if (item.exists())
-            return item.isDirectory() ? FileType.Folder : FileType.File;
+        Path pathObject = Path.of(path);
+        if (Files.exists(pathObject))
+            return Files.isDirectory(pathObject) ? FileType.Folder : FileType.File;
         else
             return FileType.File;
     }
@@ -94,15 +98,11 @@ public class FileOperations {
      */
     public static String getTrashDirectory() {
         String OS = System.getProperty("os.name");
-        switch (OS) {
-            case "Linux" -> {
-                return linuxTrashLocation;
-            }
-            case "Windows" -> {
-                return windowsTrashLocation;
-            }
+        if (OS.equals("Linux")) {
+            return linuxTrashLocation;
+        } else {
+            return windowsTrashLocation;
         }
-        return "";
     }
 
     /**

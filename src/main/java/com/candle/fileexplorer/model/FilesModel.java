@@ -5,6 +5,7 @@ import com.candle.fileexplorer.model.data.FileItem;
 import com.candle.fileexplorer.model.data.FileType;
 import com.candle.fileexplorer.model.observer.DataListener;
 
+import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 
 /**
@@ -115,7 +116,7 @@ public interface FilesModel {
      *
      * @param sourcePath The original path of the file/folder.
      */
-    void paste(String sourcePath);
+    void paste(String sourcePath) throws FileSystemException;
 
     //endregion
 }

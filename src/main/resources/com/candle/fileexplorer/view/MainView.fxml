@@ -25,7 +25,7 @@
             fx:id="root">
 
     <stylesheets>
-        <URL value="@/com/candle/fileexplorer/styles/Light.css"/>
+        <URL value="@../styles/Light.css"/>
     </stylesheets>
 
     <padding>

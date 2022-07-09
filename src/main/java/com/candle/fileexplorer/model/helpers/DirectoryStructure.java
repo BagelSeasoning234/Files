@@ -21,6 +21,11 @@ public class DirectoryStructure {
         return homefolder.getName();
     }
 
+    public static String getTrashDirectoryName() {
+        File trashFolder = new File(FileOperations.getTrashDirectory());
+        return trashFolder.getName();
+    }
+
     /**
      * Returns a list of the mounted drives.
      */

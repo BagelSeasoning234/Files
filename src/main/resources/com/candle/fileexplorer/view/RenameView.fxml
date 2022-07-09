@@ -13,7 +13,7 @@
 
     <!-- The styling is the same for both, so I might as well use the same css file. -->
     <stylesheets>
-        <URL value="@/com/candle/fileexplorer/styles/LightNewFile.css"/>
+        <URL value="@../styles/LightNewFile.css"/>
     </stylesheets>
 
     <padding>

@@ -12,7 +12,7 @@
          alignment="CENTER">
 
     <stylesheets>
-        <URL value="@/com/candle/fileexplorer/styles/LightFileItem.css"/>
+        <URL value="@../styles/LightFileItem.css"/>
     </stylesheets>
 
     <ImageView fx:id="filePreview" StackPane.alignment="CENTER"
