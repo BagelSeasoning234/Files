@@ -69,11 +69,11 @@ jlinkZip {
     group = 'distribution'
 }
 
-sourceSets.main {
-    resources {
-        srcDir 'src/main/resources'
-    }
-}
+//sourceSets.main {
+//    resources {
+//        srcDir 'src/main/resources'
+//    }
+//}
 
 allprojects {
     apply plugin: 'java'
@@ -85,7 +85,8 @@ allprojects {
 
 task createProperties(dependsOn: processResources) {
     doLast {
-        new File("$buildDir/resources/version.properties").withWriter { w ->
+        new File("${sourceSets.main.resources.srcDirs[0]}/version.properties").
+                withWriter { w ->
             Properties p = new Properties()
             p['version'] = project.version.toString()
             p.store w, null

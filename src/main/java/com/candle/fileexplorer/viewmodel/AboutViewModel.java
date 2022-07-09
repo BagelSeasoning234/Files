@@ -1,8 +1,8 @@
 package com.candle.fileexplorer.viewmodel;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class AboutViewModel {
@@ -12,13 +12,12 @@ public class AboutViewModel {
      * Gets the version of the application.
      */
     public String getFilesVersion() {
-        Properties properties = null;
-        FileInputStream stream = null;
+        Properties properties;
+        InputStream stream;
         String version = null;
         try {
-            String location = System.getProperty("user.dir") + "/build" +
-                    "/resources/version.properties";
-            stream = new FileInputStream(location);
+
+            stream = this.getClass().getResourceAsStream("/version.properties");
             properties = new Properties();
             properties.load(stream);
 
