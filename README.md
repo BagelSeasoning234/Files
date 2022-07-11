@@ -1,6 +1,6 @@
 # Files
 
-A file explorer app written using JavaFX.
+A file explorer app.
 
 ## Features
 
