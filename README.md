@@ -23,8 +23,7 @@ A file explorer app.
 ## Note for Linux Devices
 
 "Send to Trash" functionality on Linux-based devices only works with
-the `trash-cli` dependency.
-Unfortunately, I was unable to find a Java library with Recycle Bin
-functionality that supported Linux, so I had to rely on this package.
+the `trash-cli` dependency. This was necessary because apparently no Java library has bothered to implement the FreeDesktop.org trash specification on Linux.
+
 The dependency should be installable from your distribution's package manager,
 or at the following GitHub page: https://github.com/andreafrancia/trash-cli
