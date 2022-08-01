@@ -243,6 +243,7 @@ public class FileGridController extends ScrollPane {
         // Open the item.
         else if (event.getClickCount() == openItemClickCount) {
             viewModel.setCurrentDirectory(getFocusedItemPath());
+            focusedNode = null;
         }
     }
 
