@@ -1,6 +1,6 @@
 # Files
 
-A file explorer app.
+A cross platform file explorer app.
 
 ## Features
 
